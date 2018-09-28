@@ -2,24 +2,21 @@ package org.dice_research.opal.civet;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import org.dice_research.opal.civet.metrics.CategorizationMetirc;
 import org.dice_research.opal.civet.metrics.Metric;
+import org.dice_research.opal.civet.metrics.Metrics;
 import org.junit.Test;
 
+/**
+ * Tests, if all mandatory values are set.
+ *
+ * @author Adrian Wilke
+ */
 public class MetricImplementationTest {
 
 	@Test
 	public void test() {
 
-		// TODO: Automatically add all available metrics
-
-		List<Metric> metrics = new LinkedList<Metric>();
-		metrics.add(new CategorizationMetirc());
-
-		for (Metric metric : metrics) {
+		for (Metric metric : new Metrics().getMetrics()) {
 			assertNotNull(metric.getDescription());
 			assertNotNull(metric.getId());
 			assertNotNull(metric.getType());

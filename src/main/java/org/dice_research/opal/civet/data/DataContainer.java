@@ -4,13 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.dice_research.opal.civet.exceptions.InputMissingException;
+import org.dice_research.opal.civet.metrics.Metric;
 
 /**
- * TODO:
- * 
- * add or rethink output
- * 
- * rethink to devide dataset inputs and configuration inputs
+ * Data container for calculations in {@link Metric} implementations.
+ *
+ * @author Adrian Wilke
  */
 public class DataContainer {
 
@@ -18,21 +17,21 @@ public class DataContainer {
 
 	public Object getInput(InputType type) throws InputMissingException {
 		if (!input.containsKey(type)) {
-			throw new InputMissingException(type.toString());
+			throw new InputMissingException(type);
 		}
 		return input.get(type);
 	}
 
 	public float getInputAsFloat(InputType type) throws InputMissingException {
 		if (!input.containsKey(type)) {
-			throw new InputMissingException(type.toString());
+			throw new InputMissingException(type);
 		}
-		return Float.valueOf(getInputAsString(type));
+		return Float.valueOf(String.valueOf(input.get(type)));
 	}
 
 	public String getInputAsString(InputType type) throws InputMissingException {
 		if (!input.containsKey(type)) {
-			throw new InputMissingException(type.toString());
+			throw new InputMissingException(type);
 		}
 		return String.valueOf(input.get(type));
 	}

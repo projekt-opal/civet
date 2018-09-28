@@ -1,5 +1,7 @@
 package org.dice_research.opal.civet.exceptions;
 
+import org.dice_research.opal.civet.data.InputType;
+
 /**
  * Thrown, if input data is missing.
  *
@@ -9,20 +11,15 @@ public class InputMissingException extends CivetException {
 
 	private static final long serialVersionUID = 1L;
 
-	public InputMissingException() {
-		super();
+	InputType inputType;
+
+	public InputMissingException(InputType inputType) {
+		super("Missing input type " + inputType.toString());
+		this.inputType = inputType;
 	}
 
-	public InputMissingException(String message) {
-		super(message);
-	}
-
-	public InputMissingException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public InputMissingException(Throwable cause) {
-		super(cause);
+	public InputType getInputType() {
+		return this.inputType;
 	}
 
 }

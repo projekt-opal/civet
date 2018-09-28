@@ -1,12 +1,26 @@
 package org.dice_research.opal.civet.data;
 
+import org.dice_research.opal.civet.metrics.Metric;
+
 /**
- * TODO: rethink to devide datasets and configuration
+ * Identifiers for {@link Metric} inputs stored in {@link DataContainer}.
  *
  * @author Adrian Wilke
  */
 public enum InputType {
-	AVERAGE_NUMBER_OF_CATEGORIES,
 
-	NUMBER_OF_CATEGORIES
+	// String
+	CONTACT_EMAIL,
+
+	// String
+	CONTACT_URL,
+
+	// String
+	DESCRIPTION,
+
+	// Integer
+	NUMBER_OF_CATEGORIES,
+
+	// String
+	TITLE
 }
