@@ -1,7 +1,6 @@
 package org.dice_research.opal.civet.metrics;
 
 import org.dice_research.opal.civet.data.DataContainer;
-import org.dice_research.opal.civet.exceptions.InputMissingException;
 
 /**
  * Computes metadata quality metric.
@@ -42,7 +41,7 @@ public abstract class Metric {
 	/**
 	 * Computes and returns score of metric.
 	 */
-	public abstract float getScore(DataContainer data) throws InputMissingException;
+	public abstract float getScore(DataContainer dataContainer);
 
 	/**
 	 * Returns type of metric.

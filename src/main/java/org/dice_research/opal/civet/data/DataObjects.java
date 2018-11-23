@@ -11,6 +11,8 @@ import org.dice_research.opal.civet.exceptions.UnknownIdRuntimeException;
  * Data object IDs are defined via {@link DataObjects} class constants.
  * 
  * Data object types are defined in static initializer of {@link DataObjects}.
+ * 
+ * Data objects are used in {@link DataContainer}.
  *
  * @author Adrian Wilke
  */
@@ -24,8 +26,8 @@ public abstract class DataObjects {
 	public final static String NUMBER_OF_CATEGORIES = "NUMBER_OF_CATEGORIES";
 	public final static String TITLE = "TITLE";
 
-	protected static List<String> integerDataObjects = new LinkedList<String>();
-	protected static List<String> stringDataObjects = new LinkedList<String>();
+	private static List<String> integerDataObjects = new LinkedList<String>();
+	private static List<String> stringDataObjects = new LinkedList<String>();
 
 	/**
 	 * Definition of data object types.
@@ -42,7 +44,7 @@ public abstract class DataObjects {
 	 * Creates data object for given ID.
 	 * 
 	 * @throws UnknownIdRuntimeException if the given ID has not been defined.
-	 * @throws NullPointerException       if the given ID is null.
+	 * @throws NullPointerException      if the given ID is null.
 	 */
 	public static DataObject<?> createDataObject(String id) throws UnknownIdRuntimeException {
 		if (id == null) {

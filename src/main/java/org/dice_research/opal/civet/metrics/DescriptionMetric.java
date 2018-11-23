@@ -1,8 +1,8 @@
 package org.dice_research.opal.civet.metrics;
 
 import org.dice_research.opal.civet.data.DataContainer;
-import org.dice_research.opal.civet.data.InputType;
-import org.dice_research.opal.civet.exceptions.InputMissingException;
+import org.dice_research.opal.civet.data.DataObjects;
+import org.dice_research.opal.civet.data.StringDataObject;
 
 /**
  * Single metric.
@@ -22,9 +22,23 @@ public class DescriptionMetric extends Metric {
 	}
 
 	@Override
-	public float getScore(DataContainer data) throws InputMissingException {
-		String title = data.getInputAsString(InputType.TITLE).trim();
-		String description = data.getInputAsString(InputType.DESCRIPTION).trim();
+	public float getScore(DataContainer dataContainer) {
+
+		StringDataObject dataObject = dataContainer.getStringDataObject(DataObjects.TITLE);
+		String title;
+		if (dataObject.isEmpty()) {
+			return 0f;
+		} else {
+			title = dataObject.getValues().get(0);
+		}
+
+		dataObject = dataContainer.getStringDataObject(DataObjects.DESCRIPTION);
+		String description;
+		if (dataObject.isEmpty()) {
+			return 0f;
+		} else {
+			description = dataObject.getValues().get(0);
+		}
 
 		if (title.isEmpty() && description.isEmpty()) {
 			return 0f;

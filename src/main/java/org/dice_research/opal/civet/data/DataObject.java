@@ -26,6 +26,11 @@ public interface DataObject<TYPE> {
 	Class<TYPE> getType();
 
 	/**
+	 * Returns true if the list of values contains no elements.
+	 */
+	boolean isEmpty();
+
+	/**
 	 * Gets values of data object.
 	 */
 	List<TYPE> getValues();

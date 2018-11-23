@@ -4,8 +4,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.dice_research.opal.civet.data.DataContainer;
-import org.dice_research.opal.civet.data.InputType;
-import org.dice_research.opal.civet.exceptions.InputMissingException;
+import org.dice_research.opal.civet.data.DataObjects;
+import org.dice_research.opal.civet.data.StringDataObject;
 
 /**
  * Single metric.
@@ -25,8 +25,15 @@ public class ContactUrlMetric extends Metric {
 	}
 
 	@Override
-	public float getScore(DataContainer data) throws InputMissingException {
-		String url = data.getInputAsString(InputType.CONTACT_URL).trim();
+	public float getScore(DataContainer dataContainer) {
+		StringDataObject dataObject = dataContainer.getStringDataObject(DataObjects.CONTACT_URL);
+
+		String url;
+		if (dataObject.isEmpty()) {
+			return 0f;
+		} else {
+			url = dataObject.getValues().get(0);
+		}
 
 		if (url.isEmpty()) {
 			return 0f;

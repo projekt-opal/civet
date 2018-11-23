@@ -10,6 +10,22 @@ import java.util.List;
 public class IntegerDataObject extends AbstractDataObject<Integer> {
 
 	/**
+	 * Casts data object to type Integer.
+	 * 
+	 * @throws NullPointerException if given data object is null.
+	 * @throws ClassCastException   if type of data object does not fit.
+	 */
+	public static IntegerDataObject cast(DataObject<?> dataObject) throws NullPointerException, ClassCastException {
+		if (dataObject == null) {
+			throw new NullPointerException("Data object is null");
+		} else if (dataObject instanceof IntegerDataObject) {
+			return (IntegerDataObject) dataObject;
+		} else {
+			throw new ClassCastException("Can not cast " + dataObject);
+		}
+	}
+
+	/**
 	 * Sets id. Creates empty list of values.
 	 * 
 	 * @throws NullPointerException if the given ID is null.

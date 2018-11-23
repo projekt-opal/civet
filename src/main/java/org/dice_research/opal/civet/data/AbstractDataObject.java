@@ -10,8 +10,8 @@ import java.util.List;
  */
 public abstract class AbstractDataObject<TYPE> implements DataObject<TYPE> {
 
-	protected String id;
-	protected List<TYPE> values;
+	private String id;
+	private List<TYPE> values;
 
 	/**
 	 * Sets id. Creates empty list of values.
@@ -73,6 +73,13 @@ public abstract class AbstractDataObject<TYPE> implements DataObject<TYPE> {
 	/**
 	 * {@inheritDoc}
 	 */
+	public boolean isEmpty() {
+		return values.isEmpty();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public List<TYPE> getValues() {
 		return values;
 	}
@@ -124,6 +131,11 @@ public abstract class AbstractDataObject<TYPE> implements DataObject<TYPE> {
 			this.values.addAll(values);
 			return this;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return getId() + " [" + values.size() + "]";
 	}
 
 }

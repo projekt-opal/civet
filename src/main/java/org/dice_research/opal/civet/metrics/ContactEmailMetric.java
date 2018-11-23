@@ -1,8 +1,8 @@
 package org.dice_research.opal.civet.metrics;
 
 import org.dice_research.opal.civet.data.DataContainer;
-import org.dice_research.opal.civet.data.InputType;
-import org.dice_research.opal.civet.exceptions.InputMissingException;
+import org.dice_research.opal.civet.data.DataObjects;
+import org.dice_research.opal.civet.data.StringDataObject;
 
 /**
  * Single metric.
@@ -22,8 +22,15 @@ public class ContactEmailMetric extends Metric {
 	}
 
 	@Override
-	public float getScore(DataContainer data) throws InputMissingException {
-		String email = data.getInputAsString(InputType.CONTACT_EMAIL).trim();
+	public float getScore(DataContainer dataContainer) {
+		StringDataObject dataObject = dataContainer.getStringDataObject(DataObjects.CONTACT_EMAIL);
+
+		String email;
+		if (dataObject.isEmpty()) {
+			return 0f;
+		} else {
+			email = dataObject.getValues().get(0);
+		}
 
 		if (email.isEmpty()) {
 			return 0f;

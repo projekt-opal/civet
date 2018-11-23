@@ -1,8 +1,8 @@
 package org.dice_research.opal.civet.metrics;
 
 import org.dice_research.opal.civet.data.DataContainer;
-import org.dice_research.opal.civet.data.InputType;
-import org.dice_research.opal.civet.exceptions.InputMissingException;
+import org.dice_research.opal.civet.data.DataObjects;
+import org.dice_research.opal.civet.data.IntegerDataObject;
 
 /**
  * Single metric.
@@ -22,8 +22,15 @@ public class CategorizationMetric extends Metric {
 	}
 
 	@Override
-	public float getScore(DataContainer data) throws InputMissingException {
-		float numberOfCategories = data.getInputAsFloat(InputType.NUMBER_OF_CATEGORIES);
+	public float getScore(DataContainer dataContainer) {
+		IntegerDataObject dataObject = dataContainer.getIntegerDataObject(DataObjects.NUMBER_OF_CATEGORIES);
+
+		int numberOfCategories = 0;
+		if (dataObject.isEmpty()) {
+			return 0f;
+		} else {
+			numberOfCategories = dataObject.getValues().get(0);
+		}
 
 		if (numberOfCategories <= 0) {
 			return 0f;
