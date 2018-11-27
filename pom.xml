@@ -7,8 +7,16 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>OPAL-Civet</name>
 	<description>OPAL metadata quality component</description>
-
 	<dependencies>
+
+		<!-- RDF / Jena -->
+		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-rdfconnection -->
+		<!-- jena-rdfconnection > jena-arq > jena-core -->
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-rdfconnection</artifactId>
+			<version>3.9.0</version>
+		</dependency>
 
 		<!-- Test -->
 		<!-- https://mvnrepository.com/artifact/junit/junit -->
@@ -20,5 +28,4 @@
 		</dependency>
 
 	</dependencies>
-
 </project>
