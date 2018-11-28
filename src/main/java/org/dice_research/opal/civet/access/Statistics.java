@@ -9,9 +9,6 @@ import org.apache.jena.query.ResultSetFormatter;
  */
 public class Statistics extends SparqlEndpointAccessor {
 
-	// TODO Examples:
-	// https://gist.github.com/yayamamo/8052bd4620c1c58adff8
-
 	public Statistics(String endpoint) {
 		super(endpoint);
 	}

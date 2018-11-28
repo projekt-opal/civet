@@ -1,33 +1,49 @@
 package org.dice_research.opal.civet.metrics;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Metrics catalogue.
+ * Metrics catalog.
  *
  * @author Adrian Wilke
  */
 public class Metrics {
 
-	public List<Metric> getMetricsExpressiveness() {
-		List<Metric> metrics = new LinkedList<Metric>();
-		metrics.add(new CategorizationMetric());
-		metrics.add(new DescriptionMetric());
+	/**
+	 * Gets all metrics of the dimension expressiveness.
+	 */
+	public Map<String, Metric> getMetricsExpressiveness() {
+		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		putMetricIntoMap(new CategorizationMetric(), metrics);
+		putMetricIntoMap(new DescriptionMetric(), metrics);
 		return metrics;
 	}
 
-	public List<Metric> getMetricsContact() {
-		List<Metric> metrics = new LinkedList<Metric>();
-		metrics.add(new ContactEmailMetric());
-		metrics.add(new ContactUrlMetric());
+	/**
+	 * Gets all metrics of the dimension contact.
+	 */
+	public Map<String, Metric> getMetricsContact() {
+		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		putMetricIntoMap(new ContactEmailMetric(), metrics);
+		putMetricIntoMap(new ContactUrlMetric(), metrics);
 		return metrics;
 	}
 
-	public List<Metric> getMetrics() {
-		List<Metric> metrics = new LinkedList<Metric>();
-		metrics.addAll(getMetricsExpressiveness());
-		metrics.addAll(getMetricsContact());
+	/**
+	 * Gets all metrics.
+	 */
+	public Map<String, Metric> getMetrics() {
+		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		metrics.putAll(getMetricsExpressiveness());
+		metrics.putAll(getMetricsContact());
 		return metrics;
+	}
+
+	/**
+	 * Puts ID of metric and the metric itself in the map.
+	 */
+	private void putMetricIntoMap(Metric metric, Map<String, Metric> map) {
+		map.put(metric.toString(), metric);
 	}
 }

@@ -64,4 +64,12 @@ public abstract class Metric {
 	public MetricType getType() {
 		return this.metricType;
 	}
+
+	/**
+	 * Gets simple class name of metric.
+	 */
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName();
+	}
 }

@@ -13,9 +13,6 @@ import org.apache.jena.rdfconnection.RDFConnectionRemote;
  */
 public class SparqlEndpointAccessor {
 
-	// TODO Examples:
-	// https://www.wikidata.org/wiki/Wikidata:SPARQL_query_service/queries/examples
-
 	protected String endpoint;
 	protected RDFConnection rdfConnection;
 
@@ -24,7 +21,6 @@ public class SparqlEndpointAccessor {
 	}
 
 	public SparqlEndpointAccessor connect() {
-		// Examples: https://jena.apache.org/documentation/rdfconnection/
 		rdfConnection = RDFConnectionRemote.create().destination(endpoint).build();
 		return this;
 	}
