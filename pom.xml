@@ -10,11 +10,19 @@
 	<dependencies>
 
 		<!-- RDF / Jena -->
+
 		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-rdfconnection -->
 		<!-- jena-rdfconnection > jena-arq > jena-core -->
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-rdfconnection</artifactId>
+			<version>3.9.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-querybuilder -->
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-querybuilder</artifactId>
 			<version>3.9.0</version>
 		</dependency>
 

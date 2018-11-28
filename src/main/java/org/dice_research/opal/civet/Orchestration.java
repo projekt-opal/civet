@@ -51,7 +51,7 @@ public class Orchestration {
 
 		this.sparqlEndpointAccessor = new SparqlEndpointAccessor(this.sparqlQueryEndpoint);
 
-		// TODO get data
+		// TODO get data. use sparqlEndpointAccessor
 
 		// TODO compute metrics
 	}
