@@ -20,6 +20,7 @@ public class MetricImplementationTest {
 			assertNotNull(metric.getDescription());
 			assertNotNull(metric.getId());
 			assertNotNull(metric.getType());
+			assertNotNull(metric.getRequiredProperties());
 		}
 	}
 

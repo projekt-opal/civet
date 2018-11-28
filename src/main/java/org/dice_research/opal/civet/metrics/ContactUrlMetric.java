@@ -2,6 +2,8 @@ package org.dice_research.opal.civet.metrics;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Collection;
 
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObjects;
@@ -17,11 +19,13 @@ public class ContactUrlMetric extends Metric {
 	private static final String DESCRIPTION = "Calculates a score based on the contact URL.";
 	private static final String ID = ContactUrlMetric.class.getSimpleName();
 	private static final MetricType METRIC_TYPE = MetricType.FIVE_STAR;
+	private static final Collection<String> REQUIRED_PROPERTIES = Arrays.asList(DataObjects.CONTACT_URL);
 
 	public ContactUrlMetric() {
 		this.description = DESCRIPTION;
 		this.id = ID;
 		this.metricType = METRIC_TYPE;
+		this.requiredProperties = REQUIRED_PROPERTIES;
 	}
 
 	@Override

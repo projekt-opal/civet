@@ -1,5 +1,8 @@
 package org.dice_research.opal.civet.metrics;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.data.StringDataObject;
@@ -14,11 +17,13 @@ public class ContactEmailMetric extends Metric {
 	private static final String DESCRIPTION = "Calculates a score based on the contact email.";
 	private static final String ID = ContactEmailMetric.class.getSimpleName();
 	private static final MetricType METRIC_TYPE = MetricType.FIVE_STAR;
+	private static final Collection<String> REQUIRED_PROPERTIES = Arrays.asList(DataObjects.CONTACT_EMAIL);
 
 	public ContactEmailMetric() {
 		this.description = DESCRIPTION;
 		this.id = ID;
 		this.metricType = METRIC_TYPE;
+		this.requiredProperties = REQUIRED_PROPERTIES;
 	}
 
 	@Override

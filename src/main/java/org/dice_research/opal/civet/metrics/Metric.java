@@ -1,5 +1,7 @@
 package org.dice_research.opal.civet.metrics;
 
+import java.util.Collection;
+
 import org.dice_research.opal.civet.data.DataContainer;
 
 /**
@@ -25,6 +27,12 @@ public abstract class Metric {
 	protected MetricType metricType;
 
 	/**
+	 * The respective required properties for a metric are set in the concrete
+	 * implementation.
+	 */
+	protected Collection<String> requiredProperties;
+
+	/**
 	 * Returns description of the metric.
 	 */
 	public String getDescription() {
@@ -36,6 +44,13 @@ public abstract class Metric {
 	 */
 	public String getId() {
 		return this.id;
+	}
+
+	/**
+	 * Returns list of required properties
+	 */
+	public Collection<String> getRequiredProperties() {
+		return this.requiredProperties;
 	}
 
 	/**

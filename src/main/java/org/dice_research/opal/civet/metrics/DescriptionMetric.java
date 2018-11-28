@@ -1,5 +1,8 @@
 package org.dice_research.opal.civet.metrics;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.data.StringDataObject;
@@ -14,11 +17,14 @@ public class DescriptionMetric extends Metric {
 	private static final String DESCRIPTION = "Calculates a score based on the extend of the description.";
 	private static final String ID = DescriptionMetric.class.getSimpleName();
 	private static final MetricType METRIC_TYPE = MetricType.FIVE_STAR;
+	private static final Collection<String> REQUIRED_PROPERTIES = Arrays.asList(DataObjects.TITLE,
+			DataObjects.DESCRIPTION);
 
 	public DescriptionMetric() {
 		this.description = DESCRIPTION;
 		this.id = ID;
 		this.metricType = METRIC_TYPE;
+		this.requiredProperties = REQUIRED_PROPERTIES;
 	}
 
 	@Override
