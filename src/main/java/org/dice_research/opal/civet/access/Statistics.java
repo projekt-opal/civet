@@ -78,6 +78,11 @@ public class Statistics extends SparqlEndpointAccessor {
 		System.out.println(query);
 		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
+
+		query = "SELECT DISTINCT ?predicate WHERE { ?s a <http://www.w3.org/ns/dcat#Dataset> . ?s ?predicate ?o } ORDER BY ?predicate";
+		System.out.println(query);
+		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		System.out.println();
 	}
 
 	/**

@@ -43,8 +43,10 @@ public abstract class DataObjects {
 	/**
 	 * Creates data object for given ID.
 	 * 
-	 * @throws UnknownIdRuntimeException if the given ID has not been defined.
-	 * @throws NullPointerException      if the given ID is null.
+	 * @throws UnknownIdRuntimeException
+	 *             if the given ID has not been defined.
+	 * @throws NullPointerException
+	 *             if the given ID is null.
 	 */
 	public static DataObject<?> createDataObject(String id) throws UnknownIdRuntimeException {
 		if (id == null) {
