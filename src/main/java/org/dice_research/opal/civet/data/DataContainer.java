@@ -1,7 +1,9 @@
 package org.dice_research.opal.civet.data;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.dice_research.opal.civet.exceptions.UnknownIdRuntimeException;
 
@@ -59,18 +61,32 @@ public class DataContainer {
 	}
 
 	/**
-	 * Sets data object.
+	 * Puts data object in container.
 	 * 
 	 * @param dataObject implementation of {@link AbstractDataObject}
 	 * 
 	 * @throws NullPointerException if the given data object is null.
 	 */
-	public DataContainer setDataObject(DataObject<?> dataObject) throws NullPointerException {
+	public DataContainer putDataObject(DataObject<?> dataObject) throws NullPointerException {
 		if (dataObject == null) {
 			throw new NullPointerException("Data object is null");
 		} else {
 			dataObjects.put(dataObject.getId(), dataObject);
 			return this;
 		}
+	}
+
+	/**
+	 * Gets contained data object IDs.
+	 */
+	public Set<String> getIds() {
+		return dataObjects.keySet();
+	}
+
+	/**
+	 * Gets contained data objects.
+	 */
+	public Collection<DataObject<?>> getDataObjects() {
+		return dataObjects.values();
 	}
 }

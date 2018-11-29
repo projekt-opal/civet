@@ -19,19 +19,19 @@ public class ContactUrlMetricTest {
 
 		DataContainer data = new DataContainer();
 
-		data.setDataObject(new StringDataObject(DataObjects.CONTACT_URL, ""));
+		data.putDataObject(new StringDataObject(DataObjects.CONTACT_URL, ""));
 		assertEquals(0, new ContactUrlMetric().getScore(data), 0);
 
-		data.setDataObject(new StringDataObject(DataObjects.CONTACT_URL, "upb-de"));
+		data.putDataObject(new StringDataObject(DataObjects.CONTACT_URL, "upb-de"));
 		assertEquals(1, new ContactUrlMetric().getScore(data), 0);
 
-		data.setDataObject(new StringDataObject(DataObjects.CONTACT_URL, "upb.de"));
+		data.putDataObject(new StringDataObject(DataObjects.CONTACT_URL, "upb.de"));
 		assertEquals(2, new ContactUrlMetric().getScore(data), 0);
 
-		data.setDataObject(new StringDataObject(DataObjects.CONTACT_URL, "//upb.de"));
+		data.putDataObject(new StringDataObject(DataObjects.CONTACT_URL, "//upb.de"));
 		assertEquals(3, new ContactUrlMetric().getScore(data), 0);
 
-		data.setDataObject(new StringDataObject(DataObjects.CONTACT_URL, "http://dice.cs.upb.de"));
+		data.putDataObject(new StringDataObject(DataObjects.CONTACT_URL, "http://dice.cs.upb.de"));
 		assertEquals(5, new ContactUrlMetric().getScore(data), 0);
 	}
 }

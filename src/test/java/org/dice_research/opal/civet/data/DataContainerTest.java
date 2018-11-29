@@ -16,7 +16,7 @@ public class DataContainerTest {
 
 		boolean thrown = false;
 		try {
-			dataContainer.setDataObject(null);
+			dataContainer.putDataObject(null);
 		} catch (NullPointerException e) {
 			thrown = true;
 		}
@@ -27,10 +27,10 @@ public class DataContainerTest {
 		String id = "Test-Data-Object-ID";
 		String unknownId = "Test-Data-Object-Unknown-ID";
 		String stringValue = "Test-Data-Object-Value";
-		dataContainer.setDataObject(new StringDataObject(id));
+		dataContainer.putDataObject(new StringDataObject(id));
 		assertTrue(dataContainer.getDataObject(id).getValues().isEmpty());
 
-		dataContainer.setDataObject(new StringDataObject(id, stringValue));
+		dataContainer.putDataObject(new StringDataObject(id, stringValue));
 		assertFalse(dataContainer.getDataObject(id).getValues().isEmpty());
 
 		thrown = false;

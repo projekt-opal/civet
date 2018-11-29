@@ -19,16 +19,16 @@ public class ContactEmailMetricTest {
 
 		DataContainer data = new DataContainer();
 
-		data.setDataObject(new StringDataObject(DataObjects.CONTACT_EMAIL, ""));
+		data.putDataObject(new StringDataObject(DataObjects.CONTACT_EMAIL, ""));
 		assertEquals(0, new ContactEmailMetric().getScore(data), 0);
 
-		data.setDataObject(new StringDataObject(DataObjects.CONTACT_EMAIL, "john.doe-at-upb.de"));
+		data.putDataObject(new StringDataObject(DataObjects.CONTACT_EMAIL, "john.doe-at-upb.de"));
 		assertEquals(1, new ContactEmailMetric().getScore(data), 0);
 
-		data.setDataObject(new StringDataObject(DataObjects.CONTACT_EMAIL, "x@x.x"));
+		data.putDataObject(new StringDataObject(DataObjects.CONTACT_EMAIL, "x@x.x"));
 		assertEquals(1, new ContactEmailMetric().getScore(data), 0);
 
-		data.setDataObject(new StringDataObject(DataObjects.CONTACT_EMAIL, "john.doe@upb.de"));
+		data.putDataObject(new StringDataObject(DataObjects.CONTACT_EMAIL, "john.doe@upb.de"));
 		assertEquals(5, new ContactEmailMetric().getScore(data), 0);
 	}
 }
