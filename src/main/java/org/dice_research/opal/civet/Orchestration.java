@@ -22,6 +22,7 @@ import org.dice_research.opal.civet.metrics.Metrics;
 public class Orchestration {
 
 	protected static final Logger LOGGER = LogManager.getLogger();
+	OpalAccessor opalAccessor;
 	protected String sparqlQueryEndpoint;
 
 	/**
@@ -59,14 +60,15 @@ public class Orchestration {
 		}
 
 		// Get data
-		OpalAccessor opalAccessor = new OpalAccessor(this.sparqlQueryEndpoint).connect();
+		if (opalAccessor == null) {
+			opalAccessor = new OpalAccessor(this.sparqlQueryEndpoint).connect();
+		}
 		DataContainer dataContainer = createDataContainer(dataObjectIds);
 		try {
 			opalAccessor.getData(dataset, dataContainer);
 		} catch (SparqlEndpointRuntimeException e) {
 			LOGGER.error("Not connected to SPARQL endpoint.", e);
 		}
-		opalAccessor.close();
 
 		// Compute metrics
 		Map<String, Float> scores = new HashMap<String, Float>();
@@ -75,6 +77,13 @@ public class Orchestration {
 		}
 
 		return scores;
+	}
+
+	/**
+	 * Closes OPAL accessor endpoint connection.
+	 */
+	public void close() {
+		opalAccessor.close();
 	}
 
 	/**
