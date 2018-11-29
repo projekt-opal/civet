@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.jena.rdfconnection.RDFConnection;
 import org.dice_research.opal.civet.metrics.Metrics;
 
 /**
@@ -13,8 +14,8 @@ import org.dice_research.opal.civet.metrics.Metrics;
  */
 public class CivetApi {
 
-	protected Orchestration orchestration;
-	protected String sparqlQueryEndpoint;
+	private Orchestration orchestration;
+	private String sparqlQueryEndpoint;
 
 	/**
 	 * Sets the endpoint for SPARQL queries.
@@ -69,4 +70,22 @@ public class CivetApi {
 		return this.orchestration.compute(dataset, metrics);
 	}
 
+	/**
+	 * Gets RDF connection or null, if not set.
+	 */
+	public RDFConnection getRdfConnection() {
+		if (orchestration == null) {
+			return null;
+		} else {
+			return orchestration.getRdfConnection();
+		}
+	}
+
+	/**
+	 * Sets RDF connection.
+	 */
+	public CivetApi setRdfConnection(RDFConnection rdfConnection) {
+		this.orchestration.setRdfConnection(rdfConnection);
+		return this;
+	}
 }

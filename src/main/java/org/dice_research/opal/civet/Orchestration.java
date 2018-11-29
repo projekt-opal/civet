@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.jena.rdfconnection.RDFConnection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.access.OpalAccessor;
@@ -22,7 +23,7 @@ import org.dice_research.opal.civet.metrics.Metrics;
 public class Orchestration {
 
 	protected static final Logger LOGGER = LogManager.getLogger();
-	OpalAccessor opalAccessor;
+	protected OpalAccessor opalAccessor;
 	protected String sparqlQueryEndpoint;
 
 	/**
@@ -87,6 +88,17 @@ public class Orchestration {
 	}
 
 	/**
+	 * Gets RDF connection or null, if not set.
+	 */
+	public RDFConnection getRdfConnection() {
+		if (opalAccessor == null) {
+			return null;
+		} else {
+			return opalAccessor.getRdfConnection();
+		}
+	}
+
+	/**
 	 * Creates new data container with data objects.
 	 */
 	protected DataContainer createDataContainer(Collection<String> dataObjectIds) {
@@ -95,5 +107,13 @@ public class Orchestration {
 			dataContainer.putDataObject(DataObjects.createDataObject(id));
 		}
 		return dataContainer;
+	}
+
+	/**
+	 * Sets RDF connection.
+	 */
+	public Orchestration setRdfConnection(RDFConnection rdfConnection) {
+		this.opalAccessor.setRdfConnection(rdfConnection);
+		return this;
 	}
 }
