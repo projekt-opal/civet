@@ -31,7 +31,11 @@ import org.junit.runners.Suite.SuiteClasses;
 
 		ContactUrlMetricTest.class,
 
-		DescriptionMetricTest.class })
+		DescriptionMetricTest.class,
+
+		// Complete run
+
+		OrchestrationTest.class })
 
 public class AllTests {
 }

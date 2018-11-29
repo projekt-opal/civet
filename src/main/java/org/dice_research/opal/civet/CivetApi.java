@@ -1,8 +1,8 @@
 package org.dice_research.opal.civet;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.Collection;
+import java.util.Map;
 
 import org.dice_research.opal.civet.metrics.Metrics;
 
@@ -19,10 +19,14 @@ public class CivetApi {
 	/**
 	 * Sets the endpoint for SPARQL queries.
 	 * 
-	 * @param endpoint
-	 *            a URL, e.g. http://example.com:8890/sparql
+	 * @param endpoint a URL, e.g. http://example.com:8890/sparql
+	 * 
+	 * @throws NullPointerException if endpoint is null
 	 */
-	public CivetApi setSparqlQueryEndpoint(String endpoint) {
+	public CivetApi setSparqlQueryEndpoint(String endpoint) throws NullPointerException {
+		if (endpoint == null) {
+			throw new NullPointerException("No SPARQL query endpoint specified.");
+		}
 		this.sparqlQueryEndpoint = endpoint;
 		return this;
 	}
@@ -30,25 +34,23 @@ public class CivetApi {
 	/**
 	 * Gets IDs of all quality metrics.
 	 */
-	public Collection<String> getAllMetrics() {
-		return new Metrics().getMetrics().keySet();
+	public Collection<String> getAllMetricIds() {
+		return Metrics.getMetrics().keySet();
 	}
 
 	/**
 	 * Computes metrics for a dataset.
 	 * 
-	 * @param dataset
-	 *            the URI of the dataset
-	 * @param metrics
-	 *            a collection of metrics to compute
+	 * @param dataset the URI of the dataset
+	 * @param metrics a collection of metrics to compute
+	 * @return
 	 * 
-	 * @throws IOException
-	 *             if the metrics parameter is empty
-	 * @throws NullPointerException
-	 *             if one of the parameters is null or the SPARQL query endpoint was
-	 *             not set
+	 * @throws IllegalArgumentException if the metrics parameter is empty
+	 * @throws NullPointerException     if one of the parameters is null or the
+	 *                                  SPARQL query endpoint was not set
 	 */
-	public void compute(URI dataset, Collection<String> metrics) throws RuntimeException, IOException {
+	public Map<String, Float> compute(URI dataset, Collection<String> metrics)
+			throws NullPointerException, IllegalArgumentException {
 		if (this.sparqlQueryEndpoint == null) {
 			throw new NullPointerException("No SPARQL query endpoint specified.");
 		} else if (dataset == null) {
@@ -56,7 +58,7 @@ public class CivetApi {
 		} else if (metrics == null) {
 			throw new NullPointerException("No metrics specified.");
 		} else if (metrics.isEmpty()) {
-			throw new IOException("No metrics specified.");
+			throw new IllegalArgumentException("No metrics specified.");
 		}
 
 		if (this.orchestration == null) {
@@ -64,7 +66,7 @@ public class CivetApi {
 			this.orchestration.setSparqlQueryEndpoint(this.sparqlQueryEndpoint);
 		}
 
-		// TODO: Compute and return appropriate values.
-		this.orchestration.compute(dataset, metrics);
+		return this.orchestration.compute(dataset, metrics);
 	}
+
 }

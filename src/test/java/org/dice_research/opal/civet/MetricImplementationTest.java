@@ -16,7 +16,7 @@ public class MetricImplementationTest {
 	@Test
 	public void test() {
 
-		for (Metric metric : new Metrics().getMetrics().values()) {
+		for (Metric metric : Metrics.getMetrics().values()) {
 			assertNotNull(metric.getDescription());
 			assertNotNull(metric.getId());
 			assertNotNull(metric.getType());

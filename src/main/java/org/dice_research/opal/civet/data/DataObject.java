@@ -2,6 +2,8 @@ package org.dice_research.opal.civet.data;
 
 import java.util.List;
 
+import org.dice_research.opal.civet.exceptions.ParsingException;
+
 /**
  * Generic data object.
  * 
@@ -43,6 +45,14 @@ public interface DataObject<TYPE> {
 	DataObject<TYPE> setValue(TYPE value) throws NullPointerException;
 
 	/**
+	 * Parses and sets string value of data object.
+	 * 
+	 * @throws NullPointerException if the given value is null.
+	 * @throws ParsingException     on errors parsing the given string.
+	 */
+	DataObject<TYPE> setValue(String value) throws NullPointerException, ParsingException;
+
+	/**
 	 * Sets values of data object.
 	 * 
 	 * @throws NullPointerException if the given list of values is null.
@@ -55,6 +65,14 @@ public interface DataObject<TYPE> {
 	 * @throws NullPointerException if the given value is null.
 	 */
 	DataObject<TYPE> addValue(TYPE value) throws NullPointerException;
+
+	/**
+	 * Parses and adds string value of data object.
+	 * 
+	 * @throws NullPointerException if the given value is null.
+	 * @throws ParsingException     on errors parsing the given string.
+	 */
+	DataObject<TYPE> addValue(String value) throws NullPointerException, ParsingException;
 
 	/**
 	 * Adds values of data object.

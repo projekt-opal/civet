@@ -2,6 +2,8 @@ package org.dice_research.opal.civet.data;
 
 import java.util.List;
 
+import org.dice_research.opal.civet.exceptions.ParsingException;
+
 /**
  * {@link DataObject} of type {@link Integer}.
  *
@@ -58,6 +60,32 @@ public class IntegerDataObject extends AbstractDataObject<Integer> {
 	 */
 	public Class<Integer> getType() {
 		return Integer.class;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public DataObject<Integer> setValue(String value) throws NullPointerException, ParsingException {
+		try {
+			setValue(Integer.parseInt(value));
+		} catch (NumberFormatException e) {
+			throw new ParsingException(e);
+		}
+		return this;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public DataObject<Integer> addValue(String value) throws NullPointerException, ParsingException {
+		try {
+			addValue(Integer.parseInt(value));
+		} catch (NumberFormatException e) {
+			throw new ParsingException(e);
+		}
+		return this;
 	}
 
 }

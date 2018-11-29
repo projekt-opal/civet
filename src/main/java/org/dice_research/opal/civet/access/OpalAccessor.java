@@ -1,6 +1,7 @@
 package org.dice_research.opal.civet.access;
 
 import java.net.URI;
+import java.util.Iterator;
 
 import org.apache.jena.arq.querybuilder.SelectBuilder;
 import org.apache.jena.graph.NodeFactory;
@@ -14,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObject;
 import org.dice_research.opal.civet.data.DataObjects;
+import org.dice_research.opal.civet.exceptions.ParsingException;
 import org.dice_research.opal.civet.vocabulary.DublinCore;
 
 public class OpalAccessor extends SparqlEndpointAccessor {
@@ -30,7 +32,14 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		return this;
 	}
 
-	public void getData(URI dataset, DataContainer dataContainer) {
+	public void getData(URI datasetUri, DataContainer dataContainer) {
+
+		// Ensure connection
+		if (!isConnected()) {
+			connect();
+		}
+
+		// Build query
 		SelectBuilder selectBuilder = new SelectBuilder();
 		for (DataObject<?> dataObject : dataContainer.getDataObjects()) {
 
@@ -48,20 +57,31 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 				LOGGER.warn("Unknown data object ID: " + dataObject.getId());
 			}
 		}
-		selectBuilder.setVar(Var.alloc("dataset"), "<" + dataset.toString() + ">");
+		selectBuilder.setVar(Var.alloc("dataset"), "<" + datasetUri.toString() + ">");
 
+		// Execute query
 		Query query = selectBuilder.build();
 		QueryExecution queryExecution = rdfConnection.query(query);
 		ResultSet resultSet = queryExecution.execSelect();
 
-		while (resultSet.hasNext()) {
+		// Process results
+		if (resultSet.hasNext()) {
 			QuerySolution querySolution = resultSet.next();
-			System.out.println(querySolution.getLiteral(DataObjects.DESCRIPTION));
-			System.out.println(querySolution.getLiteral(DataObjects.TITLE));
+
+			// Iterator only returns variables with values (optional properties are skipped)
+			Iterator<String> iterator = querySolution.varNames();
+			while (iterator.hasNext()) {
+				String id = iterator.next();
+				try {
+					dataContainer.getDataObject(id).addValue(querySolution.getLiteral(id).getString());
+				} catch (ParsingException e) {
+					LOGGER.error(e);
+				}
+
+			}
 		}
-
-		// TODO Check empty values
-		// TODO put in data objects
-
+		if (resultSet.hasNext()) {
+			LOGGER.debug("More than one result returned.");
+		}
 	}
 }
