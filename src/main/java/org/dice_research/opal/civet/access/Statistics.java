@@ -52,6 +52,9 @@ public class Statistics extends SparqlEndpointAccessor {
 		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
+		System.out.println();
+		System.out.println();
+
 		// Distribution
 
 		query = "SELECT DISTINCT (COUNT(?distribution) as ?distributions) WHERE { ?distribution a <http://www.w3.org/ns/dcat#Distribution> }";
@@ -62,6 +65,14 @@ public class Statistics extends SparqlEndpointAccessor {
 		query = "SELECT DISTINCT ?distribution WHERE { ?distribution a <http://www.w3.org/ns/dcat#Distribution> } LIMIT 5";
 		System.out.println(query);
 		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		System.out.println();
+
+		query = "SELECT DISTINCT ?predicate WHERE { ?s a <http://www.w3.org/ns/dcat#Distribution> . ?s ?predicate ?o } ORDER BY ?predicate";
+		System.out.println(query);
+		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		System.out.println();
+
+		System.out.println();
 		System.out.println();
 
 		// Dataset
@@ -80,6 +91,31 @@ public class Statistics extends SparqlEndpointAccessor {
 		System.out.println(query);
 		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
+
+		System.out.println();
+		System.out.println();
+
+		// Combinations
+
+		query = "SELECT DISTINCT ?dataset (COUNT(?distribution) as ?distributions) "
+				+ "WHERE { ?dataset a <http://www.w3.org/ns/dcat#Dataset> . ?dataset <dcat:distribution> ?distribution . ?distribution a <http://www.w3.org/ns/dcat#Distribution> } "
+				+ "GROUP BY ?dataset " + "ORDER BY DESC(?distributions) LIMIT 5";
+		System.out.println(query);
+		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		System.out.println();
+
+		// URLs of a dataset
+
+		String dataset = "<http://europeandataportal.projekt-opal.de/dataset/donnees-temps-reel-de-mesure-des-concentrations-de-polluants-atmospheriques-reglementes-1>";
+		query = "SELECT DISTINCT ?accessURL ?downloadURL " + "WHERE { "
+				+ "?dataset a <http://www.w3.org/ns/dcat#Dataset> . " + "?dataset <dcat:distribution> ?distribution . "
+				+ dataset + " <dcat:distribution> ?distribution . "
+				+ "OPTIONAL { ?distribution <http://www.w3.org/ns/dcat#accessURL> ?accessURL } . "
+				+ "OPTIONAL { ?distribution <http://www.w3.org/ns/dcat#downloadURL> ?downloadURL } " + "} LIMIT 5 ";
+		System.out.println(query);
+		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		System.out.println();
+
 	}
 
 	/**
