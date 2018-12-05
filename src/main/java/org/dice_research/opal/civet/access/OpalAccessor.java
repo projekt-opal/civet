@@ -16,6 +16,7 @@ import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObject;
 import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.exceptions.ParsingException;
+import org.dice_research.opal.civet.vocabulary.Dcat;
 import org.dice_research.opal.civet.vocabulary.DublinCore;
 
 public class OpalAccessor extends SparqlEndpointAccessor {
@@ -43,19 +44,26 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		SelectBuilder selectBuilder = new SelectBuilder();
 		for (DataObject<?> dataObject : dataContainer.getDataObjects()) {
 
-			if (dataObject.getId().equals(DataObjects.DESCRIPTION)) {
-				selectBuilder.addVar(DataObjects.DESCRIPTION).addOptional("?dataset",
-						NodeFactory.createURI(DublinCore.PROPERTY_DESCRIPTION),
-						NodeFactory.createVariable(DataObjects.DESCRIPTION));
+			// Dataset properties
 
-			} else if (dataObject.getId().equals(DataObjects.TITLE)) {
-				selectBuilder.addVar(DataObjects.TITLE).addOptional("?dataset",
-						NodeFactory.createURI(DublinCore.PROPERTY_TITLE),
-						NodeFactory.createVariable(DataObjects.TITLE));
+			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.DESCRIPTION,
+					DublinCore.PROPERTY_DESCRIPTION))
+				continue;
 
-			} else {
-				LOGGER.warn("Unknown data object ID: " + dataObject.getId());
-			}
+			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.ISSUED, DublinCore.PROPERTY_ISSUED))
+				continue;
+
+			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.PUBLISHER,
+					DublinCore.PROPERTY_PUBLISHER))
+				continue;
+
+			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.THEME, Dcat.PROPERTY_THEME))
+				continue;
+
+			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.TITLE, DublinCore.PROPERTY_TITLE))
+				continue;
+
+			LOGGER.warn("Unknown data object ID: " + dataObject.getId());
 		}
 		selectBuilder.setVar(Var.alloc("dataset"), "<" + datasetUri.toString() + ">");
 
@@ -83,6 +91,17 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		}
 		if (resultSet.hasNext()) {
 			LOGGER.debug("More than one result returned.");
+		}
+	}
+
+	private boolean addDatasetRelation(SelectBuilder selectBuilder, String dataObjectIdActual,
+			String dataObjectIdExpected, String predicate) {
+		if (dataObjectIdActual.equals(dataObjectIdExpected)) {
+			selectBuilder.addVar(dataObjectIdExpected).addOptional("?dataset", NodeFactory.createURI(predicate),
+					NodeFactory.createVariable(dataObjectIdExpected));
+			return true;
+		} else {
+			return false;
 		}
 	}
 }
