@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Iterator;
 
 import org.apache.jena.arq.querybuilder.SelectBuilder;
+import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
@@ -18,6 +19,8 @@ import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.exceptions.ParsingException;
 import org.dice_research.opal.civet.vocabulary.Dcat;
 import org.dice_research.opal.civet.vocabulary.DublinCore;
+import org.dice_research.opal.civet.vocabulary.Foaf;
+import org.dice_research.opal.civet.vocabulary.Skos;
 
 public class OpalAccessor extends SparqlEndpointAccessor {
 
@@ -53,18 +56,28 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.ISSUED, DublinCore.PROPERTY_ISSUED))
 				continue;
 
-			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.PUBLISHER,
-					DublinCore.PROPERTY_PUBLISHER))
-				continue;
-
-			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.THEME, Dcat.PROPERTY_THEME))
-				continue;
-
 			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.TITLE, DublinCore.PROPERTY_TITLE))
 				continue;
 
-			LOGGER.warn("Unknown data object ID: " + dataObject.getId());
+			if (dataObject.getId().equals(DataObjects.PUBLISHER)) {
+				Node foafAgent = NodeFactory.createVariable("foafAgent");
+				selectBuilder.addVar(DataObjects.PUBLISHER)
+						.addOptional("?dataset", NodeFactory.createURI(DublinCore.PROPERTY_PUBLISHER), foafAgent)
+						.addOptional(foafAgent, NodeFactory.createURI(Foaf.PROPERTY_NAME),
+								NodeFactory.createVariable(DataObjects.PUBLISHER));
+			}
+
+			if (dataObject.getId().equals(DataObjects.THEME)) {
+				Node skosConcept = NodeFactory.createVariable("skosConcept");
+				selectBuilder.addVar(DataObjects.THEME)
+						.addOptional("?dataset", NodeFactory.createURI(Dcat.PROPERTY_THEME), skosConcept)
+						.addOptional(skosConcept, NodeFactory.createURI(Skos.PROPERTY_PREF_LABEL),
+								NodeFactory.createVariable(DataObjects.THEME));
+			}
+
+			// TODO: Distribution data
 		}
+
 		selectBuilder.setVar(Var.alloc("dataset"), "<" + datasetUri.toString() + ">");
 
 		// Execute query
@@ -74,6 +87,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		ResultSet resultSet = queryExecution.execSelect();
 
 		// Process results
+		int categories = 0;
 		if (resultSet.hasNext()) {
 			QuerySolution querySolution = resultSet.next();
 
@@ -82,16 +96,24 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 			while (iterator.hasNext()) {
 				String id = iterator.next();
 				try {
-					dataContainer.getDataObject(id).addValue(querySolution.getLiteral(id).getString());
+					if (id.equals(DataObjects.THEME)) {
+						categories++;
+					}
+					dataContainer.getDataObject(id).addValue(querySolution.get(id).toString());
 				} catch (ParsingException e) {
 					LOGGER.error(e);
 				}
-
 			}
+		}
+		try {
+			dataContainer.getDataObject(DataObjects.NUMBER_OF_CATEGORIES).addValue("" + categories);
+		} catch (ParsingException e) {
+			LOGGER.error(e);
 		}
 		if (resultSet.hasNext()) {
 			LOGGER.debug("More than one result returned.");
 		}
+
 	}
 
 	private boolean addDatasetRelation(SelectBuilder selectBuilder, String dataObjectIdActual,
@@ -104,4 +126,5 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 			return false;
 		}
 	}
+
 }

@@ -62,12 +62,12 @@ public class Statistics extends SparqlEndpointAccessor {
 		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
-		query = "SELECT DISTINCT ?distribution WHERE { ?distribution a <http://www.w3.org/ns/dcat#Distribution> } LIMIT 5";
+		query = "SELECT DISTINCT ?predicate WHERE { ?s a <http://www.w3.org/ns/dcat#Distribution> . ?s ?predicate ?o } ORDER BY ?predicate";
 		System.out.println(query);
 		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
-		query = "SELECT DISTINCT ?predicate WHERE { ?s a <http://www.w3.org/ns/dcat#Distribution> . ?s ?predicate ?o } ORDER BY ?predicate";
+		query = "SELECT DISTINCT ?distribution WHERE { ?distribution a <http://www.w3.org/ns/dcat#Distribution> } LIMIT 5";
 		System.out.println(query);
 		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
@@ -82,12 +82,12 @@ public class Statistics extends SparqlEndpointAccessor {
 		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
-		query = "SELECT DISTINCT ?dataset WHERE { ?dataset a <http://www.w3.org/ns/dcat#Dataset> } LIMIT 5";
+		query = "SELECT DISTINCT ?predicate WHERE { ?s a <http://www.w3.org/ns/dcat#Dataset> . ?s ?predicate ?o } ORDER BY ?predicate";
 		System.out.println(query);
 		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
-		query = "SELECT DISTINCT ?predicate WHERE { ?s a <http://www.w3.org/ns/dcat#Dataset> . ?s ?predicate ?o } ORDER BY ?predicate";
+		query = "SELECT DISTINCT ?dataset WHERE { ?dataset a <http://www.w3.org/ns/dcat#Dataset> } LIMIT 5";
 		System.out.println(query);
 		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();

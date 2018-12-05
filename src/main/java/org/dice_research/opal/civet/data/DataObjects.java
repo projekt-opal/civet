@@ -31,9 +31,9 @@ public abstract class DataObjects {
 	public final static String DISTRIBUTION = "DISTRIBUTION";
 
 	// Distribution properties
-	public final static String LICENSE = "LICENSE";
 	public final static String ACCESS_URL = "ACCESS_URL";
 	public final static String DOWNLOAD_URL = "DOWNLOAD_URL";
+	public final static String LICENSE = "LICENSE";
 
 	private static List<String> integerDataObjects = new LinkedList<String>();
 	private static List<String> stringDataObjects = new LinkedList<String>();
@@ -42,9 +42,19 @@ public abstract class DataObjects {
 	 * Definition of data object types.
 	 */
 	static {
-		stringDataObjects.add(DESCRIPTION);
 		integerDataObjects.add(NUMBER_OF_CATEGORIES);
+
+		stringDataObjects.add(DESCRIPTION);
+		stringDataObjects.add(ISSUED);
+		stringDataObjects.add(PUBLISHER);
+		stringDataObjects.add(THEME);
 		stringDataObjects.add(TITLE);
+
+		stringDataObjects.add(DISTRIBUTION);
+
+		stringDataObjects.add(ACCESS_URL);
+		stringDataObjects.add(DOWNLOAD_URL);
+		stringDataObjects.add(LICENSE);
 	}
 
 	/**

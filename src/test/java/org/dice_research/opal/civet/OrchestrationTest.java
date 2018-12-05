@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashSet;
@@ -18,23 +16,15 @@ import org.junit.Test;
 
 public class OrchestrationTest {
 
-	// TODO: Put in properties file or so
-	private String sparqlQueryEndpointHost = "opalpro.cs.upb.de";
-	private int sparqlQueryEndpointPort = 8890;
-	private String sparqlQueryEndpointPath = "/sparql";
-	private String sparqlQueryEndpoint = "http://" + sparqlQueryEndpointHost + ":" + sparqlQueryEndpointPort
-			+ sparqlQueryEndpointPath;
-	private String datasetUri = "http://europeandataportal.projekt-opal.de/dataset/0021";
-
 	@Test
-	public void test() throws MalformedURLException, IOException, URISyntaxException {
+	public void test() throws URISyntaxException {
 
 		// Check if endpoint is reachable
 		Orchestration orchestration = new Orchestration();
-		boolean reachable = IoUtils.pingHost(sparqlQueryEndpointHost, sparqlQueryEndpointPort, 100);
+		boolean reachable = IoUtils.pingHost(Config.sparqlQueryEndpointHost, Config.sparqlQueryEndpointPort, 100);
 		if (!reachable) {
-			System.out.println(
-					OrchestrationTest.class.getSimpleName() + ": could not access endpoint " + sparqlQueryEndpoint);
+			System.out.println(OrchestrationTest.class.getSimpleName() + ": could not access endpoint "
+					+ Config.sparqlQueryEndpoint);
 		}
 		assumeTrue(reachable);
 
@@ -44,8 +34,8 @@ public class OrchestrationTest {
 		// Compute scores
 		Set<String> metrics = new HashSet<String>();
 		metrics.add(metricDescription);
-		orchestration.setSparqlQueryEndpoint(sparqlQueryEndpoint);
-		Map<String, Float> scores = orchestration.compute(new URI(datasetUri), metrics);
+		orchestration.setSparqlQueryEndpoint(Config.sparqlQueryEndpoint);
+		Map<String, Float> scores = orchestration.compute(new URI(Config.datasetUriEuroPortal), metrics);
 
 		assertEquals(1, scores.size());
 		assertTrue(scores.get(metricDescription) > 0);
