@@ -106,7 +106,8 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 			}
 		}
 		try {
-			dataContainer.getDataObject(DataObjects.NUMBER_OF_CATEGORIES).addValue("" + categories);
+			if (dataContainer.getIds().contains(DataObjects.NUMBER_OF_CATEGORIES))
+				dataContainer.getDataObject(DataObjects.NUMBER_OF_CATEGORIES).addValue("" + categories);
 		} catch (ParsingException e) {
 			LOGGER.error(e);
 		}
