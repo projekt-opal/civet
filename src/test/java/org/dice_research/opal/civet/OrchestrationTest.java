@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dice_research.opal.civet.access.IoUtils;
-import org.dice_research.opal.civet.metrics.ContactEmailMetric;
 import org.dice_research.opal.civet.metrics.DescriptionMetric;
 import org.junit.Test;
 
@@ -40,20 +39,15 @@ public class OrchestrationTest {
 		assumeTrue(reachable);
 
 		// Metrics to use
-		String metricContact = new ContactEmailMetric().toString();
 		String metricDescription = new DescriptionMetric().toString();
 
 		// Compute scores
 		Set<String> metrics = new HashSet<String>();
-		metrics.add(metricContact);
 		metrics.add(metricDescription);
 		orchestration.setSparqlQueryEndpoint(sparqlQueryEndpoint);
 		Map<String, Float> scores = orchestration.compute(new URI(datasetUri), metrics);
 
-		assertEquals(2, scores.size());
+		assertEquals(1, scores.size());
 		assertTrue(scores.get(metricDescription) > 0);
-
-		// TODO: Currently, no contact emails are included in graph
-		assertEquals(Float.valueOf(0), scores.get(metricContact));
 	}
 }

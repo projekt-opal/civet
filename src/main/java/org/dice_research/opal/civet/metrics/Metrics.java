@@ -21,22 +21,11 @@ public abstract class Metrics {
 	}
 
 	/**
-	 * Gets all metrics of the dimension contact.
-	 */
-	public static Map<String, Metric> getMetricsContact() {
-		Map<String, Metric> metrics = new HashMap<String, Metric>();
-		putMetricIntoMap(new ContactEmailMetric(), metrics);
-		putMetricIntoMap(new ContactUrlMetric(), metrics);
-		return metrics;
-	}
-
-	/**
 	 * Gets all metrics.
 	 */
 	public static Map<String, Metric> getMetrics() {
 		Map<String, Metric> metrics = new HashMap<String, Metric>();
 		metrics.putAll(getMetricsExpressiveness());
-		metrics.putAll(getMetricsContact());
 		return metrics;
 	}
 

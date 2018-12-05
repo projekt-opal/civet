@@ -61,6 +61,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 
 		// Execute query
 		Query query = selectBuilder.build();
+		LOGGER.debug(query.toString());
 		QueryExecution queryExecution = rdfConnection.query(query);
 		ResultSet resultSet = queryExecution.execSelect();
 
