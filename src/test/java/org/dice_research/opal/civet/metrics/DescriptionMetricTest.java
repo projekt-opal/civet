@@ -20,6 +20,11 @@ public class DescriptionMetricTest {
 		DataContainer data;
 
 		data = new DataContainer();
+		data.putDataObject(new StringDataObject(DataObjects.TITLE, ""));
+		data.putDataObject(new StringDataObject(DataObjects.DESCRIPTION, ""));
+		assertEquals(0, new DescriptionMetric().getScore(data), 0);
+
+		data = new DataContainer();
 		data.putDataObject(new StringDataObject(DataObjects.TITLE, "test"));
 		data.putDataObject(new StringDataObject(DataObjects.DESCRIPTION, ""));
 		assertEquals(1, new DescriptionMetric().getScore(data), 0);
@@ -37,22 +42,27 @@ public class DescriptionMetricTest {
 		data = new DataContainer();
 		data.putDataObject(new StringDataObject(DataObjects.TITLE, "test"));
 		data.putDataObject(new StringDataObject(DataObjects.DESCRIPTION, "this is a description: 25"));
-		assertEquals(2, new DescriptionMetric().getScore(data), 0);
+		assertEquals(1, new DescriptionMetric().getScore(data), 0);
 
 		data = new DataContainer();
 		data.putDataObject(new StringDataObject(DataObjects.TITLE, "test"));
+		data.putDataObject(new StringDataObject(DataObjects.DESCRIPTION, "this is a description: 25"));
+		assertEquals(1, new DescriptionMetric().getScore(data), 0);
+
+		data = new DataContainer();
+		data.putDataObject(new StringDataObject(DataObjects.TITLE, "test title: 15!"));
 		data.putDataObject(
 				new StringDataObject(DataObjects.DESCRIPTION, "this is a description with some useful informat50"));
 		assertEquals(3, new DescriptionMetric().getScore(data), 0);
 
 		data = new DataContainer();
-		data.putDataObject(new StringDataObject(DataObjects.TITLE, "test"));
+		data.putDataObject(new StringDataObject(DataObjects.TITLE, "test title: 15!"));
 		data.putDataObject(new StringDataObject(DataObjects.DESCRIPTION,
 				"this is a description with some text which could contain useful informati75"));
 		assertEquals(4, new DescriptionMetric().getScore(data), 0);
 
 		data = new DataContainer();
-		data.putDataObject(new StringDataObject(DataObjects.TITLE, "test"));
+		data.putDataObject(new StringDataObject(DataObjects.TITLE, "test title: 15!"));
 		data.putDataObject(new StringDataObject(DataObjects.DESCRIPTION,
 				"this is a description with some text which could contain useful information and more"));
 		assertEquals(5, new DescriptionMetric().getScore(data), 0);

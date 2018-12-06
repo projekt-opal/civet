@@ -3,6 +3,7 @@ package org.dice_research.opal.civet.data;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.dice_research.opal.civet.exceptions.UnknownIdRuntimeException;
@@ -88,5 +89,22 @@ public class DataContainer {
 	 */
 	public Collection<DataObject<?>> getDataObjects() {
 		return dataObjects.values();
+	}
+
+	/**
+	 * Gets all contained data as string representation.
+	 */
+	public String toExtendedString() {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (Entry<String, DataObject<?>> dataObject : dataObjects.entrySet()) {
+			stringBuilder.append(dataObject.getKey());
+			stringBuilder.append(System.lineSeparator());
+			for (Object value : dataObject.getValue().getValues()) {
+				stringBuilder.append(" ");
+				stringBuilder.append(value.toString());
+				stringBuilder.append(System.lineSeparator());
+			}
+		}
+		return stringBuilder.toString();
 	}
 }

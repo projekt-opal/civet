@@ -74,6 +74,8 @@ public class CivetApi {
 
 	/**
 	 * Gets RDF connection or null, if not set.
+	 * 
+	 * @deprecated Was used for test issues
 	 */
 	public RDFConnection getRdfConnection() {
 		if (orchestration == null) {
@@ -85,6 +87,8 @@ public class CivetApi {
 
 	/**
 	 * Sets RDF connection.
+	 * 
+	 * @deprecated Was used for test issues
 	 */
 	public CivetApi setRdfConnection(RDFConnection rdfConnection) {
 		this.orchestration.setRdfConnection(rdfConnection);

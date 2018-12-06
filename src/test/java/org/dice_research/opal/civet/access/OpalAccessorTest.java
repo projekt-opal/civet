@@ -1,5 +1,7 @@
 package org.dice_research.opal.civet.access;
 
+import static org.junit.Assert.assertEquals;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -29,21 +31,16 @@ public class OpalAccessorTest {
 		opalAccessor.getData(new URI(Config.datasetUriMcloud), dataContainer);
 		opalAccessor.getData(new URI(Config.datasetUriEuroPortal), dataContainer);
 
-		// Use data
-		// TODO: Test minimal score
-		System.out.println(allPropertiesMetric.getScore(dataContainer));
+		// ACCESS_URL data is currently not used in RDF graph
+		int unusedProperties = 1;
 
-		// TODO: get all literals
-		StringBuilder stringBuilder = new StringBuilder();
-		for (String propertyId : allPropertiesIds) {
-			stringBuilder.append(dataContainer.getDataObject(propertyId));
-			stringBuilder.append(System.lineSeparator());
-			for (Object value : dataContainer.getDataObject(propertyId).getValues()) {
-				stringBuilder.append(" ");
-				stringBuilder.append(value.toString());
-				stringBuilder.append(System.lineSeparator());
-			}
-		}
-		System.out.println(stringBuilder.toString());
+		assertEquals(allPropertiesMetric.getRequiredProperties().size() - unusedProperties,
+				allPropertiesMetric.getScore(dataContainer), 0);
+
+		// Human test of score
+//		System.out.println(allPropertiesMetric.getScore(dataContainer));
+
+		// Human investigation of data
+//		System.out.println(dataContainer.toExtendedString());
 	}
 }

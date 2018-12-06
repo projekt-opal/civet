@@ -4,10 +4,17 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.dice_research.opal.civet.data.DataContainer;
+import org.dice_research.opal.civet.data.DataObject;
 import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.metrics.Metric;
 import org.dice_research.opal.civet.metrics.MetricType;
 
+/**
+ * Uses all known properties. Calculated score is number of non-empty data
+ * objects.
+ *
+ * @author Adrian Wilke
+ */
 public class AllPropertiesMetric extends Metric {
 
 	private static final String DESCRIPTION = "Requires all properties for tests.";
@@ -19,8 +26,6 @@ public class AllPropertiesMetric extends Metric {
 
 			DataObjects.DESCRIPTION, DataObjects.ISSUED, DataObjects.PUBLISHER, DataObjects.THEME, DataObjects.TITLE,
 
-			DataObjects.DISTRIBUTION,
-
 			DataObjects.ACCESS_URL, DataObjects.DOWNLOAD_URL, DataObjects.LICENSE);
 
 	public AllPropertiesMetric() {
@@ -30,11 +35,18 @@ public class AllPropertiesMetric extends Metric {
 		this.requiredProperties = REQUIRED_PROPERTIES;
 	}
 
+	/**
+	 * Counts number of non-empty data objects.
+	 */
 	@Override
 	public float getScore(DataContainer dataContainer) {
-
-		return dataContainer.getIds().size();
-
+		int nonEmpty = 0;
+		for (DataObject<?> dataObject : dataContainer.getDataObjects()) {
+			if (!dataObject.getValues().isEmpty()) {
+				nonEmpty++;
+			}
+		}
+		return nonEmpty;
 	}
 
 }

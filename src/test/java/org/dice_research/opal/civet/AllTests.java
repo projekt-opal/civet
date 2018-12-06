@@ -17,6 +17,11 @@ import org.junit.runners.Suite.SuiteClasses;
 
 		DataContainerTest.class,
 
+		// Access
+
+// TODO: Too many requests overall. Endpoint does not react.		
+//		OpalAccessorTest.class,
+
 		// Metrics
 
 		MetricImplementationTest.class,

@@ -28,8 +28,6 @@ public abstract class DataObjects {
 	public final static String THEME = "THEME";
 	public final static String TITLE = "TITLE";
 
-	public final static String DISTRIBUTION = "DISTRIBUTION";
-
 	// Distribution properties
 	public final static String ACCESS_URL = "ACCESS_URL";
 	public final static String DOWNLOAD_URL = "DOWNLOAD_URL";
@@ -49,8 +47,6 @@ public abstract class DataObjects {
 		stringDataObjects.add(PUBLISHER);
 		stringDataObjects.add(THEME);
 		stringDataObjects.add(TITLE);
-
-		stringDataObjects.add(DISTRIBUTION);
 
 		stringDataObjects.add(ACCESS_URL);
 		stringDataObjects.add(DOWNLOAD_URL);

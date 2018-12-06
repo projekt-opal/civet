@@ -1,7 +1,12 @@
 package org.dice_research.opal.civet.access;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.jena.arq.querybuilder.SelectBuilder;
 import org.apache.jena.graph.Node;
@@ -22,6 +27,18 @@ import org.dice_research.opal.civet.vocabulary.DublinCore;
 import org.dice_research.opal.civet.vocabulary.Foaf;
 import org.dice_research.opal.civet.vocabulary.Skos;
 
+/**
+ * Data accessor for OPAL SPARQL endpoint.
+ * 
+ * RDF graph data is accessed and written into data container.
+ * 
+ * TODO: Process multiple datasets using binds.
+ * 
+ * TODO: Rewrite SPARQL queries to use max. one query per dataset. If possible,
+ * avoid cross product data.
+ *
+ * @author Adrian Wilke
+ */
 public class OpalAccessor extends SparqlEndpointAccessor {
 
 	protected static final Logger LOGGER = LogManager.getLogger();
@@ -118,21 +135,12 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 
 	private void getDistributionData(URI datasetUri, DataContainer dataContainer) {
 
-		// Ensure connection
-		if (!isConnected()) {
-			connect();
-		}
-
 		// Build query
 		SelectBuilder selectBuilder = new SelectBuilder();
 		selectBuilder.addWhere("?dataset", NodeFactory.createURI(Dcat.PROPERTY_DISTRIBUTION), "?distribution");
 		for (DataObject<?> dataObject : dataContainer.getDataObjects()) {
 
-			// Dataset properties
-
-			if (addDistributionRelation(selectBuilder, dataObject.getId(), DataObjects.LICENSE,
-					DublinCore.PROPERTY_LICENSE))
-				continue;
+			// Distribution properties
 
 			if (addDistributionRelation(selectBuilder, dataObject.getId(), DataObjects.ACCESS_URL,
 					Dcat.PROPERTY_ACCESS_URL))
@@ -140,6 +148,10 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 
 			if (addDistributionRelation(selectBuilder, dataObject.getId(), DataObjects.DOWNLOAD_URL,
 					Dcat.PROPERTY_DOWNLOAD_URL))
+				continue;
+
+			if (addDistributionRelation(selectBuilder, dataObject.getId(), DataObjects.LICENSE,
+					DublinCore.PROPERTY_LICENSE))
 				continue;
 		}
 		selectBuilder.setVar(Var.alloc("dataset"), "<" + datasetUri.toString() + ">");
@@ -150,8 +162,10 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		QueryExecution queryExecution = rdfConnection.query(query);
 		ResultSet resultSet = queryExecution.execSelect();
 
+		// Deduplication
+		Map<String, Set<String>> data = new HashMap<>();
+
 		// Process results
-		int categories = 0;
 		while (resultSet.hasNext()) {
 			QuerySolution querySolution = resultSet.next();
 
@@ -159,21 +173,26 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 			Iterator<String> iterator = querySolution.varNames();
 			while (iterator.hasNext()) {
 				String id = iterator.next();
+				if (id.equals("distribution")) {
+					// variable just used to access data
+					continue;
+				}
+				if (!data.containsKey(id)) {
+					data.put(id, new HashSet<String>());
+				}
+				data.get(id).add(querySolution.get(id).toString().trim());
+			}
+		}
+
+		// Put data in container
+		for (Entry<String, Set<String>> entry : data.entrySet()) {
+			for (String value : entry.getValue()) {
 				try {
-					if (id.equals(DataObjects.THEME)) {
-						categories++;
-					}
-					dataContainer.getDataObject(id).addValue(querySolution.get(id).toString().trim());
+					dataContainer.getDataObject(entry.getKey()).addValue(value);
 				} catch (ParsingException e) {
 					LOGGER.error(e);
 				}
 			}
-		}
-		try {
-			if (dataContainer.getIds().contains(DataObjects.NUMBER_OF_CATEGORIES))
-				dataContainer.getDataObject(DataObjects.NUMBER_OF_CATEGORIES).addValue("" + categories);
-		} catch (ParsingException e) {
-			LOGGER.error(e);
 		}
 	}
 
