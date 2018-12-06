@@ -74,8 +74,6 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 						.addOptional(skosConcept, NodeFactory.createURI(Skos.PROPERTY_PREF_LABEL),
 								NodeFactory.createVariable(DataObjects.THEME));
 			}
-
-			// TODO: Distribution data
 		}
 
 		selectBuilder.setVar(Var.alloc("dataset"), "<" + datasetUri.toString() + ">");
@@ -99,7 +97,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 					if (id.equals(DataObjects.THEME)) {
 						categories++;
 					}
-					dataContainer.getDataObject(id).addValue(querySolution.get(id).toString());
+					dataContainer.getDataObject(id).addValue(querySolution.get(id).toString().trim());
 				} catch (ParsingException e) {
 					LOGGER.error(e);
 				}
@@ -115,12 +113,85 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 			LOGGER.debug("More than one result returned.");
 		}
 
+		getDistributionData(datasetUri, dataContainer);
+	}
+
+	private void getDistributionData(URI datasetUri, DataContainer dataContainer) {
+
+		// Ensure connection
+		if (!isConnected()) {
+			connect();
+		}
+
+		// Build query
+		SelectBuilder selectBuilder = new SelectBuilder();
+		selectBuilder.addWhere("?dataset", NodeFactory.createURI(Dcat.PROPERTY_DISTRIBUTION), "?distribution");
+		for (DataObject<?> dataObject : dataContainer.getDataObjects()) {
+
+			// Dataset properties
+
+			if (addDistributionRelation(selectBuilder, dataObject.getId(), DataObjects.LICENSE,
+					DublinCore.PROPERTY_LICENSE))
+				continue;
+
+			if (addDistributionRelation(selectBuilder, dataObject.getId(), DataObjects.ACCESS_URL,
+					Dcat.PROPERTY_ACCESS_URL))
+				continue;
+
+			if (addDistributionRelation(selectBuilder, dataObject.getId(), DataObjects.DOWNLOAD_URL,
+					Dcat.PROPERTY_DOWNLOAD_URL))
+				continue;
+		}
+		selectBuilder.setVar(Var.alloc("dataset"), "<" + datasetUri.toString() + ">");
+
+		// Execute query
+		Query query = selectBuilder.build();
+		LOGGER.debug(query.toString());
+		QueryExecution queryExecution = rdfConnection.query(query);
+		ResultSet resultSet = queryExecution.execSelect();
+
+		// Process results
+		int categories = 0;
+		while (resultSet.hasNext()) {
+			QuerySolution querySolution = resultSet.next();
+
+			// Iterator only returns variables with values (optional properties are skipped)
+			Iterator<String> iterator = querySolution.varNames();
+			while (iterator.hasNext()) {
+				String id = iterator.next();
+				try {
+					if (id.equals(DataObjects.THEME)) {
+						categories++;
+					}
+					dataContainer.getDataObject(id).addValue(querySolution.get(id).toString().trim());
+				} catch (ParsingException e) {
+					LOGGER.error(e);
+				}
+			}
+		}
+		try {
+			if (dataContainer.getIds().contains(DataObjects.NUMBER_OF_CATEGORIES))
+				dataContainer.getDataObject(DataObjects.NUMBER_OF_CATEGORIES).addValue("" + categories);
+		} catch (ParsingException e) {
+			LOGGER.error(e);
+		}
 	}
 
 	private boolean addDatasetRelation(SelectBuilder selectBuilder, String dataObjectIdActual,
 			String dataObjectIdExpected, String predicate) {
 		if (dataObjectIdActual.equals(dataObjectIdExpected)) {
 			selectBuilder.addVar(dataObjectIdExpected).addOptional("?dataset", NodeFactory.createURI(predicate),
+					NodeFactory.createVariable(dataObjectIdExpected));
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private boolean addDistributionRelation(SelectBuilder selectBuilder, String dataObjectIdActual,
+			String dataObjectIdExpected, String predicate) {
+		if (dataObjectIdActual.equals(dataObjectIdExpected)) {
+			selectBuilder.addVar(dataObjectIdExpected).addOptional("?distribution", NodeFactory.createURI(predicate),
 					NodeFactory.createVariable(dataObjectIdExpected));
 			return true;
 		} else {

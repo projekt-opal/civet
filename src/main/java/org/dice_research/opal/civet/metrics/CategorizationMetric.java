@@ -38,12 +38,13 @@ public class CategorizationMetric extends Metric {
 		}
 
 		if (numberOfCategories <= 0) {
+			// No categories used
 			return 0f;
 		} else if (numberOfCategories <= 1) {
-			return 1f;
-		} else if (numberOfCategories <= 2) {
-			return 2f;
+			// Categories used
+			return 4f;
 		} else {
+			// More than 1 category: Indicator for extensive use
 			return 5f;
 		}
 	}

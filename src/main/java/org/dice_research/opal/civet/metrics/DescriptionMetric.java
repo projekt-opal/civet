@@ -47,14 +47,22 @@ public class DescriptionMetric extends Metric {
 		}
 
 		if (title.isEmpty() && description.isEmpty()) {
+			// No title or description set
 			return 0f;
 
 		} else if (title.isEmpty()) {
+			// At least title set
 			return 1f;
 		} else if (description.isEmpty()) {
+			// At least description set
 			return 1f;
 
 		} else if (description.equals(title)) {
+			// Bad use of description text
+			return 1f;
+
+		} else if (title.length() < 15) {
+			// Bad title
 			return 1f;
 
 		} else if (description.length() <= 25) {
