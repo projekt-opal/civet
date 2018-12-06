@@ -21,11 +21,31 @@ public abstract class Metrics {
 	}
 
 	/**
+	 * Gets all metrics of the dimension temporal.
+	 */
+	public static Map<String, Metric> getMetricsTemporal() {
+		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		putMetricIntoMap(new UpdateRateMetric(), metrics);
+		return metrics;
+	}
+
+	/**
+	 * Gets all metrics of the dimension rights.
+	 */
+	public static Map<String, Metric> getMetricsRights() {
+		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		putMetricIntoMap(new LicenseSpecifiedMetric(), metrics);
+		return metrics;
+	}
+
+	/**
 	 * Gets all metrics.
 	 */
 	public static Map<String, Metric> getMetrics() {
 		Map<String, Metric> metrics = new HashMap<String, Metric>();
 		metrics.putAll(getMetricsExpressiveness());
+		metrics.putAll(getMetricsTemporal());
+		metrics.putAll(getMetricsRights());
 		return metrics;
 	}
 

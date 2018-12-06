@@ -8,6 +8,9 @@ import org.dice_research.opal.civet.exceptions.UnknownIdRuntimeException;
 /**
  * Defines IDs and types of {@link DataObject}s.
  * 
+ * Data objects represent data types which are required to calculate metrics.
+ * Accessors must supply these based on available data.
+ * 
  * Data object IDs are defined via {@link DataObjects} class constants.
  * 
  * Data object types are defined in static initializer of {@link DataObjects}.
