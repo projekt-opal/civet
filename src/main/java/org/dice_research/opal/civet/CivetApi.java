@@ -42,9 +42,11 @@ public class CivetApi {
 	/**
 	 * Computes metrics for a dataset.
 	 * 
+	 * Available metric IDs can be accessed by {@link #getAllMetricIds()}.
+	 * 
 	 * @param dataset the URI of the dataset
-	 * @param metrics a collection of metrics to compute
-	 * @return
+	 * @param metrics the metric IDs to compute
+	 * @return metric IDs mapped to the resulting scores
 	 * 
 	 * @throws IllegalArgumentException if the metrics parameter is empty
 	 * @throws NullPointerException     if one of the parameters is null or the
@@ -72,6 +74,8 @@ public class CivetApi {
 
 	/**
 	 * Gets RDF connection or null, if not set.
+	 * 
+	 * @deprecated Was used for test issues
 	 */
 	public RDFConnection getRdfConnection() {
 		if (orchestration == null) {
@@ -83,6 +87,8 @@ public class CivetApi {
 
 	/**
 	 * Sets RDF connection.
+	 * 
+	 * @deprecated Was used for test issues
 	 */
 	public CivetApi setRdfConnection(RDFConnection rdfConnection) {
 		this.orchestration.setRdfConnection(rdfConnection);

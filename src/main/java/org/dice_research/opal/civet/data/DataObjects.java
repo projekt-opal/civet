@@ -8,6 +8,9 @@ import org.dice_research.opal.civet.exceptions.UnknownIdRuntimeException;
 /**
  * Defines IDs and types of {@link DataObject}s.
  * 
+ * Data objects represent data types which are required to calculate metrics.
+ * Accessors must supply these based on available data.
+ * 
  * Data object IDs are defined via {@link DataObjects} class constants.
  * 
  * Data object types are defined in static initializer of {@link DataObjects}.
@@ -19,12 +22,19 @@ import org.dice_research.opal.civet.exceptions.UnknownIdRuntimeException;
 public abstract class DataObjects {
 
 	// Definition of data object IDs
-
-	public final static String CONTACT_EMAIL = "CONTACT_EMAIL";
-	public final static String CONTACT_URL = "CONTACT_URL";
-	public final static String DESCRIPTION = "DESCRIPTION";
 	public final static String NUMBER_OF_CATEGORIES = "NUMBER_OF_CATEGORIES";
+
+	// Dataset properties
+	public final static String DESCRIPTION = "DESCRIPTION";
+	public final static String ISSUED = "ISSUED";
+	public final static String PUBLISHER = "PUBLISHER";
+	public final static String THEME = "THEME";
 	public final static String TITLE = "TITLE";
+
+	// Distribution properties
+	public final static String ACCESS_URL = "ACCESS_URL";
+	public final static String DOWNLOAD_URL = "DOWNLOAD_URL";
+	public final static String LICENSE = "LICENSE";
 
 	private static List<String> integerDataObjects = new LinkedList<String>();
 	private static List<String> stringDataObjects = new LinkedList<String>();
@@ -33,20 +43,24 @@ public abstract class DataObjects {
 	 * Definition of data object types.
 	 */
 	static {
-		stringDataObjects.add(CONTACT_EMAIL);
-		stringDataObjects.add(CONTACT_URL);
-		stringDataObjects.add(DESCRIPTION);
 		integerDataObjects.add(NUMBER_OF_CATEGORIES);
+
+		stringDataObjects.add(DESCRIPTION);
+		stringDataObjects.add(ISSUED);
+		stringDataObjects.add(PUBLISHER);
+		stringDataObjects.add(THEME);
 		stringDataObjects.add(TITLE);
+
+		stringDataObjects.add(ACCESS_URL);
+		stringDataObjects.add(DOWNLOAD_URL);
+		stringDataObjects.add(LICENSE);
 	}
 
 	/**
 	 * Creates data object for given ID.
 	 * 
-	 * @throws UnknownIdRuntimeException
-	 *             if the given ID has not been defined.
-	 * @throws NullPointerException
-	 *             if the given ID is null.
+	 * @throws UnknownIdRuntimeException if the given ID has not been defined.
+	 * @throws NullPointerException      if the given ID is null.
 	 */
 	public static DataObject<?> createDataObject(String id) throws UnknownIdRuntimeException {
 		if (id == null) {

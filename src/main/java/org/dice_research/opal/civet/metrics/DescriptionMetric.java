@@ -9,6 +9,8 @@ import org.dice_research.opal.civet.data.StringDataObject;
 
 /**
  * Single metric.
+ * 
+ * TODO: Multiple titles can be supplied in distributions.
  *
  * @author Adrian Wilke
  */
@@ -30,7 +32,9 @@ public class DescriptionMetric extends Metric {
 	@Override
 	public float getScore(DataContainer dataContainer) {
 
-		StringDataObject dataObject = dataContainer.getStringDataObject(DataObjects.TITLE);
+		StringDataObject dataObject;
+
+		dataObject = dataContainer.getStringDataObject(DataObjects.TITLE);
 		String title;
 		if (dataObject.isEmpty()) {
 			return 0f;
@@ -47,14 +51,22 @@ public class DescriptionMetric extends Metric {
 		}
 
 		if (title.isEmpty() && description.isEmpty()) {
+			// No title or description set
 			return 0f;
 
 		} else if (title.isEmpty()) {
+			// At least title set
 			return 1f;
 		} else if (description.isEmpty()) {
+			// At least description set
 			return 1f;
 
 		} else if (description.equals(title)) {
+			// Bad use of description text
+			return 1f;
+
+		} else if (title.length() < 15) {
+			// Bad title
 			return 1f;
 
 		} else if (description.length() <= 25) {

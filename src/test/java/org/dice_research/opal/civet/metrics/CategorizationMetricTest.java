@@ -23,10 +23,10 @@ public class CategorizationMetricTest {
 		assertEquals(0, new CategorizationMetric().getScore(data), 0);
 
 		data.putDataObject(new IntegerDataObject(DataObjects.NUMBER_OF_CATEGORIES, 1));
-		assertEquals(1, new CategorizationMetric().getScore(data), 0);
+		assertEquals(4, new CategorizationMetric().getScore(data), 0);
 
 		data.putDataObject(new IntegerDataObject(DataObjects.NUMBER_OF_CATEGORIES, 2));
-		assertEquals(2, new CategorizationMetric().getScore(data), 0);
+		assertEquals(5, new CategorizationMetric().getScore(data), 0);
 
 		data.putDataObject(new IntegerDataObject(DataObjects.NUMBER_OF_CATEGORIES, 3));
 		assertEquals(5, new CategorizationMetric().getScore(data), 0);
