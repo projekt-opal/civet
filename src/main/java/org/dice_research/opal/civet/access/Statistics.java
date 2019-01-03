@@ -9,6 +9,8 @@ import org.apache.jena.query.ResultSetFormatter;
  */
 public class Statistics extends SparqlEndpointAccessor {
 
+	public static final String GRAPH = " FROM <http://projekt-opal.de> ";
+
 	public Statistics(String endpoint) {
 		super(endpoint);
 	}
@@ -30,7 +32,13 @@ public class Statistics extends SparqlEndpointAccessor {
 
 		// General
 
-		query = "SELECT DISTINCT ?concept WHERE {[] a ?concept} ORDER BY ?concept";
+		// Print all named graphs
+//		query = "SELECT DISTINCT ?g WHERE { GRAPH ?g {} }";
+//		System.out.println(query);
+//		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+//		System.out.println();
+
+		query = "SELECT DISTINCT ?concept" + GRAPH + "WHERE { [] a ?concept} ORDER BY ?concept";
 		System.out.println(query);
 		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
@@ -121,10 +129,9 @@ public class Statistics extends SparqlEndpointAccessor {
 	/**
 	 * Main entry point.
 	 * 
-	 * @param args
-	 *            [0] SPARQL endpoint
+	 * @param args [0] SPARQL endpoint
 	 * 
-	 *            [1] (optional): SPARQL query
+	 *             [1] (optional): SPARQL query
 	 */
 	public static void main(String[] args) {
 		if (args.length == 0) {
