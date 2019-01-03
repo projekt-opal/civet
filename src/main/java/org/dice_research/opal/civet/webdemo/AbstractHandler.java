@@ -98,9 +98,10 @@ public abstract class AbstractHandler implements HttpHandler {
 				// specified and no response body may be written.
 				exchange.sendResponseHeaders(responseCode, -1);
 			} else {
-				exchange.sendResponseHeaders(responseCode, data.length());
+				byte[] bytes = data.getBytes();
+				exchange.sendResponseHeaders(responseCode, bytes.length);
 				OutputStream outputStream = exchange.getResponseBody();
-				outputStream.write(data.getBytes());
+				outputStream.write(bytes);
 			}
 		} catch (Exception e) {
 			LOGGER.error(e);
