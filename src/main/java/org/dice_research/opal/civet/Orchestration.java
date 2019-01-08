@@ -18,6 +18,8 @@ import org.dice_research.opal.civet.metrics.Metrics;
 
 /**
  * Civet management
+ * 
+ * @author Adrian Wilke
  */
 public class Orchestration {
 

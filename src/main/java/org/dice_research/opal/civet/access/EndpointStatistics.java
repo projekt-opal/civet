@@ -3,20 +3,21 @@ package org.dice_research.opal.civet.access;
 import org.apache.jena.query.ResultSetFormatter;
 
 /**
- * Prints statistics of SPARQL endpoint.
+ * Prints statistics of SPARQL endpoint. This is used for development issues and
+ * independent of other Civet components.
  * 
  * @author Adrian Wilke
  */
-public class Statistics extends SparqlEndpointAccessor {
+public class EndpointStatistics extends SparqlEndpointAccessor {
 
 	public static final String GRAPH = " FROM <http://projekt-opal.de> ";
 
-	public Statistics(String endpoint) {
+	public EndpointStatistics(String endpoint) {
 		super(endpoint);
 	}
 
 	@Override
-	public Statistics connect() {
+	public EndpointStatistics connect() {
 		super.connect();
 		return this;
 	}
@@ -154,7 +155,7 @@ public class Statistics extends SparqlEndpointAccessor {
 			query = args[1];
 		}
 
-		Statistics statistics = new Statistics(args[0]).connect();
+		EndpointStatistics statistics = new EndpointStatistics(args[0]).connect();
 		if (query == null) {
 			statistics.print();
 		} else {
