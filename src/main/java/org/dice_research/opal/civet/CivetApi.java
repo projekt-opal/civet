@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.jena.rdfconnection.RDFConnection;
 import org.dice_research.opal.civet.metrics.Metrics;
 
 /**
@@ -14,8 +13,7 @@ import org.dice_research.opal.civet.metrics.Metrics;
  */
 public class CivetApi {
 
-	private Orchestration orchestration;
-	private String sparqlQueryEndpoint;
+	private Orchestration orchestration = new Orchestration();
 
 	/**
 	 * Sets the endpoint for SPARQL queries.
@@ -28,7 +26,17 @@ public class CivetApi {
 		if (endpoint == null) {
 			throw new NullPointerException("No SPARQL query endpoint specified.");
 		}
-		this.sparqlQueryEndpoint = endpoint;
+		this.orchestration.getConfiguration().setSparqlQueryEndpoint(endpoint);
+		return this;
+	}
+
+	/**
+	 * Sets a named graph for data access.
+	 * 
+	 * @param namedGraph Name of the graph or null, if default graph has to be used
+	 */
+	public CivetApi setNamedGraph(String namedGraph) {
+		this.orchestration.getConfiguration().setNamedGraph(namedGraph);
 		return this;
 	}
 
@@ -54,7 +62,7 @@ public class CivetApi {
 	 */
 	public Map<String, Float> compute(URI dataset, Collection<String> metrics)
 			throws NullPointerException, IllegalArgumentException {
-		if (this.sparqlQueryEndpoint == null) {
+		if (this.orchestration.getConfiguration().getSparqlQueryEndpoint() == null) {
 			throw new NullPointerException("No SPARQL query endpoint specified.");
 		} else if (dataset == null) {
 			throw new NullPointerException("No dataset URI specified.");
@@ -64,34 +72,6 @@ public class CivetApi {
 			throw new IllegalArgumentException("No metrics specified.");
 		}
 
-		if (this.orchestration == null) {
-			this.orchestration = new Orchestration();
-			this.orchestration.setSparqlQueryEndpoint(this.sparqlQueryEndpoint);
-		}
-
 		return this.orchestration.compute(dataset, metrics);
-	}
-
-	/**
-	 * Gets RDF connection or null, if not set.
-	 * 
-	 * @deprecated Was used for test issues
-	 */
-	public RDFConnection getRdfConnection() {
-		if (orchestration == null) {
-			return null;
-		} else {
-			return orchestration.getRdfConnection();
-		}
-	}
-
-	/**
-	 * Sets RDF connection.
-	 * 
-	 * @deprecated Was used for test issues
-	 */
-	public CivetApi setRdfConnection(RDFConnection rdfConnection) {
-		this.orchestration.setRdfConnection(rdfConnection);
-		return this;
 	}
 }

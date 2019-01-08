@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.jena.rdfconnection.RDFConnection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.access.OpalAccessor;
@@ -23,23 +22,8 @@ import org.dice_research.opal.civet.metrics.Metrics;
 public class Orchestration {
 
 	protected static final Logger LOGGER = LogManager.getLogger();
+	protected Configuration configuration = new Configuration();
 	protected OpalAccessor opalAccessor;
-	protected String sparqlQueryEndpoint;
-
-	/**
-	 * Sets the endpoint for SPARQL queries.
-	 * 
-	 * @param endpoint a URL, e.g. http://example.com:8890/sparql
-	 * 
-	 * @throws NullPointerException if endpoint is null
-	 */
-	public Orchestration setSparqlQueryEndpoint(String endpoint) throws NullPointerException {
-		if (endpoint == null) {
-			throw new NullPointerException("No SPARQL query endpoint specified.");
-		}
-		this.sparqlQueryEndpoint = endpoint;
-		return this;
-	}
 
 	/**
 	 * Computes metrics for a dataset.
@@ -62,7 +46,7 @@ public class Orchestration {
 
 		// Get data
 		if (opalAccessor == null) {
-			opalAccessor = new OpalAccessor(this.sparqlQueryEndpoint).connect();
+			opalAccessor = new OpalAccessor(this).connect();
 		}
 		DataContainer dataContainer = createDataContainer(dataObjectIds);
 		try {
@@ -88,17 +72,6 @@ public class Orchestration {
 	}
 
 	/**
-	 * Gets RDF connection or null, if not set.
-	 */
-	public RDFConnection getRdfConnection() {
-		if (opalAccessor == null) {
-			return null;
-		} else {
-			return opalAccessor.getRdfConnection();
-		}
-	}
-
-	/**
 	 * Creates new data container with data objects.
 	 */
 	protected DataContainer createDataContainer(Collection<String> dataObjectIds) {
@@ -109,11 +82,11 @@ public class Orchestration {
 		return dataContainer;
 	}
 
-	/**
-	 * Sets RDF connection.
-	 */
-	public Orchestration setRdfConnection(RDFConnection rdfConnection) {
-		this.opalAccessor.setRdfConnection(rdfConnection);
-		return this;
+	public Configuration getConfiguration() {
+		return configuration;
+	}
+
+	public void setConfiguration(Configuration configuration) {
+		this.configuration = configuration;
 	}
 }

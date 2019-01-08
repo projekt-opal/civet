@@ -18,6 +18,7 @@ import org.apache.jena.query.ResultSet;
 import org.apache.jena.sparql.core.Var;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dice_research.opal.civet.Orchestration;
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObject;
 import org.dice_research.opal.civet.data.DataObjects;
@@ -42,9 +43,11 @@ import org.dice_research.opal.civet.vocabulary.Skos;
 public class OpalAccessor extends SparqlEndpointAccessor {
 
 	protected static final Logger LOGGER = LogManager.getLogger();
+	protected Orchestration orchestration;
 
-	public OpalAccessor(String endpoint) {
-		super(endpoint);
+	public OpalAccessor(Orchestration orchestration) {
+		super(orchestration.getConfiguration().getSparqlQueryEndpoint());
+		this.orchestration = orchestration;
 	}
 
 	@Override
@@ -137,6 +140,12 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 
 		// Build query
 		SelectBuilder selectBuilder = new SelectBuilder();
+
+		// Use named graph or default graph
+		if (orchestration.getConfiguration().getNamedGraph() != null) {
+			selectBuilder.from(orchestration.getConfiguration().getNamedGraph());
+		}
+
 		selectBuilder.addWhere("?dataset", NodeFactory.createURI(Dcat.PROPERTY_DISTRIBUTION), "?distribution");
 		for (DataObject<?> dataObject : dataContainer.getDataObjects()) {
 

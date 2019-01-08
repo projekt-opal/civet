@@ -63,19 +63,4 @@ public class SparqlEndpointAccessor {
 			return true;
 		}
 	}
-
-	/**
-	 * Gets RDF connection or null, if not set.
-	 */
-	public RDFConnection getRdfConnection() {
-		return rdfConnection;
-	}
-
-	/**
-	 * Sets RDF connection.
-	 */
-	public SparqlEndpointAccessor setRdfConnection(RDFConnection rdfConnection) {
-		this.rdfConnection = rdfConnection;
-		return this;
-	}
 }

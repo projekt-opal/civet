@@ -7,6 +7,7 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 
 import org.dice_research.opal.civet.Config;
+import org.dice_research.opal.civet.Orchestration;
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObjects;
 import org.junit.Test;
@@ -27,7 +28,8 @@ public class OpalAccessorTest {
 		}
 
 		// Get data
-		OpalAccessor opalAccessor = new OpalAccessor(Config.sparqlQueryEndpoint);
+		Orchestration orchestration = new Orchestration();
+		OpalAccessor opalAccessor = new OpalAccessor(orchestration);
 		opalAccessor.getData(new URI(Config.datasetUriMcloud), dataContainer);
 		opalAccessor.getData(new URI(Config.datasetUriEuroPortal), dataContainer);
 
