@@ -10,6 +10,10 @@ package org.dice_research.opal.civet.vocabulary;
  */
 public abstract class Skos {
 
-	public static final String PROPERTY_PREF_LABEL = org.apache.jena.vocabulary.SKOS.prefLabel.toString();
+	// Fixme: It seems that in the OPAL Fuseki graph (2019-01-08) a wrong property
+	// is used.
+	// public static final String PROPERTY_PREF_LABEL =
+	// org.apache.jena.vocabulary.SKOS.prefLabel.toString();
+	public static final String PROPERTY_PREF_LABEL = "https://www.w3.org/2000/01/rdf-schema#label";
 
 }

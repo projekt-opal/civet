@@ -37,16 +37,13 @@ public class OpalAccessorTest {
 		// ACCESS_URL data is currently not used in RDF graph
 		int unusedProperties = 1;
 
-		// TODO: Update me
-//		assertEquals(allPropertiesMetric.getRequiredProperties().size() - unusedProperties,
-//				allPropertiesMetric.getScore(dataContainer), 0);
+		assertEquals(allPropertiesMetric.getRequiredProperties().size() - unusedProperties,
+				allPropertiesMetric.getScore(dataContainer), 0);
 
-		// TODO
 		// Human test of score
-		System.out.println(allPropertiesMetric.getScore(dataContainer));
+		// System.out.println(allPropertiesMetric.getScore(dataContainer));
 
-		// TODO
-//		 Human investigation of data
-		System.out.println(dataContainer.toExtendedString());
+		// Human investigation of data
+		// System.out.println(dataContainer.toExtendedString());
 	}
 }
