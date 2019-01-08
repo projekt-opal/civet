@@ -14,7 +14,8 @@ public abstract class Config {
 	public static String sparqlQueryEndpointPath = "/civet/sparql";
 	public static String sparqlQueryEndpoint = "http://" + sparqlQueryEndpointHost + ":" + sparqlQueryEndpointPort
 			+ sparqlQueryEndpointPath;
+	public static String namedGraph = "http://projekt-opal.de";
 
-	public static String datasetUriEuroPortal = "http://europeandataportal.projekt-opal.de/dataset/https-datenregister-berlin-de-dataset-ff105c67-6fb2-46da-9eac-15c730be8921";
-	public static String datasetUriMcloud = "http://mcloud.projekt-opal.de/dataset/stadtklnverkehrsunfallentwicklungstadtgebietkoeln2017";
+	// Fuseki, port 3030, January 2019
+	public static String datasetUriBerlin = "http://projekt-opal.de/dataset/berlinumweltzone-wms";
 }

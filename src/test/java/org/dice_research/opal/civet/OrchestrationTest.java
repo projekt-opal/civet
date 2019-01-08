@@ -35,7 +35,7 @@ public class OrchestrationTest {
 		Set<String> metrics = new HashSet<String>();
 		metrics.add(metricDescription);
 		orchestration.getConfiguration().setSparqlQueryEndpoint(Config.sparqlQueryEndpoint);
-		Map<String, Float> scores = orchestration.compute(new URI(Config.datasetUriEuroPortal), metrics);
+		Map<String, Float> scores = orchestration.compute(new URI(Config.datasetUriBerlin), metrics);
 
 		assertEquals(1, scores.size());
 		assertTrue(scores.get(metricDescription) > 0);

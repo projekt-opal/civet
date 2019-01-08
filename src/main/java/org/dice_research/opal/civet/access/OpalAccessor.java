@@ -65,6 +65,12 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 
 		// Build query
 		SelectBuilder selectBuilder = new SelectBuilder();
+
+		// Use named graph or default graph
+		if (orchestration.getConfiguration().getNamedGraph() != null) {
+			selectBuilder.from(orchestration.getConfiguration().getNamedGraph());
+		}
+
 		for (DataObject<?> dataObject : dataContainer.getDataObjects()) {
 
 			// Dataset properties
