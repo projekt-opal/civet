@@ -10,6 +10,7 @@ package org.dice_research.opal.civet.vocabulary;
 public abstract class Dcat {
 
 	public static final String PROPERTY_ACCESS_URL = org.apache.jena.vocabulary.DCAT.accessURL.toString();
+	public static final String PROPERTY_DATASET = org.apache.jena.vocabulary.DCAT.Dataset.toString();
 	public static final String PROPERTY_DOWNLOAD_URL = org.apache.jena.vocabulary.DCAT.downloadURL.toString();
 	public static final String PROPERTY_DISTRIBUTION = org.apache.jena.vocabulary.DCAT.distribution.toString();
 	public static final String PROPERTY_THEME = org.apache.jena.vocabulary.DCAT.theme.toString();

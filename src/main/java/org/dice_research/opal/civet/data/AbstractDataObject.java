@@ -1,5 +1,6 @@
 package org.dice_research.opal.civet.data;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,6 +13,24 @@ public abstract class AbstractDataObject<TYPE> implements DataObject<TYPE> {
 
 	private String id;
 	private List<TYPE> values;
+
+	/**
+	 * Creates a new data-object of same type as given source and with same ID as
+	 * given source.
+	 * 
+	 * @param dataObject Source data-object
+	 * @throws IOException          If type of source data-object is unknown.
+	 * @throws NullPointerException if the one of given IDs is null.
+	 */
+	public static DataObject<?> create(DataObject<?> dataObject) throws IOException, NullPointerException {
+		if (dataObject.getType().equals(String.class)) {
+			return new StringDataObject(dataObject.getId());
+		} else if (dataObject.getType().equals(Integer.class)) {
+			return new IntegerDataObject(dataObject.getId());
+		} else {
+			throw new IOException("Unknown type: " + dataObject.getType());
+		}
+	}
 
 	/**
 	 * Sets id. Creates empty list of values.

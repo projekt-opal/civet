@@ -9,7 +9,8 @@ import org.dice_research.opal.civet.exceptions.ParsingException;
  * 
  * Defines data identificator and data type. Holds list of data values.
  * 
- * Data objects are defined in {@link DataObjects}.
+ * Data object types (e.g. title or publisher) are defined in
+ * {@link DataObjects}.
  * 
  * Data objects are used in {@link DataContainer}.
  *

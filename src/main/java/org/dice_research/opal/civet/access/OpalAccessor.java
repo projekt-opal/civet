@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -43,6 +45,9 @@ import org.dice_research.opal.civet.vocabulary.Skos;
 public class OpalAccessor extends SparqlEndpointAccessor {
 
 	protected static final Logger LOGGER = LogManager.getLogger();
+	protected static final String VAR_DATASET = "DATASET";
+	protected static final String VAR_DISTRIBUTION = "DISTRIBUTION";
+
 	protected Orchestration orchestration;
 
 	public OpalAccessor(Orchestration orchestration) {
@@ -56,6 +61,71 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		return this;
 	}
 
+	/**
+	 * Gets data for several datasets.
+	 * 
+	 * @param dataContainer A data-container with pre-defined IDs
+	 * @param limit         Max number of items to request
+	 * @param offset        Starting number
+	 */
+	public List<DataContainer> getData(DataContainer dataContainer, int limit, int offset) {
+
+		// Ensure connection
+		if (!isConnected()) {
+			connect();
+		}
+
+		List<DataContainer> dataContainers = new LinkedList<>();
+
+		// Add query parts for single data-objects
+		SelectBuilder selectBuilder = buildQuery(dataContainer);
+		selectBuilder.addWhere("?" + VAR_DATASET, "a", NodeFactory.createURI(Dcat.PROPERTY_DATASET));
+		selectBuilder.setLimit(limit);
+		selectBuilder.setOffset(offset);
+
+		// Execute query
+		Query query = selectBuilder.build();
+		LOGGER.debug(query.toString());
+		QueryExecution queryExecution = rdfConnection.query(query);
+		ResultSet resultSet = queryExecution.execSelect();
+
+		// Process results
+		while (resultSet.hasNext()) {
+			int categories = 0;
+			DataContainer dataContainerResult;
+			try {
+				dataContainerResult = DataContainer.create(dataContainer);
+
+			} catch (Exception e) {
+				LOGGER.error("Could not create new data container.", e);
+				continue;
+			}
+			QuerySolution querySolution = resultSet.next();
+
+			// Iterator only returns variables with values (optional properties are skipped)
+			Iterator<String> iterator = querySolution.varNames();
+			while (iterator.hasNext()) {
+				String id = iterator.next();
+				try {
+					if (id.equals(DataObjects.THEME)) {
+						categories++;
+					}
+					dataContainerResult.getDataObject(id).addValue(querySolution.get(id).toString().trim());
+				} catch (ParsingException e) {
+					LOGGER.error(e);
+				}
+			}
+			try {
+				if (dataContainerResult.getIds().contains(DataObjects.NUMBER_OF_CATEGORIES))
+					dataContainerResult.getDataObject(DataObjects.NUMBER_OF_CATEGORIES).addValue("" + categories);
+			} catch (ParsingException e) {
+				LOGGER.error(e);
+			}
+			dataContainers.add(dataContainerResult);
+		}
+		return dataContainers;
+	}
+
 	public void getData(URI datasetUri, DataContainer dataContainer) {
 
 		// Ensure connection
@@ -63,46 +133,11 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 			connect();
 		}
 
-		// Build query
-		SelectBuilder selectBuilder = new SelectBuilder();
+		// Add query parts for single data-objects
+		SelectBuilder selectBuilder = buildQuery(dataContainer);
 
-		// Use named graph or default graph
-		if (orchestration.getConfiguration().getNamedGraph() != null) {
-			selectBuilder.from(orchestration.getConfiguration().getNamedGraph());
-		}
-
-		for (DataObject<?> dataObject : dataContainer.getDataObjects()) {
-
-			// Dataset properties
-
-			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.DESCRIPTION,
-					DublinCore.PROPERTY_DESCRIPTION))
-				continue;
-
-			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.ISSUED, DublinCore.PROPERTY_ISSUED))
-				continue;
-
-			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.TITLE, DublinCore.PROPERTY_TITLE))
-				continue;
-
-			if (dataObject.getId().equals(DataObjects.PUBLISHER)) {
-				Node foafAgent = NodeFactory.createVariable("foafAgent");
-				selectBuilder.addVar(DataObjects.PUBLISHER)
-						.addOptional("?dataset", NodeFactory.createURI(DublinCore.PROPERTY_PUBLISHER), foafAgent)
-						.addOptional(foafAgent, NodeFactory.createURI(Foaf.PROPERTY_NAME),
-								NodeFactory.createVariable(DataObjects.PUBLISHER));
-			}
-
-			if (dataObject.getId().equals(DataObjects.THEME)) {
-				Node skosConcept = NodeFactory.createVariable("skosConcept");
-				selectBuilder.addVar(DataObjects.THEME)
-						.addOptional("?dataset", NodeFactory.createURI(Dcat.PROPERTY_THEME), skosConcept)
-						.addOptional(skosConcept, NodeFactory.createURI(Skos.PROPERTY_PREF_LABEL),
-								NodeFactory.createVariable(DataObjects.THEME));
-			}
-		}
-
-		selectBuilder.setVar(Var.alloc("dataset"), "<" + datasetUri.toString() + ">");
+		// Only one dataset has to be returned
+		selectBuilder.setVar(Var.alloc(VAR_DATASET), "<" + datasetUri.toString() + ">");
 
 		// Execute query
 		Query query = selectBuilder.build();
@@ -142,6 +177,52 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		getDistributionData(datasetUri, dataContainer);
 	}
 
+	/**
+	 * Adds query parts for single data-objects.
+	 */
+	private SelectBuilder buildQuery(DataContainer dataContainer) {
+
+		// Build query
+		SelectBuilder selectBuilder = new SelectBuilder();
+
+		// Use named graph or default graph
+		if (orchestration.getConfiguration().getNamedGraph() != null) {
+			selectBuilder.from(orchestration.getConfiguration().getNamedGraph());
+		}
+
+		// Add query parts
+		for (DataObject<?> dataObject : dataContainer.getDataObjects()) {
+
+			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.DESCRIPTION,
+					DublinCore.PROPERTY_DESCRIPTION))
+				continue;
+
+			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.ISSUED, DublinCore.PROPERTY_ISSUED))
+				continue;
+
+			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.TITLE, DublinCore.PROPERTY_TITLE))
+				continue;
+
+			if (dataObject.getId().equals(DataObjects.PUBLISHER)) {
+				Node foafAgent = NodeFactory.createVariable("foafAgent");
+				selectBuilder.addVar(DataObjects.PUBLISHER)
+						.addOptional("?" + VAR_DATASET, NodeFactory.createURI(DublinCore.PROPERTY_PUBLISHER), foafAgent)
+						.addOptional(foafAgent, NodeFactory.createURI(Foaf.PROPERTY_NAME),
+								NodeFactory.createVariable(DataObjects.PUBLISHER));
+			}
+
+			if (dataObject.getId().equals(DataObjects.THEME)) {
+				Node skosConcept = NodeFactory.createVariable("skosConcept");
+				selectBuilder.addVar(DataObjects.THEME)
+						.addOptional("?" + VAR_DATASET, NodeFactory.createURI(Dcat.PROPERTY_THEME), skosConcept)
+						.addOptional(skosConcept, NodeFactory.createURI(Skos.PROPERTY_PREF_LABEL),
+								NodeFactory.createVariable(DataObjects.THEME));
+			}
+		}
+
+		return selectBuilder;
+	}
+
 	private void getDistributionData(URI datasetUri, DataContainer dataContainer) {
 
 		// Build query
@@ -152,10 +233,9 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 			selectBuilder.from(orchestration.getConfiguration().getNamedGraph());
 		}
 
-		selectBuilder.addWhere("?dataset", NodeFactory.createURI(Dcat.PROPERTY_DISTRIBUTION), "?distribution");
+		selectBuilder.addWhere("?" + VAR_DATASET, NodeFactory.createURI(Dcat.PROPERTY_DISTRIBUTION),
+				"?" + VAR_DISTRIBUTION);
 		for (DataObject<?> dataObject : dataContainer.getDataObjects()) {
-
-			// Distribution properties
 
 			if (addDistributionRelation(selectBuilder, dataObject.getId(), DataObjects.ACCESS_URL,
 					Dcat.PROPERTY_ACCESS_URL))
@@ -169,7 +249,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 					DublinCore.PROPERTY_LICENSE))
 				continue;
 		}
-		selectBuilder.setVar(Var.alloc("dataset"), "<" + datasetUri.toString() + ">");
+		selectBuilder.setVar(Var.alloc(VAR_DATASET), "<" + datasetUri.toString() + ">");
 
 		// Execute query
 		Query query = selectBuilder.build();
@@ -188,7 +268,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 			Iterator<String> iterator = querySolution.varNames();
 			while (iterator.hasNext()) {
 				String id = iterator.next();
-				if (id.equals("distribution")) {
+				if (id.equals(VAR_DISTRIBUTION)) {
 					// variable just used to access data
 					continue;
 				}
@@ -214,7 +294,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	private boolean addDatasetRelation(SelectBuilder selectBuilder, String dataObjectIdActual,
 			String dataObjectIdExpected, String predicate) {
 		if (dataObjectIdActual.equals(dataObjectIdExpected)) {
-			selectBuilder.addVar(dataObjectIdExpected).addOptional("?dataset", NodeFactory.createURI(predicate),
+			selectBuilder.addVar(dataObjectIdExpected).addOptional("?" + VAR_DATASET, NodeFactory.createURI(predicate),
 					NodeFactory.createVariable(dataObjectIdExpected));
 			return true;
 		} else {
@@ -225,8 +305,8 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	private boolean addDistributionRelation(SelectBuilder selectBuilder, String dataObjectIdActual,
 			String dataObjectIdExpected, String predicate) {
 		if (dataObjectIdActual.equals(dataObjectIdExpected)) {
-			selectBuilder.addVar(dataObjectIdExpected).addOptional("?distribution", NodeFactory.createURI(predicate),
-					NodeFactory.createVariable(dataObjectIdExpected));
+			selectBuilder.addVar(dataObjectIdExpected).addOptional("?" + VAR_DISTRIBUTION,
+					NodeFactory.createURI(predicate), NodeFactory.createVariable(dataObjectIdExpected));
 			return true;
 		} else {
 			return false;

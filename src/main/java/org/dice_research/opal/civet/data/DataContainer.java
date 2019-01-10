@@ -1,5 +1,6 @@
 package org.dice_research.opal.civet.data;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,13 +12,31 @@ import org.dice_research.opal.civet.exceptions.UnknownIdRuntimeException;
 /**
  * Data container for {@link DataObject}s.
  * 
- * Data object IDs and types are defined in {@link DataObjects}.
+ * Data-object IDs and types are defined in {@link DataObjects}.
  *
  * @author Adrian Wilke
  */
 public class DataContainer {
 
+	// Data-object ID to object
 	private Map<String, DataObject<?>> dataObjects = new HashMap<String, DataObject<?>>();
+
+	/**
+	 * Creates new data-container with data-objects of source data-container.
+	 * Data-objects will have same types and IDs, but no values.
+	 * 
+	 * @param dataContainer Source data-container
+	 * 
+	 * @throws IOException          If type of source data-object is unknown.
+	 * @throws NullPointerException if the one of given IDs is null.
+	 */
+	public static DataContainer create(DataContainer dataContainer) throws NullPointerException, IOException {
+		DataContainer newDataContainer = new DataContainer();
+		for (DataObject<?> dataObject : dataContainer.getDataObjects()) {
+			newDataContainer.putDataObject(AbstractDataObject.create(dataObject));
+		}
+		return newDataContainer;
+	}
 
 	/**
 	 * Gets data object.
