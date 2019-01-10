@@ -1,5 +1,6 @@
 package org.dice_research.opal.civet;
 
+import org.dice_research.opal.civet.access.OpalAccessorTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -9,8 +10,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 		// Access
 
-// TODO: Too many requests overall. Endpoint does not react.		
-//		OpalAccessorTest.class,
+		OpalAccessorTest.class,
 
 		// Complete run
 

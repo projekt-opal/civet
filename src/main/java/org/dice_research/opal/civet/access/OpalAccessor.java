@@ -34,11 +34,6 @@ import org.dice_research.opal.civet.vocabulary.Skos;
  * Data accessor for OPAL SPARQL endpoint.
  * 
  * RDF graph data is accessed and written into data container.
- * 
- * TODO: Process multiple datasets using binds.
- * 
- * TODO: Rewrite SPARQL queries to use max. one query per dataset. If possible,
- * avoid cross product data.
  *
  * @author Adrian Wilke
  */
@@ -61,6 +56,50 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		return this;
 	}
 
+	// TODO store data
+	// TODO Dataset uri needed
+	public void writeMetricResults(List<DataContainer> dataContainers) {
+
+		// Ensure connection
+//		if (!isConnected()) {
+//			connect();
+//		}
+//
+//		Map<String, Metric> availableMetrics = Metrics.getMetrics();
+//
+//		rdfConnection.begin(ReadWrite.WRITE);
+//
+//		for (DataContainer dataContainer : dataContainers) {
+//
+//			for (Entry<String, Float> metricResult : dataContainer.getMetricResults().entrySet()) {
+//
+//				Metric metric = availableMetrics.get(metricResult.getKey());
+//				metric.getResultsUri();
+//
+//			}
+//
+//		}
+
+// https://www.w3.org/TR/sparql11-update/#insertData	
+//		PREFIX dc: <http://purl.org/dc/elements/1.1/>
+//			INSERT DATA
+//			{ 
+//			  <http://example/book1> dc:title "A new book" ;
+//			                         dc:creator "A.N.Other" .
+//			}
+
+//		rdfConnection.update("");
+//		rdfConnection.commit();
+//		rdfConnection.end();
+
+		// Option 2
+//		https://jena.apache.org/documentation/query/update.html
+//		UpdateRequest updateRequest = new UpdateRequest();
+//		UpdateAction.execute(updateRequest, rdfConnection);
+//		UpdateFactory.
+
+	}
+
 	/**
 	 * Gets data for several datasets.
 	 * 
@@ -80,6 +119,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		// Add query parts for single data-objects
 		SelectBuilder selectBuilder = buildQuery(dataContainer);
 		selectBuilder.addWhere("?" + VAR_DATASET, "a", NodeFactory.createURI(Dcat.PROPERTY_DATASET));
+		selectBuilder.addVar(VAR_DATASET);
 		selectBuilder.setLimit(limit);
 		selectBuilder.setOffset(offset);
 
@@ -92,10 +132,10 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		// Process results
 		while (resultSet.hasNext()) {
 			int categories = 0;
+			String datasetUri = null;
 			DataContainer dataContainerResult;
 			try {
 				dataContainerResult = DataContainer.create(dataContainer);
-
 			} catch (Exception e) {
 				LOGGER.error("Could not create new data container.", e);
 				continue;
@@ -108,7 +148,13 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 				String id = iterator.next();
 				try {
 					if (id.equals(DataObjects.THEME)) {
+						// Every theme is a category
 						categories++;
+					} else if (id.equals(VAR_DATASET)) {
+						datasetUri = querySolution.get(id).toString().trim();
+						System.err.println(datasetUri);
+						// Do not add dataset uri
+						continue;
 					}
 					dataContainerResult.getDataObject(id).addValue(querySolution.get(id).toString().trim());
 				} catch (ParsingException e) {
@@ -121,6 +167,9 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 			} catch (ParsingException e) {
 				LOGGER.error(e);
 			}
+
+			// TODO: Save datasetUri
+
 			dataContainers.add(dataContainerResult);
 		}
 		return dataContainers;

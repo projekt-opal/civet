@@ -2,7 +2,6 @@ package org.dice_research.opal.civet;
 
 import java.net.URI;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -36,14 +35,11 @@ public class Orchestration {
 	 */
 	public Map<String, Float> compute(URI dataset, Collection<String> metricIds) {
 
-		// Create metrics and set of required data object IDs
+		// Get required data object IDs
 		Set<String> dataObjectIds = new HashSet<String>();
-		Set<Metric> metrics = new HashSet<Metric>();
 		Map<String, Metric> availableMetrics = Metrics.getMetrics();
 		for (String metricId : metricIds) {
-			Metric metric = availableMetrics.get(metricId);
-			metrics.add(metric);
-			dataObjectIds.addAll(metric.getRequiredProperties());
+			dataObjectIds.addAll(availableMetrics.get(metricId).getRequiredProperties());
 		}
 
 		// Get data
@@ -57,13 +53,8 @@ public class Orchestration {
 			LOGGER.error("Not connected to SPARQL endpoint.", e);
 		}
 
-		// Compute metrics
-		Map<String, Float> scores = new HashMap<String, Float>();
-		for (Metric metric : metrics) {
-			scores.put(metric.getId(), metric.getScore(dataContainer));
-		}
-
-		return scores;
+		dataContainer.calculateMetrics(metricIds);
+		return dataContainer.getMetricResults();
 	}
 
 	/**

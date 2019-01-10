@@ -8,6 +8,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.dice_research.opal.civet.exceptions.UnknownIdRuntimeException;
+import org.dice_research.opal.civet.metrics.Metric;
+import org.dice_research.opal.civet.metrics.Metrics;
 
 /**
  * Data container for {@link DataObject}s.
@@ -20,6 +22,9 @@ public class DataContainer {
 
 	// Data-object ID to object
 	private Map<String, DataObject<?>> dataObjects = new HashMap<String, DataObject<?>>();
+
+	// Metrix-ID to metric-result
+	private Map<String, Float> metricResults = new HashMap<String, Float>();
 
 	/**
 	 * Creates new data-container with data-objects of source data-container.
@@ -94,6 +99,24 @@ public class DataContainer {
 			dataObjects.put(dataObject.getId(), dataObject);
 			return this;
 		}
+	}
+
+	/**
+	 * Calculates metric results and stores them in this object.
+	 */
+	public DataContainer calculateMetrics(Collection<String> metricIds) {
+		Map<String, Metric> availableMetrics = Metrics.getMetrics();
+		for (String metricId : metricIds) {
+			metricResults.put(metricId, availableMetrics.get(metricId).getScore(this));
+		}
+		return this;
+	}
+
+	/**
+	 * Gets metric results calculated by {@link #calculateMetrics(Collection)}.
+	 */
+	public Map<String, Float> getMetricResults() {
+		return metricResults;
 	}
 
 	/**

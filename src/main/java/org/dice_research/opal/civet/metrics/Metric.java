@@ -22,6 +22,11 @@ public abstract class Metric {
 	protected String id;
 
 	/**
+	 * The URI for results in triple stores.
+	 */
+	protected String resultsUri;
+
+	/**
 	 * The respective type of a metric is set in the concrete implementation.
 	 */
 	protected MetricType metricType;
@@ -44,6 +49,13 @@ public abstract class Metric {
 	 */
 	public String getId() {
 		return this.id;
+	}
+
+	/**
+	 * Returns the URI for results in triple stores.
+	 */
+	public String getResultsUri() {
+		return this.resultsUri;
 	}
 
 	/**
