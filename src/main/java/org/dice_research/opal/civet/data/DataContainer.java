@@ -62,6 +62,26 @@ public class DataContainer {
 	}
 
 	/**
+	 * Adds all values, if not already contained.
+	 * 
+	 * @throws NullPointerException if a data-object is null.
+	 * @throws ClassCastException   if type of a data object does not fit.
+	 */
+	public DataContainer addAllUnique(DataContainer dataContainer) {
+		// Process all data-objects
+		for (String dataObjectId : dataContainer.getIds()) {
+			if (this.getIds().contains(dataObjectId)) {
+				// ID exists: Add single values, if not already contained
+				this.getDataObject(dataObjectId).addValuesUnique(dataContainer.getDataObject(dataObjectId));
+			} else {
+				// ID does not exist now: Just add
+				putDataObject(dataContainer.getDataObject(dataObjectId));
+			}
+		}
+		return this;
+	}
+
+	/**
 	 * Gets casted data object.
 	 * 
 	 * @throws NullPointerException      if the given ID is null.

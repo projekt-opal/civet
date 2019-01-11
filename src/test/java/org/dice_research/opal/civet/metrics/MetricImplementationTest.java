@@ -1,9 +1,7 @@
-package org.dice_research.opal.civet;
+package org.dice_research.opal.civet.metrics;
 
 import static org.junit.Assert.assertNotNull;
 
-import org.dice_research.opal.civet.metrics.Metric;
-import org.dice_research.opal.civet.metrics.Metrics;
 import org.junit.Test;
 
 /**
@@ -21,6 +19,7 @@ public class MetricImplementationTest {
 			assertNotNull(metric.getId());
 			assertNotNull(metric.getType());
 			assertNotNull(metric.getRequiredProperties());
+			assertNotNull(metric.getResultsUri());
 		}
 	}
 

@@ -1,4 +1,4 @@
-package org.dice_research.opal.civet;
+package org.dice_research.opal.civet.access;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,7 +10,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.dice_research.opal.civet.access.IoUtils;
+import org.dice_research.opal.civet.Config;
+import org.dice_research.opal.civet.Orchestration;
 import org.dice_research.opal.civet.metrics.DescriptionMetric;
 import org.junit.Test;
 

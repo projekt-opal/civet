@@ -1,10 +1,10 @@
 package org.dice_research.opal.civet.access;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -106,17 +106,18 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	 * @param dataContainer A data-container with pre-defined IDs
 	 * @param limit         Max number of items to request
 	 * @param offset        Starting number
+	 * @throws NullPointerException
 	 */
-	public List<DataContainer> getData(DataContainer dataContainer, int limit, int offset) {
+	public Map<String, DataContainer> getData(DataContainer dataContainer, int limit, int offset)
+			throws NullPointerException {
+		Map<String, DataContainer> dataContainers = new HashMap<>();
 
 		// Ensure connection
 		if (!isConnected()) {
 			connect();
 		}
 
-		List<DataContainer> dataContainers = new LinkedList<>();
-
-		// Add query parts for single data-objects
+		// Build query
 		SelectBuilder selectBuilder = buildQuery(dataContainer);
 		selectBuilder.addWhere("?" + VAR_DATASET, "a", NodeFactory.createURI(Dcat.PROPERTY_DATASET));
 		selectBuilder.addVar(VAR_DATASET);
@@ -129,53 +130,74 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		QueryExecution queryExecution = rdfConnection.query(query);
 		ResultSet resultSet = queryExecution.execSelect();
 
-		// Process results
+		// Process results (datasets may be splitted into multiple results)
 		while (resultSet.hasNext()) {
-			int categories = 0;
-			String datasetUri = null;
-			DataContainer dataContainerResult;
-			try {
-				dataContainerResult = DataContainer.create(dataContainer);
-			} catch (Exception e) {
-				LOGGER.error("Could not create new data container.", e);
-				continue;
-			}
 			QuerySolution querySolution = resultSet.next();
 
+			// Extract IDs and values
 			// Iterator only returns variables with values (optional properties are skipped)
+			Map<String, String> idToValue = new HashMap<>();
 			Iterator<String> iterator = querySolution.varNames();
 			while (iterator.hasNext()) {
 				String id = iterator.next();
-				try {
-					if (id.equals(DataObjects.THEME)) {
-						// Every theme is a category
-						categories++;
-					} else if (id.equals(VAR_DATASET)) {
-						datasetUri = querySolution.get(id).toString().trim();
-						System.err.println(datasetUri);
-						// Do not add dataset uri
+				idToValue.put(id, querySolution.get(id).toString().trim());
+			}
+
+			// Create or get data-container
+			DataContainer resultsDataContainer;
+			String datasetUri;
+			if (!idToValue.containsKey(VAR_DATASET)) {
+				LOGGER.error("Could not find dataset URI");
+				continue;
+			} else {
+				datasetUri = idToValue.get(VAR_DATASET);
+				if (dataContainers.containsKey(datasetUri)) {
+					resultsDataContainer = dataContainers.get(datasetUri);
+				} else {
+					try {
+						resultsDataContainer = DataContainer.create(dataContainer);
+					} catch (IOException e) {
+						LOGGER.error("Could not create new data container.", e);
 						continue;
 					}
-					dataContainerResult.getDataObject(id).addValue(querySolution.get(id).toString().trim());
+				}
+			}
+
+			// Update data-objects in data-container
+			for (String id : idToValue.keySet()) {
+				if (id.equals(VAR_DATASET)) {
+					continue;
+				} else {
+					try {
+						resultsDataContainer.getDataObject(id).addValueUnique(idToValue.get(id));
+					} catch (ParsingException e) {
+						LOGGER.error(e);
+					}
+				}
+			}
+
+			dataContainers.put(datasetUri, resultsDataContainer);
+		}
+
+		// Update number of categories
+		for (DataContainer dc : dataContainers.values()) {
+			if (dc.getIds().contains(DataObjects.NUMBER_OF_CATEGORIES)) {
+				int categories = 0;
+				try {
+					dc.getDataObject(DataObjects.NUMBER_OF_CATEGORIES)
+							.setValue("" + dc.getDataObject(DataObjects.THEME).getValues().size());
 				} catch (ParsingException e) {
 					LOGGER.error(e);
 				}
 			}
-			try {
-				if (dataContainerResult.getIds().contains(DataObjects.NUMBER_OF_CATEGORIES))
-					dataContainerResult.getDataObject(DataObjects.NUMBER_OF_CATEGORIES).addValue("" + categories);
-			} catch (ParsingException e) {
-				LOGGER.error(e);
-			}
-
-			// TODO: Save datasetUri
-
-			dataContainers.add(dataContainerResult);
 		}
+
 		return dataContainers;
 	}
 
 	public void getData(URI datasetUri, DataContainer dataContainer) {
+
+		// TODO: Check dataset with multiple categories
 
 		// Ensure connection
 		if (!isConnected()) {

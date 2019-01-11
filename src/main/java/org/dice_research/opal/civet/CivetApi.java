@@ -7,7 +7,7 @@ import java.util.Map;
 import org.dice_research.opal.civet.metrics.Metrics;
 
 /**
- * API of Civet - the quality framework of the Open Data Portal Germany (OPAL).
+ * Java API of Civet - Quality framework of the Open Data Portal Germany (OPAL).
  * 
  * @author Adrian Wilke
  */

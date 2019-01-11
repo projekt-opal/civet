@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.List;
+import java.util.Map;
 
 import org.dice_research.opal.civet.Config;
 import org.dice_research.opal.civet.Orchestration;
@@ -39,6 +39,7 @@ public class OpalAccessorTest {
 		// ACCESS_URL data is currently not used in RDF graph
 		int unusedProperties = 1;
 
+		// Check, if all properties are non-empty
 		assertEquals(allPropertiesMetric.getRequiredProperties().size() - unusedProperties,
 				allPropertiesMetric.getScore(dataContainer), 0);
 
@@ -53,7 +54,7 @@ public class OpalAccessorTest {
 	public void testMultipleDatasets() {
 
 		int limit = 10;
-		int offset = 0;
+		int offset = 2;
 
 		// Get all properties
 		AllPropertiesMetric allPropertiesMetric = new AllPropertiesMetric();
@@ -70,13 +71,14 @@ public class OpalAccessorTest {
 		orchestration.getConfiguration().setSparqlQueryEndpoint(Config.sparqlQueryEndpoint);
 		orchestration.getConfiguration().setNamedGraph(Config.namedGraph);
 		OpalAccessor opalAccessor = new OpalAccessor(orchestration);
-		List<DataContainer> dataContainers = opalAccessor.getData(dataContainer, limit, offset);
+		Map<String, DataContainer> dataContainers = opalAccessor.getData(dataContainer, limit, offset);
 
-		// Returned number of datasets shout equal limit. Assumes existence od datasets.
-		assertEquals(limit, dataContainers.size());
+		// Returned number of datasets shout be at least 1. Multiple results specified
+		// by limit may return the same dataset with additional information.
+		assertNotEquals(0, dataContainers.size());
 
 		// Checks for all datasets, if at least one non-empty data-object exists.
-		for (DataContainer container : dataContainers) {
+		for (DataContainer container : dataContainers.values()) {
 			assertNotEquals(0, allPropertiesMetric.getScore(container));
 		}
 	}

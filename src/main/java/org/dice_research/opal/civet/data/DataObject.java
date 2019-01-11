@@ -61,14 +61,22 @@ public interface DataObject<TYPE> {
 	DataObject<TYPE> setValues(List<TYPE> values) throws NullPointerException;
 
 	/**
-	 * Adds value of data object.
+	 * Adds value into data object.
 	 * 
 	 * @throws NullPointerException if the given value is null.
 	 */
 	DataObject<TYPE> addValue(TYPE value) throws NullPointerException;
 
 	/**
-	 * Parses and adds string value of data object.
+	 * Adds value into data object, if it is not already contained.
+	 * 
+	 * @throws NullPointerException if the given value is null.
+	 * @throws ParsingException     on errors parsing the given string.
+	 */
+	DataObject<TYPE> addValueUnique(String value) throws NullPointerException, ParsingException;
+
+	/**
+	 * Parses and adds string value into data object.
 	 * 
 	 * @throws NullPointerException if the given value is null.
 	 * @throws ParsingException     on errors parsing the given string.
@@ -76,10 +84,18 @@ public interface DataObject<TYPE> {
 	DataObject<TYPE> addValue(String value) throws NullPointerException, ParsingException;
 
 	/**
-	 * Adds values of data object.
+	 * Adds values into data object.
 	 * 
 	 * @throws NullPointerException if the given list of values is null.
 	 */
 	DataObject<TYPE> addValues(List<TYPE> values) throws NullPointerException;
+
+	/**
+	 * Adds values into data object, if not already contained.
+	 * 
+	 * @throws NullPointerException if the given data-object is null.
+	 * @throws ClassCastException   if type of data object does not fit.
+	 */
+	DataObject<TYPE> addValuesUnique(DataObject<?> dataObject) throws NullPointerException, ClassCastException;
 
 }

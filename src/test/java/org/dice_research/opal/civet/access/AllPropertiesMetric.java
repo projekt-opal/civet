@@ -12,6 +12,8 @@ import org.dice_research.opal.civet.metrics.MetricType;
 /**
  * Uses all known properties. Calculated score is number of non-empty data
  * objects.
+ * 
+ * Used in {@link OpalAccessorTest}.
  *
  * @author Adrian Wilke
  */

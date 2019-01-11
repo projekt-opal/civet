@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.dice_research.opal.civet.exceptions.ParsingException;
+
 /**
  * Abstract {@link DataObject}.
  * 
@@ -148,6 +150,46 @@ public abstract class AbstractDataObject<TYPE> implements DataObject<TYPE> {
 			throw new NullPointerException("Data object values is null");
 		} else {
 			this.values.addAll(values);
+			return this;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public DataObject<TYPE> addValuesUnique(DataObject<?> dataObject) throws NullPointerException, ClassCastException {
+		if (dataObject == null) {
+			throw new NullPointerException("Data object is null");
+		} else {
+			if (dataObject instanceof IntegerDataObject) {
+				for (Integer value : IntegerDataObject.cast(dataObject).getValues()) {
+					if (!this.values.contains(value)) {
+						IntegerDataObject.cast(this).addValue(value);
+					}
+				}
+			} else if (dataObject instanceof StringDataObject) {
+				for (String value : StringDataObject.cast(dataObject).getValues()) {
+					if (!this.values.contains(value)) {
+						StringDataObject.cast(this).addValue(value);
+					}
+				}
+			} else {
+				throw new ClassCastException("Can not cast " + dataObject);
+			}
+			return this;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public DataObject<TYPE> addValueUnique(String value) throws NullPointerException, ParsingException {
+		if (value == null) {
+			throw new NullPointerException("Value is null");
+		} else {
+			if (!this.values.contains(value)) {
+				addValue(value);
+			}
 			return this;
 		}
 	}

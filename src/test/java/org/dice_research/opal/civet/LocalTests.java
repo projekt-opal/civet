@@ -5,6 +5,7 @@ import org.dice_research.opal.civet.data.DataObjectTests;
 import org.dice_research.opal.civet.metrics.CategorizationMetricTest;
 import org.dice_research.opal.civet.metrics.DescriptionMetricTest;
 import org.dice_research.opal.civet.metrics.LicenseSpecifiedTest;
+import org.dice_research.opal.civet.metrics.MetricImplementationTest;
 import org.dice_research.opal.civet.metrics.UpdateRateMetricTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
