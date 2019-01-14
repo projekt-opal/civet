@@ -19,6 +19,7 @@ import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.sparql.core.Var;
+import org.apache.jena.update.UpdateRequest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Orchestration;
@@ -40,6 +41,14 @@ import org.dice_research.opal.civet.vocabulary.Skos;
  */
 public class OpalAccessor extends SparqlEndpointAccessor {
 
+	// TODO
+	private String tmp = "PREFIX dqv: <http://www.w3.org/ns/dqv#>\n"
+			+ "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" + "PREFIX mopal: <http://metric.projekt-opal.de/>\n"
+			+ "INSERT DATA {\n" + "  GRAPH <http://projekt-opal.de> {\n"
+			+ "    <http://projekt-opal.de/dataset/berlinumweltzone-wms> dqv:hasQualityMeasurement _:b0 .\n"
+			+ "    _:b0 a dqv:qualityMeasurement .\n" + "    _:b0 dqv:value \"5\"^^xsd:float .\n"
+			+ "    _:b0 dqv:isMeasurementOf mopal:known_license\n" + "  }\n" + "}";
+
 	protected static final Logger LOGGER = LogManager.getLogger();
 	protected static final String VAR_DATASET = "DATASET";
 	protected static final String VAR_DISTRIBUTION = "DISTRIBUTION";
@@ -47,13 +56,14 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	protected Orchestration orchestration;
 
 	public OpalAccessor(Orchestration orchestration) {
-		super(orchestration.getConfiguration().getSparqlQueryEndpoint());
+		super(orchestration.getConfiguration().getSparqlQueryEndpoint(),
+				orchestration.getConfiguration().getSparqlUpdateEndpoint());
 		this.orchestration = orchestration;
 	}
 
 	@Override
-	public OpalAccessor connect() {
-		super.connect();
+	public OpalAccessor connectQueryEndpoint() {
+		super.connectQueryEndpoint();
 		return this;
 	}
 
@@ -62,43 +72,17 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	public void writeMetricResults(List<DataContainer> dataContainers) {
 
 		// Ensure connection
-//		if (!isConnected()) {
-//			connect();
-//		}
-//
-//		Map<String, Metric> availableMetrics = Metrics.getMetrics();
-//
-//		rdfConnection.begin(ReadWrite.WRITE);
-//
-//		for (DataContainer dataContainer : dataContainers) {
-//
-//			for (Entry<String, Float> metricResult : dataContainer.getMetricResults().entrySet()) {
-//
-//				Metric metric = availableMetrics.get(metricResult.getKey());
-//				metric.getResultsUri();
-//
-//			}
-//
-//		}
+		if (!isUpdateEndpointConnected()) {
+			connectUpdateEndpoint();
+		}
 
-// https://www.w3.org/TR/sparql11-update/#insertData	
-//		PREFIX dc: <http://purl.org/dc/elements/1.1/>
-//			INSERT DATA
-//			{ 
-//			  <http://example/book1> dc:title "A new book" ;
-//			                         dc:creator "A.N.Other" .
-//			}
+		// TODO
+		if (!"".equals("nöööö"))
+			return;
 
-//		rdfConnection.update("");
-//		rdfConnection.commit();
-//		rdfConnection.end();
-
-		// Option 2
-//		https://jena.apache.org/documentation/query/update.html
-//		UpdateRequest updateRequest = new UpdateRequest();
-//		UpdateAction.execute(updateRequest, rdfConnection);
-//		UpdateFactory.
-
+		UpdateRequest updateRequest = new UpdateRequest();
+		updateRequest.add(tmp);
+		rdfUpdateConnection.update(updateRequest);
 	}
 
 	/**
@@ -114,8 +98,8 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		Map<String, DataContainer> dataContainers = new HashMap<>();
 
 		// Ensure connection
-		if (!isConnected()) {
-			connect();
+		if (!isQueryEndpointConnected()) {
+			connectQueryEndpoint();
 		}
 
 		// Build query
@@ -130,7 +114,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		// Execute query
 		Query query = selectBuilder.build();
 		LOGGER.debug(query.toString());
-		QueryExecution queryExecution = rdfConnection.query(query);
+		QueryExecution queryExecution = rdfQueryConnection.query(query);
 		ResultSet resultSet = queryExecution.execSelect();
 
 		// Process results (datasets may be splitted into multiple results)
@@ -231,8 +215,8 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		// TODO: Check dataset with multiple categories
 
 		// Ensure connection
-		if (!isConnected()) {
-			connect();
+		if (!isQueryEndpointConnected()) {
+			connectQueryEndpoint();
 		}
 
 		// Add query parts for single data-objects
@@ -244,7 +228,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		// Execute query
 		Query query = selectBuilder.build();
 		LOGGER.debug(query.toString());
-		QueryExecution queryExecution = rdfConnection.query(query);
+		QueryExecution queryExecution = rdfQueryConnection.query(query);
 		ResultSet resultSet = queryExecution.execSelect();
 
 		// Process results
@@ -367,7 +351,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		Query query = selectBuilder.build();
 
 		LOGGER.debug(query.toString());
-		QueryExecution queryExecution = rdfConnection.query(query);
+		QueryExecution queryExecution = rdfQueryConnection.query(query);
 		ResultSet resultSet = queryExecution.execSelect();
 
 		// Process results
@@ -440,7 +424,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		// Execute query
 		Query query = selectBuilder.build();
 		LOGGER.debug(query.toString());
-		QueryExecution queryExecution = rdfConnection.query(query);
+		QueryExecution queryExecution = rdfQueryConnection.query(query);
 		ResultSet resultSet = queryExecution.execSelect();
 
 		// Deduplication

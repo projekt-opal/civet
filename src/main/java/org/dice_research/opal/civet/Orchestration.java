@@ -42,7 +42,7 @@ public class Orchestration {
 
 		// Get data
 		if (opalAccessor == null) {
-			opalAccessor = new OpalAccessor(this).connect();
+			opalAccessor = new OpalAccessor(this).connectQueryEndpoint();
 		}
 		DataContainer dataContainer = createDataContainer(dataObjectIds);
 		try {
@@ -72,7 +72,7 @@ public class Orchestration {
 
 		// Prepare request
 		if (opalAccessor == null) {
-			opalAccessor = new OpalAccessor(this).connect();
+			opalAccessor = new OpalAccessor(this).connectQueryEndpoint();
 		}
 		DataContainer dataContainer = createDataContainer(dataObjectIds);
 
@@ -89,6 +89,7 @@ public class Orchestration {
 
 			// Write back
 			// TODO
+			// opalAccessor.writeMetricResults(null);
 
 			// Prepare next iteration
 			int repeat = limit - resultsContainer.refreshIndex;

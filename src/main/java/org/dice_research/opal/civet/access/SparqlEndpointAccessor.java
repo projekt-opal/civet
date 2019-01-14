@@ -20,14 +20,30 @@ import org.dice_research.opal.civet.exceptions.SparqlEndpointRuntimeException;
 public class SparqlEndpointAccessor {
 
 	protected static final Logger LOGGER = LogManager.getLogger();
-	protected String endpoint;
-	protected RDFConnection rdfConnection;
+	protected String queryEndpoint;
+	protected String updateEndpoint;
+	protected RDFConnection rdfQueryConnection;
+	protected RDFConnection rdfUpdateConnection;
 
-	public SparqlEndpointAccessor(String endpoint) throws NullPointerException {
-		if (endpoint == null) {
+	public SparqlEndpointAccessor(String queryEndpoint) throws NullPointerException {
+		if (queryEndpoint == null) {
 			throw new NullPointerException("No SPARQL query endpoint specified.");
 		}
-		this.endpoint = endpoint;
+		this.queryEndpoint = queryEndpoint;
+	}
+
+	public SparqlEndpointAccessor(String queryEndpoint, String updateEndpoint) throws NullPointerException {
+		if (queryEndpoint == null) {
+			throw new NullPointerException("No SPARQL query endpoint specified.");
+		}
+		this.queryEndpoint = queryEndpoint;
+
+		if (updateEndpoint == null) {
+			LOGGER.warn("No SPARQL update endpoint specified.");
+		} else {
+			this.updateEndpoint = updateEndpoint;
+		}
+
 	}
 
 	/**
@@ -44,20 +60,37 @@ public class SparqlEndpointAccessor {
 		}
 	}
 
-	public SparqlEndpointAccessor connect() throws SparqlEndpointRuntimeException {
-		LOGGER.info("Setting connection to " + endpoint);
-		rdfConnection = RDFConnectionRemote.create().destination(endpoint).build();
+	public SparqlEndpointAccessor connectQueryEndpoint() throws SparqlEndpointRuntimeException {
+		LOGGER.info("Setting query connection to " + queryEndpoint);
+		rdfQueryConnection = RDFConnectionRemote.create().destination(queryEndpoint).build();
+		return this;
+	}
+
+	public SparqlEndpointAccessor connectUpdateEndpoint() throws SparqlEndpointRuntimeException {
+		LOGGER.info("Setting update connection to " + updateEndpoint);
+		rdfUpdateConnection = RDFConnectionRemote.create().destination(updateEndpoint).build();
 		return this;
 	}
 
 	public void close() {
-		if (rdfConnection != null && !rdfConnection.isClosed()) {
-			rdfConnection.close();
+		if (rdfQueryConnection != null && !rdfQueryConnection.isClosed()) {
+			rdfQueryConnection.close();
+		}
+		if (rdfUpdateConnection != null && !rdfUpdateConnection.isClosed()) {
+			rdfUpdateConnection.close();
 		}
 	}
 
-	public boolean isConnected() {
-		if (rdfConnection == null || rdfConnection.isClosed()) {
+	public boolean isQueryEndpointConnected() {
+		if (rdfQueryConnection == null || rdfQueryConnection.isClosed()) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public boolean isUpdateEndpointConnected() {
+		if (rdfUpdateConnection == null || rdfUpdateConnection.isClosed()) {
 			return false;
 		} else {
 			return true;

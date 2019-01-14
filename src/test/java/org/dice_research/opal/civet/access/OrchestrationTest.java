@@ -55,6 +55,7 @@ public class OrchestrationTest {
 		// Configure endpoint
 		Orchestration orchestration = new Orchestration();
 		orchestration.getConfiguration().setSparqlQueryEndpoint(Config.sparqlQueryEndpoint);
+		orchestration.getConfiguration().setSparqlUpdateEndpoint(Config.sparqlUpdateEndpoint);
 		orchestration.getConfiguration().setNamedGraph(Config.namedGraph);
 		pingEndpoint();
 

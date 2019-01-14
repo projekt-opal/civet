@@ -17,14 +17,14 @@ public class EndpointStatistics extends SparqlEndpointAccessor {
 	}
 
 	@Override
-	public EndpointStatistics connect() {
-		super.connect();
+	public EndpointStatistics connectQueryEndpoint() {
+		super.connectQueryEndpoint();
 		return this;
 	}
 
 	public void print(String query) {
 		System.out.println(query);
-		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 	}
 
@@ -36,22 +36,22 @@ public class EndpointStatistics extends SparqlEndpointAccessor {
 		// Print all named graphs
 		query = "SELECT DISTINCT ?g WHERE { GRAPH ?g {} }";
 		System.out.println(query);
-		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
 		query = "SELECT DISTINCT ?concept" + GRAPH + "WHERE { [] a ?concept} ORDER BY ?concept";
 		System.out.println(query);
-		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
 		query = "SELECT (COUNT(?s) AS ?triples) " + GRAPH + "WHERE { ?s ?p ?o }";
 		System.out.println(query);
-		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
 		query = "SELECT DISTINCT ?predicate " + GRAPH + "WHERE { ?s ?predicate ?o } ORDER BY ?predicate";
 		System.out.println(query);
-		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
 		// Catalog
@@ -59,7 +59,7 @@ public class EndpointStatistics extends SparqlEndpointAccessor {
 		query = "SELECT DISTINCT ?catalog " + GRAPH
 				+ "WHERE { ?catalog a <http://www.w3.org/ns/dcat#Catalog> } LIMIT 5";
 		System.out.println(query);
-		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
 		System.out.println();
@@ -70,19 +70,19 @@ public class EndpointStatistics extends SparqlEndpointAccessor {
 		query = "SELECT DISTINCT (COUNT(?distribution) as ?distributions) " + GRAPH
 				+ "WHERE { ?distribution a <http://www.w3.org/ns/dcat#Distribution> }";
 		System.out.println(query);
-		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
 		query = "SELECT DISTINCT ?predicate " + GRAPH
 				+ "WHERE { ?s a <http://www.w3.org/ns/dcat#Distribution> . ?s ?predicate ?o } ORDER BY ?predicate";
 		System.out.println(query);
-		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
 		query = "SELECT DISTINCT ?distribution " + GRAPH
 				+ "WHERE { ?distribution a <http://www.w3.org/ns/dcat#Distribution> } LIMIT 5";
 		System.out.println(query);
-		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
 		System.out.println();
@@ -93,19 +93,19 @@ public class EndpointStatistics extends SparqlEndpointAccessor {
 		query = "SELECT DISTINCT (COUNT(?dataset) as ?datasets) " + GRAPH
 				+ "WHERE { ?dataset a <http://www.w3.org/ns/dcat#Dataset> }";
 		System.out.println(query);
-		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
 		query = "SELECT DISTINCT ?predicate " + GRAPH
 				+ "WHERE { ?s a <http://www.w3.org/ns/dcat#Dataset> . ?s ?predicate ?o } ORDER BY ?predicate";
 		System.out.println(query);
-		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
 		query = "SELECT DISTINCT ?dataset " + GRAPH
 				+ "WHERE { ?dataset a <http://www.w3.org/ns/dcat#Dataset> } LIMIT 5";
 		System.out.println(query);
-		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
 		System.out.println();
@@ -117,7 +117,7 @@ public class EndpointStatistics extends SparqlEndpointAccessor {
 				+ "WHERE { ?dataset a <http://www.w3.org/ns/dcat#Dataset> . ?dataset <dcat:distribution> ?distribution . ?distribution a <http://www.w3.org/ns/dcat#Distribution> } "
 				+ "GROUP BY ?dataset " + "ORDER BY DESC(?distributions) LIMIT 5";
 		System.out.println(query);
-		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
 		// URLs of a dataset
@@ -129,7 +129,7 @@ public class EndpointStatistics extends SparqlEndpointAccessor {
 				+ "OPTIONAL { ?distribution <http://www.w3.org/ns/dcat#accessURL> ?accessURL } . "
 				+ "OPTIONAL { ?distribution <http://www.w3.org/ns/dcat#downloadURL> ?downloadURL } " + "} LIMIT 5 ";
 		System.out.println(query);
-		rdfConnection.queryResultSet(query, ResultSetFormatter::out);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
 	}
@@ -155,7 +155,7 @@ public class EndpointStatistics extends SparqlEndpointAccessor {
 			query = args[1];
 		}
 
-		EndpointStatistics statistics = new EndpointStatistics(args[0]).connect();
+		EndpointStatistics statistics = new EndpointStatistics(args[0]).connectQueryEndpoint();
 		if (query == null) {
 			statistics.print();
 		} else {
