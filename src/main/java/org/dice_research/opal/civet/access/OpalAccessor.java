@@ -13,6 +13,7 @@ import java.util.Set;
 import org.apache.jena.arq.querybuilder.SelectBuilder;
 import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
+import org.apache.jena.graph.Triple;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QuerySolution;
@@ -108,7 +109,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	 * @param offset        Starting number
 	 * @throws NullPointerException
 	 */
-	public Map<String, DataContainer> getData(DataContainer dataContainer, int limit, int offset)
+	public OpalAccessorContainer getData(DataContainer dataContainer, int limit, int offset)
 			throws NullPointerException {
 		Map<String, DataContainer> dataContainers = new HashMap<>();
 
@@ -118,8 +119,10 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		}
 
 		// Build query
-		SelectBuilder selectBuilder = buildQuery(dataContainer);
-		selectBuilder.addWhere("?" + VAR_DATASET, "a", NodeFactory.createURI(Dcat.PROPERTY_DATASET));
+		Triple initialWhereTriple = new Triple(NodeFactory.createVariable(VAR_DATASET),
+				NodeFactory.createURI(org.apache.jena.vocabulary.RDF.type.getURI()),
+				NodeFactory.createURI(Dcat.PROPERTY_DATASET));
+		SelectBuilder selectBuilder = buildQuery(dataContainer, initialWhereTriple);
 		selectBuilder.addVar(VAR_DATASET);
 		selectBuilder.setLimit(limit);
 		selectBuilder.setOffset(offset);
@@ -131,10 +134,14 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		ResultSet resultSet = queryExecution.execSelect();
 
 		// Process results (datasets may be splitted into multiple results)
+		int resultIndex = -1;
+		int refreshIndex = 0;
+		String datasetUri = null;
 		while (resultSet.hasNext()) {
 			QuerySolution querySolution = resultSet.next();
+			resultIndex++;
 
-			// Extract IDs and values
+			// Extract IDs and values of the current result
 			// Iterator only returns variables with values (optional properties are skipped)
 			Map<String, String> idToValue = new HashMap<>();
 			Iterator<String> iterator = querySolution.varNames();
@@ -145,11 +152,21 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 
 			// Create or get data-container
 			DataContainer resultsDataContainer;
-			String datasetUri;
 			if (!idToValue.containsKey(VAR_DATASET)) {
-				LOGGER.error("Could not find dataset URI");
+				// Every result has to provide the URI of the current dataset
+				LOGGER.error("Could not find dataset URI at result index: " + resultIndex);
 				continue;
 			} else {
+
+				// Check change of URI
+				if (!idToValue.get(VAR_DATASET).equals(datasetUri)) {
+					// Remember the index of the last dataset URI in results.
+					// Used to re-request that dataset in next iteration and to ensure completeness
+					// of requested data. This could be solved with other types of SPARQL queries.
+					// However, the current request type was fastest in tests.
+					refreshIndex = resultIndex;
+				}
+
 				datasetUri = idToValue.get(VAR_DATASET);
 				if (dataContainers.containsKey(datasetUri)) {
 					resultsDataContainer = dataContainers.get(datasetUri);
@@ -182,7 +199,6 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		// Update number of categories
 		for (DataContainer dc : dataContainers.values()) {
 			if (dc.getIds().contains(DataObjects.NUMBER_OF_CATEGORIES)) {
-				int categories = 0;
 				try {
 					dc.getDataObject(DataObjects.NUMBER_OF_CATEGORIES)
 							.setValue("" + dc.getDataObject(DataObjects.THEME).getValues().size());
@@ -192,7 +208,20 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 			}
 		}
 
-		return dataContainers;
+		// Check completeness
+		if (refreshIndex == 0) {
+			// The complete results contain data for exactly one resource. Therefore,
+			// requests with the given limit are not able to fetch this dataset completely.
+			LOGGER.warn("Completeness of SPARQL request is maybe not given. Offset: " + offset);
+		}
+
+		// Return data in container
+		OpalAccessorContainer resultsContainer = new OpalAccessorContainer();
+		resultsContainer.dataContainers = dataContainers;
+		resultsContainer.refreshIndex = refreshIndex;
+		return resultsContainer;
+
+		// TODO: Get related distribution data
 	}
 
 	public void getData(URI datasetUri, DataContainer dataContainer) {
@@ -205,7 +234,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		}
 
 		// Add query parts for single data-objects
-		SelectBuilder selectBuilder = buildQuery(dataContainer);
+		SelectBuilder selectBuilder = buildQuery(dataContainer, null);
 
 		// Only one dataset has to be returned
 		selectBuilder.setVar(Var.alloc(VAR_DATASET), "<" + datasetUri.toString() + ">");
@@ -251,7 +280,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	/**
 	 * Adds query parts for single data-objects.
 	 */
-	private SelectBuilder buildQuery(DataContainer dataContainer) {
+	private SelectBuilder buildQuery(DataContainer dataContainer, Triple initialWhereTriple) {
 
 		// Build query
 		SelectBuilder selectBuilder = new SelectBuilder();
@@ -259,6 +288,10 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		// Use named graph or default graph
 		if (orchestration.getConfiguration().getNamedGraph() != null) {
 			selectBuilder.from(orchestration.getConfiguration().getNamedGraph());
+		}
+
+		if (initialWhereTriple != null) {
+			selectBuilder.addWhere(initialWhereTriple);
 		}
 
 		// Add query parts

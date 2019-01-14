@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotEquals;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.Map;
 
 import org.dice_research.opal.civet.Config;
 import org.dice_research.opal.civet.Orchestration;
@@ -54,7 +53,7 @@ public class OpalAccessorTest {
 	public void testMultipleDatasets() {
 
 		int limit = 10;
-		int offset = 2;
+		int offset = 0;
 
 		// Get all properties
 		AllPropertiesMetric allPropertiesMetric = new AllPropertiesMetric();
@@ -71,15 +70,19 @@ public class OpalAccessorTest {
 		orchestration.getConfiguration().setSparqlQueryEndpoint(Config.sparqlQueryEndpoint);
 		orchestration.getConfiguration().setNamedGraph(Config.namedGraph);
 		OpalAccessor opalAccessor = new OpalAccessor(orchestration);
-		Map<String, DataContainer> dataContainers = opalAccessor.getData(dataContainer, limit, offset);
+		OpalAccessorContainer resultsContainer = opalAccessor.getData(dataContainer, limit, offset);
 
 		// Returned number of datasets shout be at least 1. Multiple results specified
 		// by limit may return the same dataset with additional information.
-		assertNotEquals(0, dataContainers.size());
+		assertNotEquals(0, resultsContainer.dataContainers.size());
 
 		// Checks for all datasets, if at least one non-empty data-object exists.
-		for (DataContainer container : dataContainers.values()) {
+		for (DataContainer container : resultsContainer.dataContainers.values()) {
 			assertNotEquals(0, allPropertiesMetric.getScore(container));
 		}
+
+		// If this appears, the data of a dataset is maybe not completely returned.
+		// Devs have to increase the value of limit.
+		assertNotEquals(0, resultsContainer.refreshIndex);
 	}
 }
