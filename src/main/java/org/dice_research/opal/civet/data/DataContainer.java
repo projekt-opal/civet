@@ -167,6 +167,12 @@ public class DataContainer {
 				stringBuilder.append(System.lineSeparator());
 			}
 		}
+		for (Entry<String, Float> metricResult : metricResults.entrySet()) {
+			stringBuilder.append(metricResult.getValue());
+			stringBuilder.append(" ");
+			stringBuilder.append(metricResult.getKey());
+			stringBuilder.append(System.lineSeparator());
+		}
 		return stringBuilder.toString();
 	}
 }

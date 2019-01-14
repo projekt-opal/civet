@@ -52,8 +52,8 @@ public class OpalAccessorTest {
 	@Test
 	public void testMultipleDatasets() {
 
-		int limit = 10;
-		int offset = 0;
+		int limit = 20;
+		int offset = 10;
 
 		// Get all properties
 		AllPropertiesMetric allPropertiesMetric = new AllPropertiesMetric();
@@ -84,5 +84,20 @@ public class OpalAccessorTest {
 		// If this appears, the data of a dataset is maybe not completely returned.
 		// Devs have to increase the value of limit.
 		assertNotEquals(0, resultsContainer.refreshIndex);
+
+		// Human investigation of data
+		// for (Entry<String, DataContainer> data :
+		// resultsContainer.dataContainers.entrySet()) {
+		// data.getValue().calculateMetrics(Metrics.getMetrics().keySet());
+		// }
+		// StringBuilder stringBuilder = new StringBuilder();
+		// for (String datasetUri : resultsContainer.dataContainers.keySet()) {
+		// stringBuilder.append(datasetUri);
+		// stringBuilder.append(System.lineSeparator());
+		// stringBuilder.append(resultsContainer.dataContainers.get(datasetUri).toExtendedString());
+		// stringBuilder.append(System.lineSeparator());
+		// stringBuilder.append(System.lineSeparator());
+		// }
+		// System.out.println(stringBuilder.toString());
 	}
 }

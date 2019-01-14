@@ -84,7 +84,7 @@ public class Orchestration {
 
 			// Calculate metrics
 			for (Entry<String, DataContainer> entry : resultsContainer.dataContainers.entrySet()) {
-				entry.getValue().calculateMetrics(metricIds);
+				DataContainer metrics = entry.getValue().calculateMetrics(metricIds);
 			}
 
 			// Write back

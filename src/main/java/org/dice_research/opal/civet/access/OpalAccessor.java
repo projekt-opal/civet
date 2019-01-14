@@ -399,7 +399,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 				for (String id : data.keySet()) {
 					for (String value : data.get(id)) {
 						try {
-							container.getDataObject(id).addValue(value);
+							container.getDataObject(id).addValueUnique(value);
 						} catch (ParsingException e) {
 							LOGGER.error(e);
 						}
