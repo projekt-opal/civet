@@ -105,7 +105,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	 * Gets data for several datasets.
 	 * 
 	 * @param dataContainer A data-container with pre-defined IDs
-	 * @param limit         Max number of items to request
+	 * @param limit         Number of items per request
 	 * @param offset        Starting number
 	 * @throws NullPointerException
 	 */
@@ -215,13 +215,15 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 			LOGGER.warn("Completeness of SPARQL request is maybe not given. Offset: " + offset);
 		}
 
-		// Return data in container
+		// Put results into container
 		OpalAccessorContainer resultsContainer = new OpalAccessorContainer();
 		resultsContainer.dataContainers = dataContainers;
 		resultsContainer.refreshIndex = refreshIndex;
-		return resultsContainer;
 
-		// TODO: Get related distribution data
+		// Get related distribution data
+		getDistributionData(dataContainer, resultsContainer);
+
+		return resultsContainer;
 	}
 
 	public void getData(URI datasetUri, DataContainer dataContainer) {
@@ -284,6 +286,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 
 		// Build query
 		SelectBuilder selectBuilder = new SelectBuilder();
+		selectBuilder.setDistinct(true);
 
 		// Use named graph or default graph
 		if (orchestration.getConfiguration().getNamedGraph() != null) {
@@ -325,6 +328,85 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		}
 
 		return selectBuilder;
+	}
+
+	private void getDistributionData(DataContainer dataContainer, OpalAccessorContainer resultsContainer) {
+
+		// Build query
+		SelectBuilder selectBuilder = new SelectBuilder();
+		selectBuilder.setDistinct(true);
+		selectBuilder.addVar(VAR_DATASET);
+
+		// Use named graph or default graph
+		if (orchestration.getConfiguration().getNamedGraph() != null) {
+			selectBuilder.from(orchestration.getConfiguration().getNamedGraph());
+		}
+
+		selectBuilder.addWhere("?" + VAR_DATASET, NodeFactory.createURI(Dcat.PROPERTY_DISTRIBUTION),
+				"?" + VAR_DISTRIBUTION);
+		for (DataObject<?> dataObject : dataContainer.getDataObjects()) {
+
+			if (addDistributionRelation(selectBuilder, dataObject.getId(), DataObjects.ACCESS_URL,
+					Dcat.PROPERTY_ACCESS_URL))
+				continue;
+
+			if (addDistributionRelation(selectBuilder, dataObject.getId(), DataObjects.DOWNLOAD_URL,
+					Dcat.PROPERTY_DOWNLOAD_URL))
+				continue;
+
+			if (addDistributionRelation(selectBuilder, dataObject.getId(), DataObjects.LICENSE,
+					DublinCore.PROPERTY_LICENSE))
+				continue;
+		}
+
+		for (String datasetUri : resultsContainer.dataContainers.keySet()) {
+			selectBuilder.addValueVar(Var.alloc(VAR_DATASET), "<" + datasetUri + ">");
+		}
+
+		// Execute query
+		Query query = selectBuilder.build();
+
+		LOGGER.debug(query.toString());
+		QueryExecution queryExecution = rdfConnection.query(query);
+		ResultSet resultSet = queryExecution.execSelect();
+
+		// Process results
+		Map<String, Set<String>> data = new HashMap<>();
+		while (resultSet.hasNext()) {
+			QuerySolution querySolution = resultSet.next();
+			String dataset = null;
+
+			// Collect data in result
+			Iterator<String> iterator = querySolution.varNames();
+			while (iterator.hasNext()) {
+				String id = iterator.next();
+				if (id.equals(VAR_DISTRIBUTION)) {
+					// variable just used to access data
+					continue;
+				} else if (id.equals(VAR_DATASET)) {
+					dataset = querySolution.get(id).toString().trim();
+					continue;
+				}
+				if (!data.containsKey(id)) {
+					data.put(id, new HashSet<String>());
+				}
+				data.get(id).add(querySolution.get(id).toString().trim());
+			}
+
+			// Put data in container
+			if (dataset != null) {
+				DataContainer container = resultsContainer.dataContainers.get(dataset);
+				for (String id : data.keySet()) {
+					for (String value : data.get(id)) {
+						try {
+							container.getDataObject(id).addValue(value);
+						} catch (ParsingException e) {
+							LOGGER.error(e);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private void getDistributionData(URI datasetUri, DataContainer dataContainer) {
