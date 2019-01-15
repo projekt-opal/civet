@@ -45,34 +45,33 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	protected static final String VAR_DATASET = "DATASET";
 	protected static final String VAR_DISTRIBUTION = "DISTRIBUTION";
 
-	private static String tmp = "PREFIX dqv: <http://www.w3.org/ns/dqv#> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>"
-			+ "\n" +
+	private static String VAR_BLANK_INDEX = "BLANK_INDEX";
+	private static String VAR_RESULT_VALUE = "RESULT_VALUE";
+	private static String VAR_METIRC_URI = "METIRC_URI";
+	private static String VAR_NAMED_GRAPH = "NAMED_GRAPH";
+	private static String VAR_MEASUREMENT = "MEASUREMENT";
+	private static String VAR_S = "VAR_S";
+	private static String VAR_O = "VAR_O";
+	private static String VAR_PS = "VAR_PS";
+	private static String VAR_PO = "VAR_PO";
 
-			"WITH <http://projekt-opal.de>" + "\n" +
-
-			"DELETE" + "\n" +
-
-			" { ?measurement ?p1 ?o . ?s ?p2 ?measurement}" + "\n" +
-
-			"WHERE" + "\n" +
-
-			" { DATASET dqv:hasQualityMeasurement ?measurement ." + "\n" +
-
-			" ?measurement dqv:isMeasurementOf METIRC_URI .  ?measurement ?p1 ?o . ?s ?p2 ?measurement}";
-	
-	//
+	private static String DELETE_PREFIX = "PREFIX dqv: <http://www.w3.org/ns/dqv#> "
+			+ "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> ";
+	private static String DELETE_GRAPH = "WITH <NAMED_GRAPH> ";
+	private static String DELETE_DELETE = "DELETE { ";
+	private static String DELETE_ENTRY_DELETE = "MEASUREMENT VAR_PO VAR_O . VAR_S VAR_PS MEASUREMENT . ";
+	private static String DELETE_WHERE = "} WHERE { ";
+	private static String DELETE_ENTRY_WHERE = "DATASET dqv:hasQualityMeasurement MEASUREMENT . "
+			+ "MEASUREMENT dqv:isMeasurementOf METIRC_URI . "
+			+ "MEASUREMENT VAR_PO VAR_O . VAR_S VAR_PS MEASUREMENT . ";
 
 	private static String INSERT_PREFIX = "PREFIX dqv: <http://www.w3.org/ns/dqv#> "
 			+ "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> ";
 	private static String INSERT_INSERT = "INSERT DATA { ";
 	private static String INSERT_GRAPH = "GRAPH <NAMED_GRAPH> { ";
-	private static String INSERT_ENTRY_INSERT = "DATASET dqv:hasQualityMeasurement _:bBLANK_INDEX . "
+	private static String INSERT_ENTRY = "DATASET dqv:hasQualityMeasurement _:bBLANK_INDEX . "
 			+ "_:bBLANK_INDEX a dqv:qualityMeasurement . " + "_:bBLANK_INDEX dqv:value \"RESULT_VALUE\"^^xsd:float . "
 			+ "_:bBLANK dqv:isMeasurementOf METIRC_URI . ";
-	private static String VAR_BLANK_INDEX = "BLANK_INDEX";
-	private static String VAR_RESULT_VALUE = "RESULT_VALUE";
-	private static String VAR_METIRC_URI = "METIRC_URI";
-	private static String VAR_NAMED_GRAPH = "NAMED_GRAPH";
 
 	protected Orchestration orchestration;
 
@@ -98,24 +97,26 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		}
 
 		// TODO
-		tmp = tmp.replace(VAR_DATASET, "<http://projekt-opal.de/dataset/2a490c08-92dd-4aba-af96-cbf9d5f02f9a>");
-		tmp = tmp.replace(VAR_METIRC_URI, "<http://metric.projekt-opal.de/description>");
-		System.err.println(tmp);
+
+		// DELETE
+
+		System.err.println(getSparqlDelete(dataContainers));
 		if ("".equals(""))
 			return;
 
-		UpdateRequest updateRequest2 = new UpdateRequest();
-		updateRequest2.add(tmp);
-		rdfUpdateConnection.update(updateRequest2);
-		System.out.println("DOOOOOOOOOOOONE");
+		UpdateRequest deleteRequest = new UpdateRequest();
+		deleteRequest.add(getSparqlDelete(dataContainers));
+		rdfUpdateConnection.update(deleteRequest);
+
+		// INSERT
 
 //		System.err.println(getSparqlInsert(dataContainers));
 		if ("".equals(""))
 			return;
 
-		UpdateRequest updateRequest = new UpdateRequest();
-		updateRequest.add(getSparqlInsert(dataContainers));
-		rdfUpdateConnection.update(updateRequest);
+		UpdateRequest insertRequest = new UpdateRequest();
+		insertRequest.add(getSparqlInsert(dataContainers));
+		rdfUpdateConnection.update(insertRequest);
 	}
 
 	/**
@@ -516,6 +517,73 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		}
 	}
 
+	private String getSparqlDelete(Map<String, DataContainer> dataContainers) {
+		StringBuilder stringBuilder = new StringBuilder();
+
+		stringBuilder.append(DELETE_PREFIX);
+		stringBuilder.append(System.lineSeparator());
+
+		// Use named graph or default graph
+		if (orchestration.getConfiguration().getNamedGraph() != null) {
+			stringBuilder.append(new String(DELETE_GRAPH).replace(VAR_NAMED_GRAPH,
+					orchestration.getConfiguration().getNamedGraph()));
+			stringBuilder.append(System.lineSeparator());
+		}
+
+		stringBuilder.append(DELETE_DELETE);
+		stringBuilder.append(System.lineSeparator());
+
+		int datasetCounter = 0;
+		int metricCounter = 0;
+		StringBuilder whereBuilder = new StringBuilder();
+		for (Entry<String, DataContainer> dataContainer : dataContainers.entrySet()) {
+			datasetCounter++;
+			for (Entry<Metric, Float> metric : dataContainer.getValue().getMetricResults().entrySet()) {
+				metricCounter++;
+
+				stringBuilder.append(new String(DELETE_ENTRY_DELETE)
+
+						.replace(VAR_MEASUREMENT, "?m" + datasetCounter + "_" + metricCounter)
+
+						.replace(VAR_O, "?o" + datasetCounter + "_" + metricCounter)
+
+						.replace(VAR_S, "?s" + datasetCounter + "_" + metricCounter)
+
+						.replace(VAR_PO, "?po" + datasetCounter + "_" + metricCounter)
+
+						.replace(VAR_PS, "?ps" + datasetCounter + "_" + metricCounter));
+
+				stringBuilder.append(System.lineSeparator());
+
+				whereBuilder.append(new String(DELETE_ENTRY_WHERE)
+
+						.replace(VAR_DATASET, "<" + dataContainer.getKey() + ">")
+
+						.replace(VAR_METIRC_URI, "<" + metric.getKey().getResultsUri() + ">")
+
+						.replace(VAR_MEASUREMENT, "?m" + datasetCounter + "_" + metricCounter)
+
+						.replace(VAR_O, "?o" + datasetCounter + "_" + metricCounter)
+
+						.replace(VAR_S, "?s" + datasetCounter + "_" + metricCounter)
+
+						.replace(VAR_PO, "?po" + datasetCounter + "_" + metricCounter)
+
+						.replace(VAR_PS, "?ps" + datasetCounter + "_" + metricCounter));
+
+				whereBuilder.append(System.lineSeparator());
+			}
+		}
+
+		stringBuilder.append(DELETE_WHERE);
+		stringBuilder.append(System.lineSeparator());
+
+		stringBuilder.append(whereBuilder);
+		stringBuilder.append("}");
+		
+		return stringBuilder.toString();
+	}
+
 	private String getSparqlInsert(Map<String, DataContainer> dataContainers) {
 
 		StringBuilder stringBuilder = new StringBuilder();
@@ -538,7 +606,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 
 		for (Entry<String, DataContainer> dataContainer : dataContainers.entrySet()) {
 			for (Entry<Metric, Float> metric : dataContainer.getValue().getMetricResults().entrySet()) {
-				stringBuilder.append(new String(INSERT_ENTRY_INSERT)
+				stringBuilder.append(new String(INSERT_ENTRY)
 
 						.replace(VAR_BLANK_INDEX, "" + blankNodeCounter++)
 
