@@ -58,9 +58,9 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 
 			" { DATASET dqv:hasQualityMeasurement ?measurement ." + "\n" +
 
-			" ?measurement dqv:isMeasurementOf METIRC_URI . }";
+			" ?measurement dqv:isMeasurementOf METIRC_URI .  ?measurement ?p1 ?o . ?s ?p2 ?measurement}";
 	
-	// ?measurement ?p1 ?o . ?s ?p2 ?measurement
+	//
 
 	private static String INSERT_PREFIX = "PREFIX dqv: <http://www.w3.org/ns/dqv#> "
 			+ "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> ";
