@@ -68,9 +68,11 @@ public class OrchestrationTest {
 		metrics.add(licenseSpecifiedMetric);
 
 		// Process
-		int minDatasetsToProcess = 100;
-		int processedDatasets = orchestration.compute(0, 40, minDatasetsToProcess, metrics);
-		assumeTrue(minDatasetsToProcess < processedDatasets);
+		int offset = 0;
+		int endOffset = 2;
+		int limit = 6;
+		int processedDatasets = orchestration.compute(offset, endOffset, limit, metrics);
+		assumeTrue(endOffset < processedDatasets);
 	}
 
 	/**

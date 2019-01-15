@@ -23,8 +23,8 @@ public class DataContainer {
 	// Data-object ID to object
 	private Map<String, DataObject<?>> dataObjects = new HashMap<String, DataObject<?>>();
 
-	// Metrix-ID to metric-result
-	private Map<String, Float> metricResults = new HashMap<String, Float>();
+	// Metrixc-ID to metric-result
+	private Map<Metric, Float> metricResults = new HashMap<Metric, Float>();
 
 	/**
 	 * Creates new data-container with data-objects of source data-container.
@@ -127,7 +127,7 @@ public class DataContainer {
 	public DataContainer calculateMetrics(Collection<String> metricIds) {
 		Map<String, Metric> availableMetrics = Metrics.getMetrics();
 		for (String metricId : metricIds) {
-			metricResults.put(metricId, availableMetrics.get(metricId).getScore(this));
+			metricResults.put(availableMetrics.get(metricId), availableMetrics.get(metricId).getScore(this));
 		}
 		return this;
 	}
@@ -135,7 +135,7 @@ public class DataContainer {
 	/**
 	 * Gets metric results calculated by {@link #calculateMetrics(Collection)}.
 	 */
-	public Map<String, Float> getMetricResults() {
+	public Map<Metric, Float> getMetricResults() {
 		return metricResults;
 	}
 
@@ -167,10 +167,10 @@ public class DataContainer {
 				stringBuilder.append(System.lineSeparator());
 			}
 		}
-		for (Entry<String, Float> metricResult : metricResults.entrySet()) {
+		for (Entry<Metric, Float> metricResult : metricResults.entrySet()) {
 			stringBuilder.append(metricResult.getValue());
 			stringBuilder.append(" ");
-			stringBuilder.append(metricResult.getKey());
+			stringBuilder.append(metricResult.getKey().getId());
 			stringBuilder.append(System.lineSeparator());
 		}
 		return stringBuilder.toString();

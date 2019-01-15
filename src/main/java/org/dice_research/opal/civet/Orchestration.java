@@ -2,6 +2,7 @@ package org.dice_research.opal.civet;
 
 import java.net.URI;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -51,21 +52,30 @@ public class Orchestration {
 			LOGGER.error("Not connected to SPARQL endpoint.", e);
 		}
 
+		// Calculate
 		dataContainer.calculateMetrics(metricIds);
-		return dataContainer.getMetricResults();
+
+		// Return
+		Map<String, Float> metricResults = new HashMap<>();
+		for (Entry<Metric, Float> metricResult : dataContainer.getMetricResults().entrySet()) {
+			metricResults.put(metricResult.getKey().getId(), metricResult.getValue());
+		}
+		return metricResults;
 	}
 
 	/**
 	 * Computes metrics for multiple datasets. Writes results back to graph.
 	 * 
-	 * @param offset    Starting number
+	 * @param offset    Starting number (number of results, not datasets)
+	 * @param endOffset Ending number (number of results, not datasets)
 	 * @param limit     Number of items per request
-	 * @param min       Minimum number of datasets to receive
 	 * @param metricIds a collection of metrics to compute
 	 * 
 	 * @return Number of processed datasets
 	 */
-	public int compute(int offset, int limit, int min, Collection<String> metricIds) {
+	public int compute(int offset, int endOffset, int limit, Collection<String> metricIds) {
+
+		// TODO: endOffset could be -1 for all datasets
 
 		// Get required data object IDs
 		Set<String> dataObjectIds = getDataobjectIds(metricIds);
@@ -77,7 +87,7 @@ public class Orchestration {
 		DataContainer dataContainer = createDataContainer(dataObjectIds);
 
 		// Process
-		while (offset < min) {
+		while (offset < endOffset) {
 
 			// Get data
 			OpalAccessorContainer resultsContainer = opalAccessor.getData(dataContainer, limit, offset);
@@ -89,7 +99,7 @@ public class Orchestration {
 
 			// Write back
 			// TODO
-			// opalAccessor.writeMetricResults(null);
+			opalAccessor.writeMetricResults(resultsContainer.dataContainers);
 
 			// Prepare next iteration
 			int repeat = limit - resultsContainer.refreshIndex;

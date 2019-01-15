@@ -5,7 +5,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -27,6 +26,7 @@ import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObject;
 import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.exceptions.ParsingException;
+import org.dice_research.opal.civet.metrics.Metric;
 import org.dice_research.opal.civet.vocabulary.Dcat;
 import org.dice_research.opal.civet.vocabulary.DublinCore;
 import org.dice_research.opal.civet.vocabulary.Foaf;
@@ -41,17 +41,20 @@ import org.dice_research.opal.civet.vocabulary.Skos;
  */
 public class OpalAccessor extends SparqlEndpointAccessor {
 
-	// TODO
-	private String tmp = "PREFIX dqv: <http://www.w3.org/ns/dqv#>\n"
-			+ "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n" + "PREFIX mopal: <http://metric.projekt-opal.de/>\n"
-			+ "INSERT DATA {\n" + "  GRAPH <http://projekt-opal.de> {\n"
-			+ "    <http://projekt-opal.de/dataset/berlinumweltzone-wms> dqv:hasQualityMeasurement _:b0 .\n"
-			+ "    _:b0 a dqv:qualityMeasurement .\n" + "    _:b0 dqv:value \"5\"^^xsd:float .\n"
-			+ "    _:b0 dqv:isMeasurementOf mopal:known_license\n" + "  }\n" + "}";
-
 	protected static final Logger LOGGER = LogManager.getLogger();
 	protected static final String VAR_DATASET = "DATASET";
 	protected static final String VAR_DISTRIBUTION = "DISTRIBUTION";
+
+	private static String INSERT_OPEN = "PREFIX dqv: <http://www.w3.org/ns/dqv#> "
+			+ "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> " + "INSERT DATA { ";
+	private static String INSERT_GRAPH = "GRAPH <NAMED_GRAPH> { ";
+	private static String INSERT_ENTRY = "DATASET dqv:hasQualityMeasurement _:bBLANK_INDEX . "
+			+ "_:bBLANK_INDEX a dqv:qualityMeasurement . " + "_:bBLANK_INDEX dqv:value \"RESULT_VALUE\"^^xsd:float . "
+			+ "_:b0 dqv:isMeasurementOf METIRC_URI . ";
+	private static String VAR_BLANK_INDEX = "BLANK_INDEX";
+	private static String VAR_RESULT_VALUE = "RESULT_VALUE";
+	private static String VAR_METIRC_URI = "METIRC_URI";
+	private static String VAR_NAMED_GRAPH = "NAMED_GRAPH";
 
 	protected Orchestration orchestration;
 
@@ -67,9 +70,9 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		return this;
 	}
 
-	// TODO store data
-	// TODO Dataset uri needed
-	public void writeMetricResults(List<DataContainer> dataContainers) {
+	public void writeMetricResults(Map<String, DataContainer> dataContainers) {
+
+		// TODO: add configuration variable to not add/modify/delete data in tests
 
 		// Ensure connection
 		if (!isUpdateEndpointConnected()) {
@@ -77,11 +80,12 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		}
 
 		// TODO
-		if (!"".equals("nöööö"))
+		System.err.println(getSparqlInsert(dataContainers));
+		if ("".equals(""))
 			return;
 
 		UpdateRequest updateRequest = new UpdateRequest();
-		updateRequest.add(tmp);
+		updateRequest.add(getSparqlInsert(dataContainers));
 		rdfUpdateConnection.update(updateRequest);
 	}
 
@@ -483,4 +487,42 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		}
 	}
 
+	private String getSparqlInsert(Map<String, DataContainer> dataContainers) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(INSERT_OPEN);
+		stringBuilder.append(System.lineSeparator());
+
+		// Use named graph or default graph
+		boolean additionalClose = false;
+		if (orchestration.getConfiguration().getNamedGraph() != null) {
+			additionalClose = true;
+			stringBuilder.append(new String(INSERT_GRAPH).replace(VAR_NAMED_GRAPH,
+					orchestration.getConfiguration().getNamedGraph()));
+			stringBuilder.append(System.lineSeparator());
+		}
+
+		int blankNodeCounter = 0;
+		for (Entry<String, DataContainer> dataContainer : dataContainers.entrySet()) {
+			for (Entry<Metric, Float> metric : dataContainer.getValue().getMetricResults().entrySet()) {
+				stringBuilder.append(new String(INSERT_ENTRY)
+
+						.replace(VAR_BLANK_INDEX, "" + blankNodeCounter++)
+
+						.replace(VAR_DATASET, "<" + dataContainer.getKey() + ">")
+
+						.replace(VAR_METIRC_URI, "<" + metric.getKey().getResultsUri() + ">")
+
+						.replace(VAR_RESULT_VALUE, "" + metric.getValue()));
+
+				stringBuilder.append(System.lineSeparator());
+			}
+		}
+
+		stringBuilder.append("} ");
+		if (additionalClose) {
+			// Close named graph part
+			stringBuilder.append("} ");
+		}
+		return stringBuilder.toString();
+	}
 }
