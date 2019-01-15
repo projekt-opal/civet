@@ -45,19 +45,31 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	protected static final String VAR_DATASET = "DATASET";
 	protected static final String VAR_DISTRIBUTION = "DISTRIBUTION";
 
-	private static String UPDATE_PREFIX = "PREFIX dqv: <http://www.w3.org/ns/dqv#> "
+	private static String tmp = "PREFIX dqv: <http://www.w3.org/ns/dqv#> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>"
+			+ "\n" +
+
+			"WITH <http://projekt-opal.de>" + "\n" +
+
+			"DELETE" + "\n" +
+
+			" { ?measurement ?p1 ?o . ?s ?p2 ?measurement}" + "\n" +
+
+			"WHERE" + "\n" +
+
+			" { DATASET dqv:hasQualityMeasurement ?measurement ." + "\n" +
+
+			" ?measurement dqv:isMeasurementOf METIRC_URI . }";
+	
+	// ?measurement ?p1 ?o . ?s ?p2 ?measurement
+
+	private static String INSERT_PREFIX = "PREFIX dqv: <http://www.w3.org/ns/dqv#> "
 			+ "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> ";
-	private static String UPDATE_DELETE = "DELETE DATA { ";
-	private static String UPDATE_INSERT = "INSERT DATA { ";
-	private static String UPDATE_GRAPH = "GRAPH <NAMED_GRAPH> { ";
-	private static String UPDATE_ENTRY_DELETE = "DATASET dqv:hasQualityMeasurement ?bBLANK_INDEX . "
-			+ "?bBLANK_INDEX a dqv:qualityMeasurement . " + "?bBLANK_INDEX dqv:value ?metricvalueVALUE_INDEX . "
-			+ "?bBLANK dqv:isMeasurementOf METIRC_URI . ";
-	private static String UPDATE_ENTRY_INSERT = "DATASET dqv:hasQualityMeasurement _:bBLANK_INDEX . "
+	private static String INSERT_INSERT = "INSERT DATA { ";
+	private static String INSERT_GRAPH = "GRAPH <NAMED_GRAPH> { ";
+	private static String INSERT_ENTRY_INSERT = "DATASET dqv:hasQualityMeasurement _:bBLANK_INDEX . "
 			+ "_:bBLANK_INDEX a dqv:qualityMeasurement . " + "_:bBLANK_INDEX dqv:value \"RESULT_VALUE\"^^xsd:float . "
 			+ "_:bBLANK dqv:isMeasurementOf METIRC_URI . ";
 	private static String VAR_BLANK_INDEX = "BLANK_INDEX";
-	private static String VAR_VALUE_INDEX = "VALUE_INDEX";
 	private static String VAR_RESULT_VALUE = "RESULT_VALUE";
 	private static String VAR_METIRC_URI = "METIRC_URI";
 	private static String VAR_NAMED_GRAPH = "NAMED_GRAPH";
@@ -86,12 +98,23 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		}
 
 		// TODO
-		System.err.println(getSparqlUpdate(dataContainers));
+		tmp = tmp.replace(VAR_DATASET, "<http://projekt-opal.de/dataset/2a490c08-92dd-4aba-af96-cbf9d5f02f9a>");
+		tmp = tmp.replace(VAR_METIRC_URI, "<http://metric.projekt-opal.de/description>");
+		System.err.println(tmp);
+		if ("".equals(""))
+			return;
+
+		UpdateRequest updateRequest2 = new UpdateRequest();
+		updateRequest2.add(tmp);
+		rdfUpdateConnection.update(updateRequest2);
+		System.out.println("DOOOOOOOOOOOONE");
+
+//		System.err.println(getSparqlInsert(dataContainers));
 		if ("".equals(""))
 			return;
 
 		UpdateRequest updateRequest = new UpdateRequest();
-		updateRequest.add(getSparqlUpdate(dataContainers));
+		updateRequest.add(getSparqlInsert(dataContainers));
 		rdfUpdateConnection.update(updateRequest);
 	}
 
@@ -493,72 +516,29 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		}
 	}
 
-	private String getSparqlUpdate(Map<String, DataContainer> dataContainers) {
-
-		// TODO: "QueryException: Variables not permitted in data quad"
+	private String getSparqlInsert(Map<String, DataContainer> dataContainers) {
 
 		StringBuilder stringBuilder = new StringBuilder();
 		int blankNodeCounter = 0;
-		int valueIndexCounter = 0;
 
-		// DELETE
-
-		stringBuilder.append(UPDATE_PREFIX);
+		stringBuilder.append(INSERT_PREFIX);
 		stringBuilder.append(System.lineSeparator());
 
-		stringBuilder.append(UPDATE_DELETE);
+		stringBuilder.append(INSERT_INSERT);
 		stringBuilder.append(System.lineSeparator());
 
 		// Use named graph or default graph
 		boolean additionalClose = false;
 		if (orchestration.getConfiguration().getNamedGraph() != null) {
 			additionalClose = true;
-			stringBuilder.append(new String(UPDATE_GRAPH).replace(VAR_NAMED_GRAPH,
+			stringBuilder.append(new String(INSERT_GRAPH).replace(VAR_NAMED_GRAPH,
 					orchestration.getConfiguration().getNamedGraph()));
 			stringBuilder.append(System.lineSeparator());
 		}
 
 		for (Entry<String, DataContainer> dataContainer : dataContainers.entrySet()) {
 			for (Entry<Metric, Float> metric : dataContainer.getValue().getMetricResults().entrySet()) {
-				stringBuilder.append(new String(UPDATE_ENTRY_DELETE)
-
-						.replace(VAR_BLANK_INDEX, "" + blankNodeCounter++)
-
-						.replace(VAR_VALUE_INDEX, "" + valueIndexCounter++)
-
-						.replace(VAR_DATASET, "<" + dataContainer.getKey() + ">")
-
-						.replace(VAR_METIRC_URI, "<" + metric.getKey().getResultsUri() + ">"));
-
-				stringBuilder.append(System.lineSeparator());
-			}
-		}
-
-		stringBuilder.append("} ");
-		if (additionalClose) {
-			// Close named graph part
-			stringBuilder.append("} ");
-		}
-		stringBuilder.append(System.lineSeparator());
-
-		// INSERT
-
-		stringBuilder.append(UPDATE_PREFIX);
-		stringBuilder.append(System.lineSeparator());
-
-		stringBuilder.append(UPDATE_INSERT);
-		stringBuilder.append(System.lineSeparator());
-
-		// Use named graph or default graph
-		if (orchestration.getConfiguration().getNamedGraph() != null) {
-			stringBuilder.append(new String(UPDATE_GRAPH).replace(VAR_NAMED_GRAPH,
-					orchestration.getConfiguration().getNamedGraph()));
-			stringBuilder.append(System.lineSeparator());
-		}
-
-		for (Entry<String, DataContainer> dataContainer : dataContainers.entrySet()) {
-			for (Entry<Metric, Float> metric : dataContainer.getValue().getMetricResults().entrySet()) {
-				stringBuilder.append(new String(UPDATE_ENTRY_INSERT)
+				stringBuilder.append(new String(INSERT_ENTRY_INSERT)
 
 						.replace(VAR_BLANK_INDEX, "" + blankNodeCounter++)
 
