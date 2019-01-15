@@ -50,7 +50,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	private static String INSERT_GRAPH = "GRAPH <NAMED_GRAPH> { ";
 	private static String INSERT_ENTRY = "DATASET dqv:hasQualityMeasurement _:bBLANK_INDEX . "
 			+ "_:bBLANK_INDEX a dqv:qualityMeasurement . " + "_:bBLANK_INDEX dqv:value \"RESULT_VALUE\"^^xsd:float . "
-			+ "_:b0 dqv:isMeasurementOf METIRC_URI . ";
+			+ "_:bBLANK dqv:isMeasurementOf METIRC_URI . ";
 	private static String VAR_BLANK_INDEX = "BLANK_INDEX";
 	private static String VAR_RESULT_VALUE = "RESULT_VALUE";
 	private static String VAR_METIRC_URI = "METIRC_URI";
