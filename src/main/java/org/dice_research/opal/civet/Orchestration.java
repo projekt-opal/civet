@@ -75,7 +75,7 @@ public class Orchestration {
 	 */
 	public int compute(int offset, int endOffset, int limit, Collection<String> metricIds) {
 
-		// TODO: endOffset could be -1 for all datasets
+		// TODO: endOffset could be -1 to process all datasets
 
 		// Get required data object IDs
 		Set<String> dataObjectIds = getDataobjectIds(metricIds);
@@ -93,12 +93,11 @@ public class Orchestration {
 			OpalAccessorContainer resultsContainer = opalAccessor.getData(dataContainer, limit, offset);
 
 			// Calculate metrics
-			for (Entry<String, DataContainer> entry : resultsContainer.dataContainers.entrySet()) {
-				DataContainer metrics = entry.getValue().calculateMetrics(metricIds);
+			for (DataContainer container : resultsContainer.dataContainers.values()) {
+				container.calculateMetrics(metricIds);
 			}
 
 			// Write back
-			// TODO
 			opalAccessor.writeMetricResults(resultsContainer.dataContainers);
 
 			// Prepare next iteration

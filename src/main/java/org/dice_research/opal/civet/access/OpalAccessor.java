@@ -45,33 +45,27 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	protected static final String VAR_DATASET = "DATASET";
 	protected static final String VAR_DISTRIBUTION = "DISTRIBUTION";
 
-	private static String VAR_BLANK_INDEX = "BLANK_INDEX";
-	private static String VAR_RESULT_VALUE = "RESULT_VALUE";
-	private static String VAR_METIRC_URI = "METIRC_URI";
-	private static String VAR_NAMED_GRAPH = "NAMED_GRAPH";
-	private static String VAR_MEASUREMENT = "MEASUREMENT";
-	private static String VAR_S = "VAR_S";
-	private static String VAR_O = "VAR_O";
-	private static String VAR_PS = "VAR_PS";
-	private static String VAR_PO = "VAR_PO";
+	protected static final String VAR_BLANK_INDEX = "BLANK_INDEX";
+	protected static final String VAR_RESULT_VALUE = "RESULT_VALUE";
+	protected static final String VAR_METRIC_URI = "METRIC_URI";
+	protected static final String VAR_NAMED_GRAPH = "NAMED_GRAPH";
 
-	private static String DELETE_PREFIX = "PREFIX dqv: <http://www.w3.org/ns/dqv#> "
+	protected static final String DELETE_PREFIX = "PREFIX dqv: <http://www.w3.org/ns/dqv#> "
 			+ "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> ";
-	private static String DELETE_GRAPH = "WITH <NAMED_GRAPH> ";
-	private static String DELETE_DELETE = "DELETE { ";
-	private static String DELETE_ENTRY_DELETE = "MEASUREMENT VAR_PO VAR_O . VAR_S VAR_PS MEASUREMENT . ";
-	private static String DELETE_WHERE = "} WHERE { ";
-	private static String DELETE_ENTRY_WHERE = "DATASET dqv:hasQualityMeasurement MEASUREMENT . "
-			+ "MEASUREMENT dqv:isMeasurementOf METIRC_URI . "
-			+ "MEASUREMENT VAR_PO VAR_O . VAR_S VAR_PS MEASUREMENT . ";
+	protected static final String DELETE_GRAPH = "WITH <NAMED_GRAPH> ";
+	protected static final String DELETE_DELETE = "DELETE { ";
+	protected static final String DELETE_ENTRY_DELETE = "?m ?po ?o . ?s ?ps ?m ";
+	protected static final String DELETE_WHERE = "} WHERE { ";
+	protected static final String DELETE_ENTRY_WHERE = "DATASET dqv:hasQualityMeasurement ?m . "
+			+ "?m dqv:isMeasurementOf METRIC_URI . " + "?m ?po ?o . ?s ?ps ?m ";
 
-	private static String INSERT_PREFIX = "PREFIX dqv: <http://www.w3.org/ns/dqv#> "
+	protected static final String INSERT_PREFIX = "PREFIX dqv: <http://www.w3.org/ns/dqv#> "
 			+ "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> ";
-	private static String INSERT_INSERT = "INSERT DATA { ";
-	private static String INSERT_GRAPH = "GRAPH <NAMED_GRAPH> { ";
-	private static String INSERT_ENTRY = "DATASET dqv:hasQualityMeasurement _:bBLANK_INDEX . "
+	protected static final String INSERT_INSERT = "INSERT DATA { ";
+	protected static final String INSERT_GRAPH = "GRAPH <NAMED_GRAPH> { ";
+	protected static final String INSERT_ENTRY = "DATASET dqv:hasQualityMeasurement _:bBLANK_INDEX . "
 			+ "_:bBLANK_INDEX a dqv:qualityMeasurement . " + "_:bBLANK_INDEX dqv:value \"RESULT_VALUE\"^^xsd:float . "
-			+ "_:bBLANK dqv:isMeasurementOf METIRC_URI . ";
+			+ "_:bBLANK_INDEX dqv:isMeasurementOf METRIC_URI . ";
 
 	protected Orchestration orchestration;
 
@@ -89,33 +83,27 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 
 	public void writeMetricResults(Map<String, DataContainer> dataContainers) {
 
-		// TODO: add configuration variable to not add/modify/delete data in tests
-
 		// Ensure connection
 		if (!isUpdateEndpointConnected()) {
 			connectUpdateEndpoint();
 		}
 
-		// TODO
-
-		// DELETE
-
-		System.err.println(getSparqlDelete(dataContainers));
-		if ("".equals(""))
-			return;
-
+		// Delete metric values, which will be inserted in next step
 		UpdateRequest deleteRequest = new UpdateRequest();
-		deleteRequest.add(getSparqlDelete(dataContainers));
+		for (Entry<String, DataContainer> dataContainer : dataContainers.entrySet()) {
+			for (Metric metric : dataContainer.getValue().getMetricResults().keySet()) {
+				String sparqlDelete = getSparqlDelete(dataContainer.getKey(), metric.getResultsUri());
+				LOGGER.debug(sparqlDelete);
+				deleteRequest.add(sparqlDelete);
+			}
+		}
 		rdfUpdateConnection.update(deleteRequest);
 
-		// INSERT
-
-//		System.err.println(getSparqlInsert(dataContainers));
-		if ("".equals(""))
-			return;
-
+		// Insert metric values
 		UpdateRequest insertRequest = new UpdateRequest();
-		insertRequest.add(getSparqlInsert(dataContainers));
+		String sparqlInsert = getSparqlInsert(dataContainers);
+		LOGGER.debug(sparqlInsert);
+		insertRequest.add(sparqlInsert);
 		rdfUpdateConnection.update(insertRequest);
 	}
 
@@ -517,7 +505,10 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		}
 	}
 
-	private String getSparqlDelete(Map<String, DataContainer> dataContainers) {
+	/**
+	 * Gets SPARQL DELETE for given URIs of dataset and metric.
+	 */
+	private String getSparqlDelete(String datasetUri, String metricUri) {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		stringBuilder.append(DELETE_PREFIX);
@@ -527,63 +518,28 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		if (orchestration.getConfiguration().getNamedGraph() != null) {
 			stringBuilder.append(new String(DELETE_GRAPH).replace(VAR_NAMED_GRAPH,
 					orchestration.getConfiguration().getNamedGraph()));
-			stringBuilder.append(System.lineSeparator());
 		}
 
 		stringBuilder.append(DELETE_DELETE);
-		stringBuilder.append(System.lineSeparator());
-
-		int datasetCounter = 0;
-		int metricCounter = 0;
-		StringBuilder whereBuilder = new StringBuilder();
-		for (Entry<String, DataContainer> dataContainer : dataContainers.entrySet()) {
-			datasetCounter++;
-			for (Entry<Metric, Float> metric : dataContainer.getValue().getMetricResults().entrySet()) {
-				metricCounter++;
-
-				stringBuilder.append(new String(DELETE_ENTRY_DELETE)
-
-						.replace(VAR_MEASUREMENT, "?m" + datasetCounter + "_" + metricCounter)
-
-						.replace(VAR_O, "?o" + datasetCounter + "_" + metricCounter)
-
-						.replace(VAR_S, "?s" + datasetCounter + "_" + metricCounter)
-
-						.replace(VAR_PO, "?po" + datasetCounter + "_" + metricCounter)
-
-						.replace(VAR_PS, "?ps" + datasetCounter + "_" + metricCounter));
-
-				stringBuilder.append(System.lineSeparator());
-
-				whereBuilder.append(new String(DELETE_ENTRY_WHERE)
-
-						.replace(VAR_DATASET, "<" + dataContainer.getKey() + ">")
-
-						.replace(VAR_METIRC_URI, "<" + metric.getKey().getResultsUri() + ">")
-
-						.replace(VAR_MEASUREMENT, "?m" + datasetCounter + "_" + metricCounter)
-
-						.replace(VAR_O, "?o" + datasetCounter + "_" + metricCounter)
-
-						.replace(VAR_S, "?s" + datasetCounter + "_" + metricCounter)
-
-						.replace(VAR_PO, "?po" + datasetCounter + "_" + metricCounter)
-
-						.replace(VAR_PS, "?ps" + datasetCounter + "_" + metricCounter));
-
-				whereBuilder.append(System.lineSeparator());
-			}
-		}
-
+		stringBuilder.append(DELETE_ENTRY_DELETE);
 		stringBuilder.append(DELETE_WHERE);
 		stringBuilder.append(System.lineSeparator());
 
-		stringBuilder.append(whereBuilder);
+		stringBuilder.append(new String(DELETE_ENTRY_WHERE)
+
+				.replace(VAR_DATASET, "<" + datasetUri + ">")
+
+				.replace(VAR_METRIC_URI, "<" + metricUri + ">"));
+
 		stringBuilder.append("}");
-		
 		return stringBuilder.toString();
 	}
 
+	/**
+	 * Gets SPARQL INSERT for all given datasets and metrics.
+	 * 
+	 * Metrics have to be pre-calculated.
+	 */
 	private String getSparqlInsert(Map<String, DataContainer> dataContainers) {
 
 		StringBuilder stringBuilder = new StringBuilder();
@@ -612,7 +568,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 
 						.replace(VAR_DATASET, "<" + dataContainer.getKey() + ">")
 
-						.replace(VAR_METIRC_URI, "<" + metric.getKey().getResultsUri() + ">")
+						.replace(VAR_METRIC_URI, "<" + metric.getKey().getResultsUri() + ">")
 
 						.replace(VAR_RESULT_VALUE, "" + metric.getValue()));
 
