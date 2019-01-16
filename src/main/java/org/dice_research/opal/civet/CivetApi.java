@@ -1,6 +1,7 @@
 package org.dice_research.opal.civet;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.dice_research.opal.civet.metrics.Metrics;
 
@@ -93,7 +94,8 @@ public class CivetApi {
 	 * Computes all metrics.
 	 * 
 	 * @param offset    Starting number (number of results, not datasets)
-	 * @param endOffset Ending number (number of results, not datasets)
+	 * @param endOffset Ending number (number of results, not datasets). Use -1 to
+	 *                  process all results.
 	 * @param limit     Number of items per request
 	 * 
 	 * @throws NullPointerException If one SPARQL endpoint is not set
@@ -109,5 +111,31 @@ public class CivetApi {
 
 		// Run
 		this.orchestration.compute(offset, endOffset, limit, Metrics.getMetrics().keySet());
+	}
+
+	/**
+	 * Computes specified metrics.
+	 * 
+	 * @param offset    Starting number (number of results, not datasets)
+	 * @param endOffset Ending number (number of results, not datasets). Use -1 to
+	 *                  process all results.
+	 * @param limit     Number of items per request
+	 * @param metrics   Set of metric-Ids to compute
+	 * 
+	 * @throws NullPointerException If one SPARQL endpoint or metrics is not set
+	 */
+	public void compute(int offset, int endOffset, int limit, Set<String> metrics) throws NullPointerException {
+
+		// Check
+		if (this.orchestration.getConfiguration().getSparqlQueryEndpoint() == null) {
+			throw new NullPointerException("No SPARQL query endpoint specified.");
+		} else if (this.orchestration.getConfiguration().getSparqlUpdateEndpoint() == null) {
+			throw new NullPointerException("No SPARQL update endpoint specified.");
+		} else if (metrics == null) {
+			throw new NullPointerException("No metric-IDs specified.");
+		}
+
+		// Run
+		this.orchestration.compute(offset, endOffset, limit, metrics);
 	}
 }

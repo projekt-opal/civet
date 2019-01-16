@@ -67,15 +67,14 @@ public class Orchestration {
 	 * Computes metrics for multiple datasets. Writes results back to graph.
 	 * 
 	 * @param offset    Starting number (number of results, not datasets)
-	 * @param endOffset Ending number (number of results, not datasets)
+	 * @param endOffset Ending number (number of results, not datasets). Use -1 to
+	 *                  process all results.
 	 * @param limit     Number of items per request
 	 * @param metricIds a collection of metrics to compute
 	 * 
 	 * @return Number of processed datasets
 	 */
 	public int compute(int offset, int endOffset, int limit, Collection<String> metricIds) {
-
-		// TODO: endOffset could be -1 to process all datasets
 
 		// Get required data object IDs
 		Set<String> dataObjectIds = getDataobjectIds(metricIds);
@@ -86,8 +85,10 @@ public class Orchestration {
 		}
 		DataContainer dataContainer = createDataContainer(dataObjectIds);
 
-		// Process
-		while (offset < endOffset) {
+		// Process as long as end is not reached (or no end defined) AND
+		// results have received in last iteration
+		int numberOfResults = -1;
+		while ((offset < endOffset || endOffset == -1) && numberOfResults != 0) {
 
 			// Get data
 			OpalAccessorContainer resultsContainer = opalAccessor.getData(dataContainer, limit, offset);
@@ -103,6 +104,7 @@ public class Orchestration {
 			// Prepare next iteration
 			int repeat = limit - resultsContainer.refreshIndex;
 			offset = offset + limit - repeat;
+			numberOfResults = resultsContainer.dataContainers.size();
 		}
 
 		return offset - 1;

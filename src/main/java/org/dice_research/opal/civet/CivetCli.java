@@ -50,7 +50,10 @@ public class CivetCli {
 			// Run
 			long time = System.currentTimeMillis();
 			int offset = Integer.parseInt(commandLine.getOptionValue(CivetCli.OPTION_OFFSET));
-			int end = Integer.parseInt(commandLine.getOptionValue(CivetCli.OPTION_END));
+			int end = -1;
+			if (commandLine.hasOption(CivetCli.OPTION_END)) {
+				end = Integer.parseInt(commandLine.getOptionValue(CivetCli.OPTION_END));
+			}
 			int limit = LIMIT_DEFAULT;
 			if (commandLine.hasOption(CivetCli.OPTION_LIMIT)) {
 				limit = Integer.parseInt(commandLine.getOptionValue(CivetCli.OPTION_LIMIT));
@@ -85,9 +88,8 @@ public class CivetCli {
 
 		options.addOption(Option.builder(OPTION_OFFSET).longOpt("offset")
 				.desc("Offset for results (not datasets), mandatory").hasArg().argName("int").required().build());
-		options.addOption(
-				Option.builder(OPTION_END).longOpt("end").desc("Maximum number of results (not datasets), mandatory")
-						.hasArg().argName("int").required().build());
+		options.addOption(Option.builder(OPTION_END).longOpt("end")
+				.desc("(Maximum number of results (not datasets), optional)").hasArg().argName("int").build());
 		options.addOption(Option.builder(OPTION_LIMIT).longOpt("limit")
 				.desc("(Number of results per iteration, optional)").hasArg().argName("int").build());
 		return options;
