@@ -1,8 +1,6 @@
 package org.dice_research.opal.civet;
 
-import java.net.URI;
 import java.util.Collection;
-import java.util.Map;
 
 import org.dice_research.opal.civet.metrics.Metrics;
 
@@ -18,7 +16,7 @@ public class CivetApi {
 	/**
 	 * Sets the endpoint for SPARQL queries.
 	 * 
-	 * @param endpoint a URL, e.g. http://example.com:8890/sparql
+	 * @param endpoint an URL, e.g. http://example.com:8890/sparql
 	 * 
 	 * @throws NullPointerException if endpoint is null
 	 */
@@ -27,6 +25,21 @@ public class CivetApi {
 			throw new NullPointerException("No SPARQL query endpoint specified.");
 		}
 		this.orchestration.getConfiguration().setSparqlQueryEndpoint(endpoint);
+		return this;
+	}
+
+	/**
+	 * Sets the endpoint for SPARQL updates.
+	 * 
+	 * @param endpoint an URL, e.g. http://example.com:8890/update
+	 * 
+	 * @throws NullPointerException if endpoint is null
+	 */
+	public CivetApi setSparqlUpdateEndpoint(String endpoint) throws NullPointerException {
+		if (endpoint == null) {
+			throw new NullPointerException("No SPARQL update endpoint specified.");
+		}
+		this.orchestration.getConfiguration().setSparqlUpdateEndpoint(endpoint);
 		return this;
 	}
 
@@ -47,31 +60,54 @@ public class CivetApi {
 		return Metrics.getMetrics().keySet();
 	}
 
+// TODO: Outdated	
+//	/**
+//	 * Computes metrics for a dataset.
+//	 * 
+//	 * Available metric IDs can be accessed by {@link #getAllMetricIds()}.
+//	 * 
+//	 * @param dataset the URI of the dataset
+//	 * @param metrics the metric IDs to compute
+//	 * @return metric IDs mapped to the resulting scores
+//	 * 
+//	 * @throws IllegalArgumentException if the metrics parameter is empty
+//	 * @throws NullPointerException     if one of the parameters is null or the
+//	 *                                  SPARQL query endpoint was not set
+//	 */
+//	public Map<String, Float> compute(URI dataset, Collection<String> metrics)
+//			throws NullPointerException, IllegalArgumentException {
+//		if (this.orchestration.getConfiguration().getSparqlQueryEndpoint() == null) {
+//			throw new NullPointerException("No SPARQL query endpoint specified.");
+//		} else if (dataset == null) {
+//			throw new NullPointerException("No dataset URI specified.");
+//		} else if (metrics == null) {
+//			throw new NullPointerException("No metrics specified.");
+//		} else if (metrics.isEmpty()) {
+//			throw new IllegalArgumentException("No metrics specified.");
+//		}
+//
+//		return this.orchestration.compute(dataset, metrics);
+//	}
+
 	/**
-	 * Computes metrics for a dataset.
+	 * Computes all metrics.
 	 * 
-	 * Available metric IDs can be accessed by {@link #getAllMetricIds()}.
+	 * @param offset    Starting number (number of results, not datasets)
+	 * @param endOffset Ending number (number of results, not datasets)
+	 * @param limit     Number of items per request
 	 * 
-	 * @param dataset the URI of the dataset
-	 * @param metrics the metric IDs to compute
-	 * @return metric IDs mapped to the resulting scores
-	 * 
-	 * @throws IllegalArgumentException if the metrics parameter is empty
-	 * @throws NullPointerException     if one of the parameters is null or the
-	 *                                  SPARQL query endpoint was not set
+	 * @throws NullPointerException If one SPARQL endpoint is not set
 	 */
-	public Map<String, Float> compute(URI dataset, Collection<String> metrics)
-			throws NullPointerException, IllegalArgumentException {
+	public void computeAll(int offset, int endOffset, int limit) throws NullPointerException {
+
+		// Check
 		if (this.orchestration.getConfiguration().getSparqlQueryEndpoint() == null) {
 			throw new NullPointerException("No SPARQL query endpoint specified.");
-		} else if (dataset == null) {
-			throw new NullPointerException("No dataset URI specified.");
-		} else if (metrics == null) {
-			throw new NullPointerException("No metrics specified.");
-		} else if (metrics.isEmpty()) {
-			throw new IllegalArgumentException("No metrics specified.");
+		} else if (this.orchestration.getConfiguration().getSparqlUpdateEndpoint() == null) {
+			throw new NullPointerException("No SPARQL update endpoint specified.");
 		}
 
-		return this.orchestration.compute(dataset, metrics);
+		// Run
+		this.orchestration.compute(offset, endOffset, limit, Metrics.getMetrics().keySet());
 	}
 }

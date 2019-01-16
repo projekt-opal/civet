@@ -18,7 +18,8 @@ public class CategorizationMetric extends Metric {
 	private static final String DESCRIPTION = "Calculates a score based on the number of categories.";
 	private static final String ID = CategorizationMetric.class.getSimpleName();
 	private static final MetricType METRIC_TYPE = MetricType.FIVE_STAR;
-	private static final Collection<String> REQUIRED_PROPERTIES = Arrays.asList(DataObjects.NUMBER_OF_CATEGORIES);
+	private static final Collection<String> REQUIRED_PROPERTIES = Arrays.asList(DataObjects.NUMBER_OF_CATEGORIES,
+			DataObjects.THEME);
 	private static final String RESULTS_URI = Opal.OPAL_METRIC_CATEGORIZATION;
 
 	public CategorizationMetric() {

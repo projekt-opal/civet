@@ -82,6 +82,12 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	}
 
 	public void writeMetricResults(Map<String, DataContainer> dataContainers) {
+		if (dataContainers.isEmpty()) {
+			LOGGER.warn("WRITE no datasets -> aborting");
+			return;
+		} else {
+			LOGGER.info("WRITE datasets " + dataContainers.size());
+		}
 
 		// Ensure connection
 		if (!isUpdateEndpointConnected()) {
@@ -117,6 +123,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	 */
 	public OpalAccessorContainer getData(DataContainer dataContainer, int limit, int offset)
 			throws NullPointerException {
+		LOGGER.info("GET offset " + offset);
 		Map<String, DataContainer> dataContainers = new HashMap<>();
 
 		// Ensure connection
