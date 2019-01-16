@@ -80,15 +80,16 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-
 							<finalName>civet</finalName>
-
 							<archive>
 								<manifest>
 									<mainClass>
 										org.dice_research.opal.civet.CivetCli
 									</mainClass>
 								</manifest>
+								<manifestEntries>
+									<Multi-Release>true</Multi-Release>
+								</manifestEntries>
 							</archive>
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
@@ -97,6 +98,7 @@
 					</execution>
 				</executions>
 			</plugin>
+
 		</plugins>
 	</build>
 </project>
