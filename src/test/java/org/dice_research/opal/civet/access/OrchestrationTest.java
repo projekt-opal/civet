@@ -71,8 +71,8 @@ public class OrchestrationTest {
 		int offset = 0;
 		int endOffset = 100;
 		int limit = 40;
-		int processedDatasets = orchestration.compute(offset, endOffset, limit, metrics);
-		assumeTrue(endOffset < processedDatasets);
+		int continuationOffset = orchestration.compute(offset, endOffset, limit, metrics);
+		assumeTrue(endOffset < continuationOffset);
 	}
 
 	/**

@@ -75,8 +75,10 @@ public class Orchestration {
 	 *                  process all results.
 	 * @param limit     Number of items per request
 	 * @param metricIds a collection of metrics to compute
+	 * 
+	 * @return Offset for continuation
 	 */
-	public void compute(int offset, int endOffset, int limit, Collection<String> metricIds) {
+	public int compute(int offset, int endOffset, int limit, Collection<String> metricIds) {
 
 		// Get required data object IDs
 		Set<String> dataObjectIds = getDataobjectIds(metricIds);
@@ -117,6 +119,8 @@ public class Orchestration {
 				loopOffset = newLoopOffset;
 			}
 		}
+
+		return loopOffset;
 	}
 
 	/**
