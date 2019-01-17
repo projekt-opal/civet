@@ -208,6 +208,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 
 			dataContainers.put(datasetUri, resultsDataContainer);
 		}
+		queryExecution.close();
 
 		// Update number of categories
 		for (DataContainer dc : dataContainers.values()) {
@@ -288,6 +289,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		if (resultSet.hasNext()) {
 			LOGGER.debug("More than one result returned.");
 		}
+		queryExecution.close();
 
 		getDistributionData(datasetUri, dataContainer);
 	}
@@ -420,6 +422,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 				}
 			}
 		}
+		queryExecution.close();
 	}
 
 	private void getDistributionData(URI datasetUri, DataContainer dataContainer) {
@@ -477,6 +480,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 				data.get(id).add(querySolution.get(id).toString().trim());
 			}
 		}
+		queryExecution.close();
 
 		// Put data in container
 		for (Entry<String, Set<String>> entry : data.entrySet()) {
