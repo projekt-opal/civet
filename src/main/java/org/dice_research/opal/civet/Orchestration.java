@@ -66,6 +66,10 @@ public class Orchestration {
 	/**
 	 * Computes metrics for multiple datasets. Writes results back to graph.
 	 * 
+	 * Note: limit should be smaller than 1000, as
+	 * {@link OpalAccessor#writeMetricResults(Map)} tends to throw
+	 * {@link StackOverflowError}.
+	 * 
 	 * @param offset    Starting number (number of results, not datasets)
 	 * @param endOffset Ending number (number of results, not datasets). Use -1 to
 	 *                  process all results.

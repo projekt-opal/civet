@@ -1,8 +1,10 @@
 package org.dice_research.opal.civet;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
+import org.dice_research.opal.civet.access.OpalAccessor;
 import org.dice_research.opal.civet.metrics.Metrics;
 
 /**
@@ -93,6 +95,10 @@ public class CivetApi {
 	/**
 	 * Computes all metrics.
 	 * 
+	 * Note: limit should be smaller than 1000, as
+	 * {@link OpalAccessor#writeMetricResults(Map)} tends to throw
+	 * {@link StackOverflowError}.
+	 * 
 	 * @param offset    Starting number (number of results, not datasets)
 	 * @param endOffset Ending number (number of results, not datasets). Use -1 to
 	 *                  process all results.
@@ -115,6 +121,10 @@ public class CivetApi {
 
 	/**
 	 * Computes specified metrics.
+	 * 
+	 * Note: limit should be smaller than 1000, as
+	 * {@link OpalAccessor#writeMetricResults(Map)} tends to throw
+	 * {@link StackOverflowError}.
 	 * 
 	 * @param offset    Starting number (number of results, not datasets)
 	 * @param endOffset Ending number (number of results, not datasets). Use -1 to

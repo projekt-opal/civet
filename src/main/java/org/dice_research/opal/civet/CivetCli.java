@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
@@ -12,6 +13,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.dice_research.opal.civet.access.OpalAccessor;
 
 /**
  * Civet interface for the command line.
@@ -67,7 +69,8 @@ public class CivetCli {
 	public static final String INFO = "Civet: OPAL quality framework";
 	public static final String CMD_LINE_SYNTAX = "java -jar civet.jar";
 
-	public static final int LIMIT_DEFAULT = 1000;
+	// Value of 1000 produced errors in {@link OpalAccessor#writeMetricResults(Map)}
+	public static final int LIMIT_DEFAULT = 800;
 
 	public final static String OPTION_ENDPOINT_QUERY = "q";
 	public final static String OPTION_ENDPOINT_UPDATE = "u";
