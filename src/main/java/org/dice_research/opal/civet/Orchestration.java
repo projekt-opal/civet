@@ -75,10 +75,8 @@ public class Orchestration {
 	 *                  process all results.
 	 * @param limit     Number of items per request
 	 * @param metricIds a collection of metrics to compute
-	 * 
-	 * @return Number of processed datasets
 	 */
-	public int compute(int offset, int endOffset, int limit, Collection<String> metricIds) {
+	public void compute(int offset, int endOffset, int limit, Collection<String> metricIds) {
 
 		// Get required data object IDs
 		Set<String> dataObjectIds = getDataobjectIds(metricIds);
@@ -92,10 +90,11 @@ public class Orchestration {
 		// Process as long as end is not reached (or no end defined) AND
 		// results have received in last iteration
 		int numberOfResults = -1;
-		while ((offset < endOffset || endOffset == -1) && numberOfResults != 0) {
+		int loopOffset = offset;
+		while ((loopOffset < endOffset || endOffset == -1) && numberOfResults != 0) {
 
 			// Get data
-			OpalAccessorContainer resultsContainer = opalAccessor.getData(dataContainer, limit, offset);
+			OpalAccessorContainer resultsContainer = opalAccessor.getData(dataContainer, limit, loopOffset);
 
 			// Calculate metrics
 			for (DataContainer container : resultsContainer.dataContainers.values()) {
@@ -107,11 +106,17 @@ public class Orchestration {
 
 			// Prepare next iteration
 			int repeat = limit - resultsContainer.refreshIndex;
-			offset = offset + limit - repeat;
+			int newLoopOffset = loopOffset + limit - repeat;
 			numberOfResults = resultsContainer.dataContainers.size();
-		}
 
-		return offset - 1;
+			// Prevent repeated queries, if limit would produce requesting the same results
+			if (newLoopOffset == loopOffset) {
+				loopOffset = newLoopOffset + limit;
+				LOGGER.error("Preventing infinitive loop at offset " + newLoopOffset);
+			} else {
+				loopOffset = newLoopOffset;
+			}
+		}
 	}
 
 	/**
