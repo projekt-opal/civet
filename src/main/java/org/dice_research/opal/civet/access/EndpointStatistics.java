@@ -132,6 +132,26 @@ public class EndpointStatistics extends SparqlEndpointAccessor {
 		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
 		System.out.println();
 
+		// Catalogs
+
+		query = "SELECT DISTINCT (COUNT(?catalog) as ?catalogs) " + GRAPH
+				+ "WHERE { ?catalog a <http://www.w3.org/ns/dcat#Catalog> }";
+		System.out.println(query);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
+		System.out.println();
+
+		query = "SELECT DISTINCT ?catalog " + GRAPH
+				+ "WHERE { ?catalog a <http://www.w3.org/ns/dcat#Catalog> } LIMIT 5";
+		System.out.println(query);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
+		System.out.println();
+
+		query = "SELECT DISTINCT ?predicate " + GRAPH
+				+ "WHERE { ?s a <http://www.w3.org/ns/dcat#Catalog> . ?s ?predicate ?o } ORDER BY ?predicate";
+		System.out.println(query);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
+		System.out.println();
+
 	}
 
 	/**
