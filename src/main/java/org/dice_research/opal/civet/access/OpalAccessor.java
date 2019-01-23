@@ -1,6 +1,5 @@
 package org.dice_research.opal.civet.access;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,9 +9,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.jena.arq.querybuilder.SelectBuilder;
-import org.apache.jena.graph.Node;
 import org.apache.jena.graph.NodeFactory;
-import org.apache.jena.graph.Triple;
 import org.apache.jena.query.Query;
 import org.apache.jena.query.QueryExecution;
 import org.apache.jena.query.QuerySolution;
@@ -29,8 +26,6 @@ import org.dice_research.opal.civet.exceptions.ParsingException;
 import org.dice_research.opal.civet.metrics.Metric;
 import org.dice_research.opal.civet.vocabulary.Dcat;
 import org.dice_research.opal.civet.vocabulary.DublinCore;
-import org.dice_research.opal.civet.vocabulary.Foaf;
-import org.dice_research.opal.civet.vocabulary.Skos;
 
 /**
  * Data accessor for OPAL SPARQL endpoint.
@@ -121,10 +116,8 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	 * @param offset        Starting number
 	 * @throws NullPointerException
 	 */
-	public OpalAccessorContainer getData(DataContainer dataContainer, int limit, int offset)
-			throws NullPointerException {
+	public ResultsContainer getData(DataContainer dataContainer, int limit, int offset) throws NullPointerException {
 		LOGGER.info("GET offset " + offset);
-		Map<String, DataContainer> dataContainers = new HashMap<>();
 
 		// Ensure connection
 		if (!isQueryEndpointConnected()) {
@@ -132,107 +125,19 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		}
 
 		// Build query
-		Triple initialWhereTriple = new Triple(NodeFactory.createVariable(VAR_DATASET),
-				NodeFactory.createURI(org.apache.jena.vocabulary.RDF.type.getURI()),
-				NodeFactory.createURI(Dcat.PROPERTY_DATASET));
-		SelectBuilder selectBuilder = buildQuery(dataContainer, initialWhereTriple);
-		selectBuilder.addVar(VAR_DATASET);
-		selectBuilder.setLimit(limit);
-		selectBuilder.setOffset(offset);
+		DatasetQueryBuilder datasetqueryBuilder = new DatasetQueryBuilder();
+		datasetqueryBuilder.setAddInitialDataset(true).setLimit(limit).setOffset(offset);
+		if (orchestration.getConfiguration().getNamedGraph() != null) {
+			datasetqueryBuilder.setNamedGraph(orchestration.getConfiguration().getNamedGraph());
+		}
+		Query query = datasetqueryBuilder.getQuery(dataContainer);
 
 		// Execute query
-		Query query = selectBuilder.build();
 		LOGGER.debug(query.toString());
 		QueryExecution queryExecution = rdfQueryConnection.query(query);
 		ResultSet resultSet = queryExecution.execSelect();
-
-		// Process results (datasets may be splitted into multiple results)
-		int resultIndex = -1;
-		int refreshIndex = 0;
-		String datasetUri = null;
-		while (resultSet.hasNext()) {
-			QuerySolution querySolution = resultSet.next();
-			resultIndex++;
-
-			// Extract IDs and values of the current result
-			// Iterator only returns variables with values (optional properties are skipped)
-			Map<String, String> idToValue = new HashMap<>();
-			Iterator<String> iterator = querySolution.varNames();
-			while (iterator.hasNext()) {
-				String id = iterator.next();
-				idToValue.put(id, querySolution.get(id).toString().trim());
-			}
-
-			// Create or get data-container
-			DataContainer resultsDataContainer;
-			if (!idToValue.containsKey(VAR_DATASET)) {
-				// Every result has to provide the URI of the current dataset
-				LOGGER.error("Could not find dataset URI at result index: " + resultIndex);
-				continue;
-			} else {
-
-				// Check change of URI
-				if (!idToValue.get(VAR_DATASET).equals(datasetUri)) {
-					// Remember the index of the last dataset URI in results.
-					// Used to re-request that dataset in next iteration and to ensure completeness
-					// of requested data. This could be solved with other types of SPARQL queries.
-					// However, the current request type was fastest in tests.
-					refreshIndex = resultIndex;
-				}
-
-				datasetUri = idToValue.get(VAR_DATASET);
-				if (dataContainers.containsKey(datasetUri)) {
-					resultsDataContainer = dataContainers.get(datasetUri);
-				} else {
-					try {
-						resultsDataContainer = DataContainer.create(dataContainer);
-					} catch (IOException e) {
-						LOGGER.error("Could not create new data container.", e);
-						continue;
-					}
-				}
-			}
-
-			// Update data-objects in data-container
-			for (String id : idToValue.keySet()) {
-				if (id.equals(VAR_DATASET)) {
-					continue;
-				} else {
-					try {
-						resultsDataContainer.getDataObject(id).addValueUnique(idToValue.get(id));
-					} catch (ParsingException e) {
-						LOGGER.error(e);
-					}
-				}
-			}
-
-			dataContainers.put(datasetUri, resultsDataContainer);
-		}
+		ResultsContainer resultsContainer = new ResultExtractor().extractResults(resultSet, dataContainer);
 		queryExecution.close();
-
-		// Update number of categories
-		for (DataContainer dc : dataContainers.values()) {
-			if (dc.getIds().contains(DataObjects.NUMBER_OF_CATEGORIES)) {
-				try {
-					dc.getDataObject(DataObjects.NUMBER_OF_CATEGORIES)
-							.setValue("" + dc.getDataObject(DataObjects.THEME).getValues().size());
-				} catch (ParsingException e) {
-					LOGGER.error(e);
-				}
-			}
-		}
-
-		// Check completeness
-		if (refreshIndex == 0) {
-			// The complete results contain data for exactly one resource. Therefore,
-			// requests with the given limit are not able to fetch this dataset completely.
-			LOGGER.warn("Completeness of SPARQL request is maybe not given. Offset: " + offset);
-		}
-
-		// Put results into container
-		OpalAccessorContainer resultsContainer = new OpalAccessorContainer();
-		resultsContainer.dataContainers = dataContainers;
-		resultsContainer.refreshIndex = refreshIndex;
 
 		// Get related distribution data
 		getDistributionData(dataContainer, resultsContainer);
@@ -249,14 +154,15 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 			connectQueryEndpoint();
 		}
 
-		// Add query parts for single data-objects
-		SelectBuilder selectBuilder = buildQuery(dataContainer, null);
-
-		// Only one dataset has to be returned
-		selectBuilder.setVar(Var.alloc(VAR_DATASET), "<" + datasetUri.toString() + ">");
+		// Build query
+		DatasetQueryBuilder datasetqueryBuilder = new DatasetQueryBuilder();
+		datasetqueryBuilder.setDatasetUri(datasetUri.toString());
+		if (orchestration.getConfiguration().getNamedGraph() != null) {
+			datasetqueryBuilder.setNamedGraph(orchestration.getConfiguration().getNamedGraph());
+		}
+		Query query = datasetqueryBuilder.getQuery(dataContainer);
 
 		// Execute query
-		Query query = selectBuilder.build();
 		LOGGER.debug(query.toString());
 		QueryExecution queryExecution = rdfQueryConnection.query(query);
 		ResultSet resultSet = queryExecution.execSelect();
@@ -294,92 +200,13 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		getDistributionData(datasetUri, dataContainer);
 	}
 
-	/**
-	 * Adds query parts for single data-objects.
-	 */
-	private SelectBuilder buildQuery(DataContainer dataContainer, Triple initialWhereTriple) {
+	private void getDistributionData(DataContainer dataContainer, ResultsContainer resultsContainer) {
 
-		// Build query
-		SelectBuilder selectBuilder = new SelectBuilder();
-		selectBuilder.setDistinct(true);
-
-		// Use named graph or default graph
+		DistributionQueryBuilder distributionQueryBuilder = new DistributionQueryBuilder();
 		if (orchestration.getConfiguration().getNamedGraph() != null) {
-			selectBuilder.from(orchestration.getConfiguration().getNamedGraph());
+			distributionQueryBuilder.setNamedGraph(orchestration.getConfiguration().getNamedGraph());
 		}
-
-		if (initialWhereTriple != null) {
-			selectBuilder.addWhere(initialWhereTriple);
-		}
-
-		// Add query parts
-		for (DataObject<?> dataObject : dataContainer.getDataObjects()) {
-
-			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.DESCRIPTION,
-					DublinCore.PROPERTY_DESCRIPTION))
-				continue;
-
-			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.ISSUED, DublinCore.PROPERTY_ISSUED))
-				continue;
-
-			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.TITLE, DublinCore.PROPERTY_TITLE))
-				continue;
-
-			if (dataObject.getId().equals(DataObjects.PUBLISHER)) {
-				Node foafAgent = NodeFactory.createVariable("foafAgent");
-				selectBuilder.addVar(DataObjects.PUBLISHER)
-						.addOptional("?" + VAR_DATASET, NodeFactory.createURI(DublinCore.PROPERTY_PUBLISHER), foafAgent)
-						.addOptional(foafAgent, NodeFactory.createURI(Foaf.PROPERTY_NAME),
-								NodeFactory.createVariable(DataObjects.PUBLISHER));
-			}
-
-			if (dataObject.getId().equals(DataObjects.THEME)) {
-				Node skosConcept = NodeFactory.createVariable("skosConcept");
-				selectBuilder.addVar(DataObjects.THEME)
-						.addOptional("?" + VAR_DATASET, NodeFactory.createURI(Dcat.PROPERTY_THEME), skosConcept)
-						.addOptional(skosConcept, NodeFactory.createURI(Skos.PROPERTY_PREF_LABEL),
-								NodeFactory.createVariable(DataObjects.THEME));
-			}
-		}
-
-		return selectBuilder;
-	}
-
-	private void getDistributionData(DataContainer dataContainer, OpalAccessorContainer resultsContainer) {
-
-		// Build query
-		SelectBuilder selectBuilder = new SelectBuilder();
-		selectBuilder.setDistinct(true);
-		selectBuilder.addVar(VAR_DATASET);
-
-		// Use named graph or default graph
-		if (orchestration.getConfiguration().getNamedGraph() != null) {
-			selectBuilder.from(orchestration.getConfiguration().getNamedGraph());
-		}
-
-		selectBuilder.addWhere("?" + VAR_DATASET, NodeFactory.createURI(Dcat.PROPERTY_DISTRIBUTION),
-				"?" + VAR_DISTRIBUTION);
-		for (DataObject<?> dataObject : dataContainer.getDataObjects()) {
-
-			if (addDistributionRelation(selectBuilder, dataObject.getId(), DataObjects.ACCESS_URL,
-					Dcat.PROPERTY_ACCESS_URL))
-				continue;
-
-			if (addDistributionRelation(selectBuilder, dataObject.getId(), DataObjects.DOWNLOAD_URL,
-					Dcat.PROPERTY_DOWNLOAD_URL))
-				continue;
-
-			if (addDistributionRelation(selectBuilder, dataObject.getId(), DataObjects.LICENSE,
-					DublinCore.PROPERTY_LICENSE))
-				continue;
-		}
-
-		for (String datasetUri : resultsContainer.dataContainers.keySet()) {
-			selectBuilder.addValueVar(Var.alloc(VAR_DATASET), "<" + datasetUri + ">");
-		}
-
-		// Execute query
-		Query query = selectBuilder.build();
+		Query query = distributionQueryBuilder.getQuery(dataContainer, resultsContainer);
 
 		LOGGER.debug(query.toString());
 		QueryExecution queryExecution = rdfQueryConnection.query(query);
@@ -494,17 +321,6 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		}
 	}
 
-	private boolean addDatasetRelation(SelectBuilder selectBuilder, String dataObjectIdActual,
-			String dataObjectIdExpected, String predicate) {
-		if (dataObjectIdActual.equals(dataObjectIdExpected)) {
-			selectBuilder.addVar(dataObjectIdExpected).addOptional("?" + VAR_DATASET, NodeFactory.createURI(predicate),
-					NodeFactory.createVariable(dataObjectIdExpected));
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	private boolean addDistributionRelation(SelectBuilder selectBuilder, String dataObjectIdActual,
 			String dataObjectIdExpected, String predicate) {
 		if (dataObjectIdActual.equals(dataObjectIdExpected)) {
@@ -551,7 +367,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	 * 
 	 * Metrics have to be pre-calculated.
 	 */
-	private String getSparqlInsert(Map<String, DataContainer> dataContainers) {
+	public String getSparqlInsert(Map<String, DataContainer> dataContainers) {
 
 		StringBuilder stringBuilder = new StringBuilder();
 		int blankNodeCounter = 0;

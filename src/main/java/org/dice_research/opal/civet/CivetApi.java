@@ -22,27 +22,6 @@ public class CivetApi {
 	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	/**
-	 * Computes metric result values for a dcat:Dataset in the given Model.
-	 * 
-	 * @param model A model containing a dcat:Dataset and related concepts like
-	 *              dcat:Distribution.
-	 * 
-	 * @return A new model with added result values.
-	 */
-	public Model compute(Model model) {
-		return orchestration.compute(model);
-	}
-
-	/**
-	 * TODO: Not implemented, just returns model
-	 */
-	public Future<Model> computeFuture(Model model) {
-		return executor.submit(() -> {
-			return model;
-		});
-	}
-
-	/**
 	 * Sets the endpoint for SPARQL queries.
 	 * 
 	 * @param endpoint an URL, e.g. http://example.com:8890/sparql
@@ -173,5 +152,26 @@ public class CivetApi {
 
 		// Run
 		this.orchestration.compute(offset, endOffset, limit, metrics);
+	}
+
+	/**
+	 * Computes metric result values for a dcat:Dataset in the given Model.
+	 * 
+	 * @param model A model containing a dcat:Dataset and related concepts like
+	 *              dcat:Distribution.
+	 * 
+	 * @return A new model with added result values.
+	 */
+	public Model compute(Model model) {
+		return orchestration.compute(model);
+	}
+
+	/**
+	 * TODO: Not implemented, just returns model
+	 */
+	public Future<Model> computeFuture(Model model) {
+		return executor.submit(() -> {
+			return model;
+		});
 	}
 }
