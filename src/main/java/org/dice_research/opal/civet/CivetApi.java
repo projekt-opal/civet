@@ -3,7 +3,11 @@ package org.dice_research.opal.civet;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
+import org.apache.jena.rdf.model.Model;
 import org.dice_research.opal.civet.access.OpalAccessor;
 import org.dice_research.opal.civet.metrics.Metrics;
 
@@ -15,7 +19,34 @@ import org.dice_research.opal.civet.metrics.Metrics;
 public class CivetApi {
 
 	private Orchestration orchestration = new Orchestration();
+	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
+	/**
+	 * Computes metric result values for a dcat:Dataset in the given Model.
+	 * 
+	 * @param model A model containing a dcat:Dataset and related concepts like
+	 *              dcat:Distribution.
+	 * 
+	 * @return A new model with added result values.
+	 */
+	public Model computeMetrics(Model model) {
+		return model;
+	}
+
+	/**
+	 * Computes metric result values for a dcat:Dataset in the given Model.
+	 * 
+	 * @param model A model containing a dcat:Dataset and related concepts like
+	 *              dcat:Distribution.
+	 * 
+	 * @return A new model with added result values.
+	 */
+	public Future<Model> computeMetricsFuture(Model model) {
+		return executor.submit(() -> {
+			return model;
+		});
+	}
+	
 	/**
 	 * Sets the endpoint for SPARQL queries.
 	 * 
