@@ -20,7 +20,9 @@ import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.access.DatasetQueryBuilder;
 import org.dice_research.opal.civet.access.InsertBuilder;
 import org.dice_research.opal.civet.access.OpalAccessor;
-import org.dice_research.opal.civet.access.ResultExtractor;
+import org.dice_research.opal.civet.access.DatasetResultExtractor;
+import org.dice_research.opal.civet.access.DistributionQueryBuilder;
+import org.dice_research.opal.civet.access.DistributionResultExtractor;
 import org.dice_research.opal.civet.access.ResultsContainer;
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObjects;
@@ -68,13 +70,17 @@ public class Orchestration {
 		ResultSet resultSet = queryExecution.execSelect();
 
 		// Extract
-		ResultExtractor resultExtractor = new ResultExtractor();
+		DatasetResultExtractor resultExtractor = new DatasetResultExtractor();
 		ResultsContainer resultsContainer = resultExtractor.extractResults(resultSet, dataContainer);
 
 		// Finish
 		queryExecution.close();
 
-		// TODO get distribution data
+		// Add distribution data
+		query = new DistributionQueryBuilder().getQuery(dataContainer, resultsContainer);
+		queryExecution = QueryExecutionFactory.create(query, model);
+		resultSet = queryExecution.execSelect();
+		new DistributionResultExtractor().extractResults(resultSet, resultsContainer);
 
 		// Calculate metrics
 		for (DataContainer container : resultsContainer.dataContainers.values()) {

@@ -52,7 +52,6 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	protected static final String DELETE_ENTRY_WHERE = "DATASET dqv:hasQualityMeasurement ?m . "
 			+ "?m dqv:isMeasurementOf METRIC_URI . " + "?m ?po ?o . ?s ?ps ?m ";
 
-
 	protected Orchestration orchestration;
 
 	public OpalAccessor(Orchestration orchestration) {
@@ -133,7 +132,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		LOGGER.debug(query.toString());
 		QueryExecution queryExecution = rdfQueryConnection.query(query);
 		ResultSet resultSet = queryExecution.execSelect();
-		ResultsContainer resultsContainer = new ResultExtractor().extractResults(resultSet, dataContainer);
+		ResultsContainer resultsContainer = new DatasetResultExtractor().extractResults(resultSet, dataContainer);
 		queryExecution.close();
 
 		// Get related distribution data
@@ -199,53 +198,20 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 
 	private void getDistributionData(DataContainer dataContainer, ResultsContainer resultsContainer) {
 
+		// Get query
 		DistributionQueryBuilder distributionQueryBuilder = new DistributionQueryBuilder();
 		if (orchestration.getConfiguration().getNamedGraph() != null) {
 			distributionQueryBuilder.setNamedGraph(orchestration.getConfiguration().getNamedGraph());
 		}
 		Query query = distributionQueryBuilder.getQuery(dataContainer, resultsContainer);
 
+		// Execute
 		LOGGER.debug(query.toString());
 		QueryExecution queryExecution = rdfQueryConnection.query(query);
 		ResultSet resultSet = queryExecution.execSelect();
 
-		// Process results
-		Map<String, Set<String>> data = new HashMap<>();
-		while (resultSet.hasNext()) {
-			QuerySolution querySolution = resultSet.next();
-			String dataset = null;
-
-			// Collect data in result
-			Iterator<String> iterator = querySolution.varNames();
-			while (iterator.hasNext()) {
-				String id = iterator.next();
-				if (id.equals(VAR_DISTRIBUTION)) {
-					// variable just used to access data
-					continue;
-				} else if (id.equals(VAR_DATASET)) {
-					dataset = querySolution.get(id).toString().trim();
-					continue;
-				}
-				if (!data.containsKey(id)) {
-					data.put(id, new HashSet<String>());
-				}
-				data.get(id).add(querySolution.get(id).toString().trim());
-			}
-
-			// Put data in container
-			if (dataset != null) {
-				DataContainer container = resultsContainer.dataContainers.get(dataset);
-				for (String id : data.keySet()) {
-					for (String value : data.get(id)) {
-						try {
-							container.getDataObject(id).addValueUnique(value);
-						} catch (ParsingException e) {
-							LOGGER.error(e);
-						}
-					}
-				}
-			}
-		}
+		// Add results
+		new DistributionResultExtractor().extractResults(resultSet, resultsContainer);
 		queryExecution.close();
 	}
 

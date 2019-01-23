@@ -13,7 +13,7 @@ import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.exceptions.ParsingException;
 
-public class ResultExtractor {
+public class DatasetResultExtractor {
 
 	protected static final Logger LOGGER = LogManager.getLogger();
 	protected static final String VAR_DATASET = DatasetQueryBuilder.VAR_DATASET;
