@@ -6,7 +6,7 @@ import java.util.Collection;
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.data.StringDataObject;
-import org.dice_research.opal.civet.vocabulary.Opal;
+import org.dice_research.opal.common.vocabulary.Opal;
 
 /**
  * Single metric.
@@ -21,7 +21,7 @@ public class UpdateRateMetric extends Metric {
 	private static final String ID = UpdateRateMetric.class.getSimpleName();
 	private static final MetricType METRIC_TYPE = MetricType.FIVE_STAR;
 	private static final Collection<String> REQUIRED_PROPERTIES = Arrays.asList(DataObjects.DOWNLOAD_URL);
-	private static final String RESULTS_URI = Opal.OPAL_METRIC_UPDATE_RATE;
+	private static final String RESULTS_URI = Opal.OPAL_METRIC_UPDATE_RATE.toString();
 
 	public UpdateRateMetric() {
 		this.description = DESCRIPTION;

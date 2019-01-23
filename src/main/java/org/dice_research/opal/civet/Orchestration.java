@@ -90,7 +90,6 @@ public class Orchestration {
 		// Add metric results to model
 		String insert = new InsertBuilder().getSparqlInsert(resultsContainer.dataContainers);
 		UpdateAction.parseExecute(insert, model);
-		System.out.println(model.toString());
 
 		return model;
 	}
