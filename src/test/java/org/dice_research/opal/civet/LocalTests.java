@@ -1,5 +1,6 @@
 package org.dice_research.opal.civet;
 
+import org.dice_research.opal.civet.access.OrchestrationLocalTest;
 import org.dice_research.opal.civet.data.DataContainerTest;
 import org.dice_research.opal.civet.data.DataObjectTests;
 import org.dice_research.opal.civet.metrics.CategorizationMetricTest;
@@ -13,6 +14,10 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
+
+		// Orchestration
+
+		OrchestrationLocalTest.class,
 
 		// Data
 

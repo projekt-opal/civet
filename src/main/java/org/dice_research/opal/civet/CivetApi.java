@@ -29,24 +29,19 @@ public class CivetApi {
 	 * 
 	 * @return A new model with added result values.
 	 */
-	public Model computeMetrics(Model model) {
-		return model;
+	public Model compute(Model model) {
+		return orchestration.compute(model);
 	}
 
 	/**
-	 * Computes metric result values for a dcat:Dataset in the given Model.
-	 * 
-	 * @param model A model containing a dcat:Dataset and related concepts like
-	 *              dcat:Distribution.
-	 * 
-	 * @return A new model with added result values.
+	 * TODO: Not implemented, just returns model
 	 */
-	public Future<Model> computeMetricsFuture(Model model) {
+	public Future<Model> computeFuture(Model model) {
 		return executor.submit(() -> {
 			return model;
 		});
 	}
-	
+
 	/**
 	 * Sets the endpoint for SPARQL queries.
 	 * 

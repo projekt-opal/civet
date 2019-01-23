@@ -8,6 +8,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Property;
+import org.apache.jena.rdf.model.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.access.OpalAccessor;
@@ -28,6 +34,32 @@ public class Orchestration {
 	protected static final Logger LOGGER = LogManager.getLogger();
 	protected Configuration configuration = new Configuration();
 	protected OpalAccessor opalAccessor;
+
+	/**
+	 * Computes metric result values for a dcat:Dataset in the given Model.
+	 * 
+	 * @param model A model containing a dcat:Dataset and related concepts like
+	 *              dcat:Distribution.
+	 * 
+	 * @return A new model with added result values.
+	 */
+	public Model compute(Model model) {
+
+		// Duplicate model object
+		model = ModelFactory.createDefaultModel().add(model);
+
+		// TODO
+		// Query query = null;
+		// QueryExecutionFactory.create(query, model);
+
+		// Metrics.getMetrics().keySet()
+
+		Resource r = model.createResource("http://example.com/Example");
+		Property p = model.createProperty("http://example.com/computes");
+		model = model.add(r, p, r);
+
+		return model;
+	}
 
 	/**
 	 * Computes metrics for a dataset.
