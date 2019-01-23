@@ -18,6 +18,7 @@ import org.apache.jena.update.UpdateAction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.access.DatasetQueryBuilder;
+import org.dice_research.opal.civet.access.InsertBuilder;
 import org.dice_research.opal.civet.access.OpalAccessor;
 import org.dice_research.opal.civet.access.ResultExtractor;
 import org.dice_research.opal.civet.access.ResultsContainer;
@@ -81,11 +82,7 @@ public class Orchestration {
 		}
 
 		// Add metric results to model
-		// TODO Necessary to use opalaccessor. insert query should be extracted from
-		// opalaccessor
-		this.getConfiguration().setSparqlQueryEndpoint("tmp");
-		OpalAccessor opalAccessor = new OpalAccessor(this);
-		String insert = opalAccessor.getSparqlInsert(resultsContainer.dataContainers);
+		String insert = new InsertBuilder().getSparqlInsert(resultsContainer.dataContainers);
 		UpdateAction.parseExecute(insert, model);
 		System.out.println(model.toString());
 

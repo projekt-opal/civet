@@ -40,8 +40,6 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	protected static final String VAR_DATASET = "DATASET";
 	protected static final String VAR_DISTRIBUTION = "DISTRIBUTION";
 
-	protected static final String VAR_BLANK_INDEX = "BLANK_INDEX";
-	protected static final String VAR_RESULT_VALUE = "RESULT_VALUE";
 	protected static final String VAR_METRIC_URI = "METRIC_URI";
 	protected static final String VAR_NAMED_GRAPH = "NAMED_GRAPH";
 
@@ -54,13 +52,6 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 	protected static final String DELETE_ENTRY_WHERE = "DATASET dqv:hasQualityMeasurement ?m . "
 			+ "?m dqv:isMeasurementOf METRIC_URI . " + "?m ?po ?o . ?s ?ps ?m ";
 
-	protected static final String INSERT_PREFIX = "PREFIX dqv: <http://www.w3.org/ns/dqv#> "
-			+ "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> ";
-	protected static final String INSERT_INSERT = "INSERT DATA { ";
-	protected static final String INSERT_GRAPH = "GRAPH <NAMED_GRAPH> { ";
-	protected static final String INSERT_ENTRY = "DATASET dqv:hasQualityMeasurement _:bBLANK_INDEX . "
-			+ "_:bBLANK_INDEX a dqv:qualityMeasurement . " + "_:bBLANK_INDEX dqv:value \"RESULT_VALUE\"^^xsd:float . "
-			+ "_:bBLANK_INDEX dqv:isMeasurementOf METRIC_URI . ";
 
 	protected Orchestration orchestration;
 
@@ -102,7 +93,13 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 
 		// Insert metric values
 		UpdateRequest insertRequest = new UpdateRequest();
-		String sparqlInsert = getSparqlInsert(dataContainers);
+
+		InsertBuilder insertBuilder = new InsertBuilder();
+		if (orchestration.getConfiguration().getNamedGraph() != null) {
+			insertBuilder.setNamedGraph(orchestration.getConfiguration().getNamedGraph());
+		}
+		String sparqlInsert = insertBuilder.getSparqlInsert(dataContainers);
+
 		LOGGER.debug(sparqlInsert);
 		insertRequest.add(sparqlInsert);
 		rdfUpdateConnection.update(insertRequest);
@@ -362,53 +359,4 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		return stringBuilder.toString();
 	}
 
-	/**
-	 * Gets SPARQL INSERT for all given datasets and metrics.
-	 * 
-	 * Metrics have to be pre-calculated.
-	 */
-	public String getSparqlInsert(Map<String, DataContainer> dataContainers) {
-
-		StringBuilder stringBuilder = new StringBuilder();
-		int blankNodeCounter = 0;
-
-		stringBuilder.append(INSERT_PREFIX);
-		stringBuilder.append(System.lineSeparator());
-
-		stringBuilder.append(INSERT_INSERT);
-		stringBuilder.append(System.lineSeparator());
-
-		// Use named graph or default graph
-		boolean additionalClose = false;
-		if (orchestration.getConfiguration().getNamedGraph() != null) {
-			additionalClose = true;
-			stringBuilder.append(new String(INSERT_GRAPH).replace(VAR_NAMED_GRAPH,
-					orchestration.getConfiguration().getNamedGraph()));
-			stringBuilder.append(System.lineSeparator());
-		}
-
-		for (Entry<String, DataContainer> dataContainer : dataContainers.entrySet()) {
-			for (Entry<Metric, Float> metric : dataContainer.getValue().getMetricResults().entrySet()) {
-				stringBuilder.append(new String(INSERT_ENTRY)
-
-						.replace(VAR_BLANK_INDEX, "" + blankNodeCounter++)
-
-						.replace(VAR_DATASET, "<" + dataContainer.getKey() + ">")
-
-						.replace(VAR_METRIC_URI, "<" + metric.getKey().getResultsUri() + ">")
-
-						.replace(VAR_RESULT_VALUE, "" + metric.getValue()));
-
-				stringBuilder.append(System.lineSeparator());
-			}
-		}
-
-		stringBuilder.append("} ");
-		if (additionalClose) {
-			// Close named graph part
-			stringBuilder.append("} ");
-		}
-
-		return stringBuilder.toString();
-	}
 }
