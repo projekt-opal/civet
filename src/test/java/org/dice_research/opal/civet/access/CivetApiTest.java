@@ -12,7 +12,7 @@ import java.util.Map;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Resource;
-import org.dice_research.opal.civet.Orchestration;
+import org.dice_research.opal.civet.CivetApi;
 import org.dice_research.opal.civet.Utils;
 import org.dice_research.opal.civet.metrics.CategorizationMetric;
 import org.dice_research.opal.civet.metrics.DescriptionMetric;
@@ -21,15 +21,13 @@ import org.dice_research.opal.civet.metrics.UpdateRateMetric;
 import org.dice_research.opal.common.vocabulary.Dqv;
 import org.junit.Test;
 
-public class OrchestrationLocalTest {
+public class CivetApiTest {
 
 	@Test
 	public void test() throws URISyntaxException {
 
-		// Configure endpoint
-		Orchestration orchestration = new Orchestration();
 		Model sourceModel = Utils.readModel(Utils.MODEL_ZUGBILDUNGSPLAN, Utils.LANG_TURTLE);
-		Model model = orchestration.compute(sourceModel);
+		Model model = new CivetApi().compute(sourceModel);
 
 		// Model was changed
 		assertFalse(sourceModel.isIsomorphicWith(model));
