@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObjects;
-import org.dice_research.opal.civet.data.StringDataObject;
 import org.dice_research.opal.common.vocabulary.Opal;
 
 /**
@@ -35,22 +34,20 @@ public class DescriptionMetric extends Metric {
 	@Override
 	public float getScore(DataContainer dataContainer) {
 
-		StringDataObject dataObject;
-
-		dataObject = dataContainer.getStringDataObject(DataObjects.TITLE);
-		String title;
-		if (dataObject.isEmpty()) {
-			return 0f;
-		} else {
-			title = dataObject.getValues().get(0);
+		// Get longest title
+		String title = "";
+		for (String value : getValues(dataContainer, DataObjects.TITLE)) {
+			if (value.length() > title.length()) {
+				title = value;
+			}
 		}
 
-		dataObject = dataContainer.getStringDataObject(DataObjects.DESCRIPTION);
-		String description;
-		if (dataObject.isEmpty()) {
-			return 0f;
-		} else {
-			description = dataObject.getValues().get(0);
+		// Get longest description
+		String description = "";
+		for (String value : getValues(dataContainer, DataObjects.DESCRIPTION)) {
+			if (value.length() > description.length()) {
+				description = value;
+			}
 		}
 
 		if (title.isEmpty() && description.isEmpty()) {
@@ -84,7 +81,5 @@ public class DescriptionMetric extends Metric {
 		} else {
 			return 5f;
 		}
-
 	}
-
 }
