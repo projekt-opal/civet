@@ -62,10 +62,11 @@ public class Orchestration {
 
 		// Build query
 		DatasetQueryBuilder datasetQueryBuilder = new DatasetQueryBuilder();
-		datasetQueryBuilder.setLimit(1).setAddInitialDataset(true);
+		datasetQueryBuilder.setAddInitialDataset(true);
 		Query query = datasetQueryBuilder.getQuery(dataContainer);
 
 		// Execute
+		LOGGER.debug(query.toString());
 		QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
 		ResultSet resultSet = queryExecution.execSelect();
 
@@ -78,6 +79,7 @@ public class Orchestration {
 
 		// Add distribution data
 		query = new DistributionQueryBuilder().getQuery(dataContainer, resultsContainer);
+		LOGGER.debug(query.toString());
 		queryExecution = QueryExecutionFactory.create(query, model);
 		resultSet = queryExecution.execSelect();
 		new DistributionResultExtractor().extractResults(resultSet, resultsContainer);

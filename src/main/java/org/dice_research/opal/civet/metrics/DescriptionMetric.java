@@ -42,13 +42,14 @@ public class DescriptionMetric extends Metric {
 			}
 		}
 
-		// Get longest description
-		String description = "";
+		// Single descriptions are unique.
+		// Concatenate all describing information.
+		StringBuilder stringBuilder = new StringBuilder();
 		for (String value : getValues(dataContainer, DataObjects.DESCRIPTION)) {
-			if (value.length() > description.length()) {
-				description = value;
-			}
+			stringBuilder.append(value);
+			stringBuilder.append(System.lineSeparator());
 		}
+		String description = stringBuilder.toString();
 
 		if (title.isEmpty() && description.isEmpty()) {
 			// No title or description set
@@ -57,6 +58,7 @@ public class DescriptionMetric extends Metric {
 		} else if (title.isEmpty()) {
 			// At least title set
 			return 1f;
+
 		} else if (description.isEmpty()) {
 			// At least description set
 			return 1f;

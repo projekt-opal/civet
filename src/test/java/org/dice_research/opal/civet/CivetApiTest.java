@@ -51,9 +51,10 @@ public class CivetApiTest {
 					blank.getProperty(Dqv.HAS_VALUE).getLiteral().getFloat());
 		}
 
-		// Has long description
-		// TODO: Has multiple descriptions
-		assertTrue(metricResults.get(new DescriptionMetric().getResultsUri()) > 3);
+		// Title and description
+		// Description values are concatenated and should produce a long valuable
+		// result.
+		assertTrue(metricResults.get(new DescriptionMetric().getResultsUri()) == 5);
 
 		// Distribution license is given
 		assertTrue(metricResults.get(new LicenseSpecifiedMetric().getResultsUri()) == 5);
