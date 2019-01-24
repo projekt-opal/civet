@@ -12,7 +12,7 @@ import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.vocabulary.Dcat;
 import org.dice_research.opal.civet.vocabulary.DublinCore;
 import org.dice_research.opal.civet.vocabulary.Foaf;
-import org.dice_research.opal.civet.vocabulary.Skos;
+import org.dice_research.opal.common.vocabulary.Skos;
 
 public class DatasetQueryBuilder {
 
