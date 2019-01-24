@@ -20,7 +20,7 @@
 			<artifactId>common</artifactId>
 			<version>1.0.0.1</version>
 		</dependency>
-		
+
 		<!-- RDF / Jena -->
 
 		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-rdfconnection -->

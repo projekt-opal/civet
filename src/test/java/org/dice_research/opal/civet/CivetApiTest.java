@@ -1,19 +1,18 @@
-package org.dice_research.opal.civet.access;
+package org.dice_research.opal.civet;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Resource;
-import org.dice_research.opal.civet.CivetApi;
-import org.dice_research.opal.civet.Utils;
 import org.dice_research.opal.civet.metrics.CategorizationMetric;
 import org.dice_research.opal.civet.metrics.DescriptionMetric;
 import org.dice_research.opal.civet.metrics.LicenseSpecifiedMetric;
@@ -23,8 +22,11 @@ import org.junit.Test;
 
 public class CivetApiTest {
 
+	/**
+	 * Tests {@link CivetApi#compute(Model)}
+	 */
 	@Test
-	public void test() throws URISyntaxException {
+	public void testModel() throws Exception {
 
 		Model sourceModel = Utils.readModel(Utils.MODEL_ZUGBILDUNGSPLAN, Utils.LANG_TURTLE);
 		Model model = new CivetApi().compute(sourceModel);
@@ -63,4 +65,21 @@ public class CivetApiTest {
 		assertTrue(metricResults.get(new UpdateRateMetric().getResultsUri()) == 0);
 	}
 
+	/**
+	 * Tests {@link CivetApi#computeFuture(Model)}
+	 */
+	@Test
+	public void testModelFuture() throws Exception {
+		Model sourceModel = Utils.readModel(Utils.MODEL_ZUGBILDUNGSPLAN, Utils.LANG_TURTLE);
+		Future<Model> modelFuture = new CivetApi().computeFuture(sourceModel);
+		while (!modelFuture.isDone()) {
+			System.out.println(CivetApiTest.class.getSimpleName() + " is computing future model");
+			Thread.sleep(200);
+		}
+		Model model = modelFuture.get();
+
+		// Model was changed
+		assertNotNull(model);
+		assertFalse(sourceModel.isIsomorphicWith(model));
+	}
 }

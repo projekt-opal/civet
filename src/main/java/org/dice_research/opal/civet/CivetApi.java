@@ -171,7 +171,7 @@ public class CivetApi {
 	 */
 	public Future<Model> computeFuture(Model model) {
 		return executor.submit(() -> {
-			return model;
+			return orchestration.compute(model);
 		});
 	}
 }
