@@ -24,6 +24,11 @@ import org.dice_research.opal.civet.data.DataObject;
 import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.exceptions.ParsingException;
 import org.dice_research.opal.civet.metrics.Metric;
+import org.dice_research.opal.civet.sparql.DatasetQueryBuilder;
+import org.dice_research.opal.civet.sparql.DatasetResultExtractor;
+import org.dice_research.opal.civet.sparql.DistributionQueryBuilder;
+import org.dice_research.opal.civet.sparql.DistributionResultExtractor;
+import org.dice_research.opal.civet.sparql.InsertBuilder;
 import org.dice_research.opal.civet.vocabulary.Dcat;
 import org.dice_research.opal.civet.vocabulary.DublinCore;
 

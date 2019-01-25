@@ -1,4 +1,4 @@
-package org.dice_research.opal.civet.access;
+package org.dice_research.opal.civet.sparql;
 
 import org.apache.jena.arq.querybuilder.SelectBuilder;
 import org.apache.jena.graph.Node;

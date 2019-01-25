@@ -1,4 +1,4 @@
-package org.dice_research.opal.civet.access;
+package org.dice_research.opal.civet.sparql;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +10,7 @@ import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dice_research.opal.civet.access.ResultsContainer;
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.exceptions.ParsingException;
 

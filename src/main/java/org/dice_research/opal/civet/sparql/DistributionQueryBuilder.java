@@ -1,4 +1,4 @@
-package org.dice_research.opal.civet.access;
+package org.dice_research.opal.civet.sparql;
 
 import org.apache.jena.arq.querybuilder.SelectBuilder;
 import org.apache.jena.graph.NodeFactory;
@@ -6,6 +6,7 @@ import org.apache.jena.query.Query;
 import org.apache.jena.sparql.core.Var;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dice_research.opal.civet.access.ResultsContainer;
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObject;
 import org.dice_research.opal.civet.data.DataObjects;

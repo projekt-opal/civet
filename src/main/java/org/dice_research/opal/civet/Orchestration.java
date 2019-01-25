@@ -17,18 +17,18 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.update.UpdateAction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.dice_research.opal.civet.access.DatasetQueryBuilder;
-import org.dice_research.opal.civet.access.InsertBuilder;
 import org.dice_research.opal.civet.access.OpalAccessor;
-import org.dice_research.opal.civet.access.DatasetResultExtractor;
-import org.dice_research.opal.civet.access.DistributionQueryBuilder;
-import org.dice_research.opal.civet.access.DistributionResultExtractor;
 import org.dice_research.opal.civet.access.ResultsContainer;
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.exceptions.SparqlEndpointRuntimeException;
 import org.dice_research.opal.civet.metrics.Metric;
 import org.dice_research.opal.civet.metrics.Metrics;
+import org.dice_research.opal.civet.sparql.DatasetQueryBuilder;
+import org.dice_research.opal.civet.sparql.DatasetResultExtractor;
+import org.dice_research.opal.civet.sparql.DistributionQueryBuilder;
+import org.dice_research.opal.civet.sparql.DistributionResultExtractor;
+import org.dice_research.opal.civet.sparql.InsertBuilder;
 
 /**
  * Civet management

@@ -1,0 +1,27 @@
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://projekt-opal.de/catalog/govdata>
+        a             dcat:Catalog ;
+        dcat:dataset  <http://projekt-opal.de/dataset/https___ckan_govdata_de_0017f6d0_6de9_4804_9e34_f25e65fff039> .
+
+<http://projekt-opal.de/dataset/https___ckan_govdata_de_0017f6d0_6de9_4804_9e34_f25e65fff039>
+        a                  dcat:Dataset ;
+        dct:description    "Messdaten zur Überwachung der Radioaktivität in der Umwelt, in Lebens- und Futtermitteln" ;
+        dct:identifier     "LeVeLIMS-Ramis:201600215" ;
+        dct:issued         "2017-01-23T00:00:00" , "2017-01-27 11:09:19.956171" ;
+        dct:license        "http://dcat-ap.de/def/licenses/dl-by-de/2_0" ;
+        dct:modified       "2018-04-03 20:44:45.592532" ;
+        dct:title          "Messergebnisse zur Radioaktivität in: Rhabarber (04.05.2016)" ;
+        dcat:distribution  <http://projekt-opal.de/distribution/https___ckan_govdata_de_73707399_f72c_4a60_8d9e_0e72b7e3c43e> ;
+        dcat:keyword       "lebensmittel" , "futtermittel" , "strahlenschutzvorsorge" , "umwelt" ;
+        dcat:landingPage   "http://www.hamburg.de/bgv/radioaktivitaet" .
+
+<http://projekt-opal.de/distribution/https___ckan_govdata_de_73707399_f72c_4a60_8d9e_0e72b7e3c43e>
+        a                 dcat:Distribution ;
+        dct:description   "" ;
+        dct:format        "CSV" ;
+        dct:title         "Rhabarber" ;
+        dcat:accessURL    "http://daten.transparenz.hamburg.de/Dataport.HmbTG.ZS.Webservice.GetRessource100/GetRessource100.svc/6b018f79-e017-4696-a19f-84b7ecf98aa9/Rhabarber.csv" ;
+        dcat:byteSize     9265 ;
+        dcat:downloadURL  "http://daten.transparenz.hamburg.de/Dataport.HmbTG.ZS.Webservice.GetRessource100/GetRessource100.svc/6b018f79-e017-4696-a19f-84b7ecf98aa9/Rhabarber.csv" .

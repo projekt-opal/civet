@@ -1,4 +1,4 @@
-package org.dice_research.opal.civet.access;
+package org.dice_research.opal.civet.sparql;
 
 import java.util.Map;
 import java.util.Map.Entry;
