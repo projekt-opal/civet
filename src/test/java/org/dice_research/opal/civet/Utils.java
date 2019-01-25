@@ -15,14 +15,19 @@ public abstract class Utils {
 
 	// mcloud, 4 distributions zip
 	public static final String MODEL_STRECKEN = "Strecken.ttl";
-	
+
 	// govdata, no description
-	public static final String MODEL_RHABABER = "/home/adi/DICE/git/civet/src/test/resources/Govdata-Rhabarber.ttl";
-	
+	public static final String MODEL_RHABABER = "Govdata-Rhabarber.ttl";
+
 	// govdata, 4 distributions
 	public static final String MODEL_ALLERMOEHE = "Govdata-Allermoehe.ttl";
-	
-	
+
+	// europeandataportal, 2 distributions
+	public static final String MODEL_ICELAND = "Europeandataportal-Iceland.ttl";
+
+	// europeandataportal, titles in various languages
+	public static final String MODEL_DURCHSCHNITTSALTER = "Europeandataportal-Durchschnittsalter.ttl";
+
 	public static final String LANG_TURTLE = "TURTLE";
 
 	private static ClassLoader classLoader;

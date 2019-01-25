@@ -22,48 +22,85 @@ import org.junit.Test;
 
 public class CivetApiTest {
 
+	static final String description = new DescriptionMetric().getResultsUri();
+	static final String licenseSpecified = new LicenseSpecifiedMetric().getResultsUri();
+	static final String categorization = new CategorizationMetric().getResultsUri();
+	static final String updateRate = new UpdateRateMetric().getResultsUri();
+
 	/**
 	 * Tests {@link CivetApi#compute(Model)}
 	 */
 	@Test
 	public void testModel() throws Exception {
 
-		Model sourceModel = Utils.readModel(Utils.MODEL_ZUGBILDUNGSPLAN, Utils.LANG_TURTLE);
+		Map<String, Float> metricResults = extractMetricResults(compute(Utils.MODEL_ZUGBILDUNGSPLAN));
+
+		// Title and description
+		// Description values are concatenated and should produce a long valuable
+		// result.
+		assertTrue(metricResults.get(description) == 5);
+
+		// Distribution license is given
+		assertTrue(metricResults.get(licenseSpecified) == 5);
+
+		// Has one theme / category
+		assertTrue(metricResults.get(categorization) == 4);
+
+		// TODO
+		assertTrue(metricResults.get(updateRate) == 0);
+
+		// ---
+
+		metricResults = extractMetricResults(compute(Utils.MODEL_STATIONSDATEN));
+		assertTrue(metricResults.get(description) > 0);
+		metricResults = extractMetricResults(compute(Utils.MODEL_STRECKEN));
+		assertTrue(metricResults.get(description) > 0);
+		metricResults = extractMetricResults(compute(Utils.MODEL_RHABABER));
+		assertTrue(metricResults.get(description) > 0);
+		metricResults = extractMetricResults(compute(Utils.MODEL_ALLERMOEHE));
+		assertTrue(metricResults.get(description) > 0);
+		metricResults = extractMetricResults(compute(Utils.MODEL_ICELAND));
+		assertTrue(metricResults.get(description) > 0);
+		metricResults = extractMetricResults(compute(Utils.MODEL_DURCHSCHNITTSALTER));
+		assertTrue(metricResults.get(description) > 0);
+	}
+
+	private Model compute(String modelResourceFile) {
+		Model sourceModel = Utils.readModel(modelResourceFile, Utils.LANG_TURTLE);
+
+		// Compute metrics
 		Model model = new CivetApi().compute(sourceModel);
 
-		// Model was changed
+		// Assert model has changed
 		assertFalse(sourceModel.isIsomorphicWith(model));
 
-		// At least one dataset
+		return model;
+	}
+
+	/**
+	 * Extracts all metric resutls for first dataset in model
+	 */
+	private Map<String, Float> extractMetricResults(Model model) {
+		Map<String, Float> metricResults = new HashMap<>();
+
+		// Get all datasets
 		List<Resource> datasets = new LinkedList<>();
 		NodeIterator datasetIterator = model.listObjectsOfProperty(org.apache.jena.vocabulary.DCAT.dataset);
 		while (datasetIterator.hasNext()) {
 			datasets.add(model.getResource(datasetIterator.next().toString()));
 		}
+
+		// Assert that at least one dataset is available
 		assertTrue(datasets.size() >= 1);
 
-		// Get metric results
-		Map<String, Float> metricResults = new HashMap<>();
+		// Compute metric results for first dataset
 		NodeIterator blankIterator = model.listObjectsOfProperty(datasets.get(0), Dqv.HAS_QUALITY_MEASUREMENT);
 		while (blankIterator.hasNext()) {
 			Resource blank = blankIterator.next().asResource();
 			metricResults.put(blank.getPropertyResourceValue(Dqv.IS_MEASUREMENT_OF).getURI(),
 					blank.getProperty(Dqv.HAS_VALUE).getLiteral().getFloat());
 		}
-
-		// Title and description
-		// Description values are concatenated and should produce a long valuable
-		// result.
-		assertTrue(metricResults.get(new DescriptionMetric().getResultsUri()) == 5);
-
-		// Distribution license is given
-		assertTrue(metricResults.get(new LicenseSpecifiedMetric().getResultsUri()) == 5);
-
-		// Has one theme / category
-		assertTrue(metricResults.get(new CategorizationMetric().getResultsUri()) == 4);
-
-		// TODO
-		assertTrue(metricResults.get(new UpdateRateMetric().getResultsUri()) == 0);
+		return metricResults;
 	}
 
 	/**
