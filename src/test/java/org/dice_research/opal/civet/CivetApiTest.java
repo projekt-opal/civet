@@ -1,5 +1,6 @@
 package org.dice_research.opal.civet;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -15,7 +16,8 @@ import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.dice_research.opal.civet.metrics.CategorizationMetric;
 import org.dice_research.opal.civet.metrics.DescriptionMetric;
-import org.dice_research.opal.civet.metrics.LicenseSpecifiedMetric;
+import org.dice_research.opal.civet.metrics.KnownLicenseMetric;
+import org.dice_research.opal.civet.metrics.MultipleSerializationsMetric;
 import org.dice_research.opal.civet.metrics.UpdateRateMetric;
 import org.dice_research.opal.common.vocabulary.Dqv;
 import org.junit.Test;
@@ -23,9 +25,10 @@ import org.junit.Test;
 public class CivetApiTest {
 
 	static final String description = new DescriptionMetric().getResultsUri();
-	static final String licenseSpecified = new LicenseSpecifiedMetric().getResultsUri();
+	static final String licenseSpecified = new KnownLicenseMetric().getResultsUri();
 	static final String categorization = new CategorizationMetric().getResultsUri();
 	static final String updateRate = new UpdateRateMetric().getResultsUri();
+	static final String multipleSerializations = new MultipleSerializationsMetric().getResultsUri();
 
 	/**
 	 * Tests {@link CivetApi#compute(Model)}
@@ -38,29 +41,41 @@ public class CivetApiTest {
 		// Title and description
 		// Description values are concatenated and should produce a long valuable
 		// result.
-		assertTrue(metricResults.get(description) == 5);
+		assertEquals(metricResults.get(description).floatValue(), 5f, 0);
 
 		// Distribution license is given
-		assertTrue(metricResults.get(licenseSpecified) == 5);
+		assertEquals(metricResults.get(licenseSpecified).floatValue(), 5f, 0);
 
 		// Has one theme / category
-		assertTrue(metricResults.get(categorization) == 4);
+		assertEquals(metricResults.get(categorization).floatValue(), 4f, 0);
 
 		// TODO
-		assertTrue(metricResults.get(updateRate) == 0);
+		assertEquals(metricResults.get(updateRate).floatValue(), 0f, 0);
+
+		// Only one distribution and format
+		assertEquals(metricResults.get(multipleSerializations).floatValue(), 0f, 0);
 
 		// ---
 
 		metricResults = extractMetricResults(compute(Utils.MODEL_STATIONSDATEN));
 		assertTrue(metricResults.get(description) > 0);
+		// Two formats
+		assertEquals(metricResults.get(multipleSerializations).floatValue(), 4f, 0);
+
 		metricResults = extractMetricResults(compute(Utils.MODEL_STRECKEN));
 		assertTrue(metricResults.get(description) > 0);
+		// 4 distributions
+		assertEquals(metricResults.get(multipleSerializations).floatValue(), 1f, 0);
+
 		metricResults = extractMetricResults(compute(Utils.MODEL_RHABABER));
 		assertTrue(metricResults.get(description) > 0);
+
 		metricResults = extractMetricResults(compute(Utils.MODEL_ALLERMOEHE));
 		assertTrue(metricResults.get(description) > 0);
+
 		metricResults = extractMetricResults(compute(Utils.MODEL_ICELAND));
 		assertTrue(metricResults.get(description) > 0);
+
 		metricResults = extractMetricResults(compute(Utils.MODEL_DURCHSCHNITTSALTER));
 		assertTrue(metricResults.get(description) > 0);
 	}

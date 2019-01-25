@@ -34,7 +34,16 @@ public abstract class Metrics {
 	 */
 	public static Map<String, Metric> getMetricsRights() {
 		Map<String, Metric> metrics = new HashMap<String, Metric>();
-		putMetricIntoMap(new LicenseSpecifiedMetric(), metrics);
+		putMetricIntoMap(new KnownLicenseMetric(), metrics);
+		return metrics;
+	}
+
+	/**
+	 * Gets all metrics of the dimension versatility.
+	 */
+	public static Map<String, Metric> getMetricsVersatility() {
+		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		putMetricIntoMap(new MultipleSerializationsMetric(), metrics);
 		return metrics;
 	}
 
@@ -46,6 +55,7 @@ public abstract class Metrics {
 		metrics.putAll(getMetricsExpressiveness());
 		metrics.putAll(getMetricsTemporal());
 		metrics.putAll(getMetricsRights());
+		metrics.putAll(getMetricsVersatility());
 		return metrics;
 	}
 

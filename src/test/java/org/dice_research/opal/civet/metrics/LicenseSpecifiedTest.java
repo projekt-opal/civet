@@ -23,7 +23,7 @@ public class LicenseSpecifiedTest {
 
 		data.putDataObject(new StringDataObject(DataObjects.LICENSE, "https://example.com/licence"));
 		assertEquals(1, data.getDataObject(DataObjects.LICENSE).getValues().size(), 0);
-		assertEquals(5, new LicenseSpecifiedMetric().getScore(data), 0);
+		assertEquals(5, new KnownLicenseMetric().getScore(data), 0);
 
 	}
 
