@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.StringDataObject;
 
@@ -39,6 +41,11 @@ public abstract class Metric {
 	 * implementation.
 	 */
 	protected Collection<String> requiredProperties;
+
+	/**
+	 * Logger for all metrics
+	 */
+	protected static final Logger LOGGER = LogManager.getLogger();
 
 	/**
 	 * Returns description of the metric.

@@ -65,7 +65,7 @@ public class DatasetQueryBuilder {
 		if (addInitialDataset) {
 			Triple initialWhereTriple = new Triple(NodeFactory.createVariable(VAR_DATASET),
 					NodeFactory.createURI(org.apache.jena.vocabulary.RDF.type.getURI()),
-					NodeFactory.createURI(Dcat.PROPERTY_DATASET));
+					NodeFactory.createURI(Dcat.RESOURCE_DATASET));
 			selectBuilder.addWhere(initialWhereTriple);
 			selectBuilder.addVar(VAR_DATASET);
 		}
@@ -91,6 +91,14 @@ public class DatasetQueryBuilder {
 
 			if (addDatasetRelation(selectBuilder, dataObject.getId(), DataObjects.TITLE, DublinCore.PROPERTY_TITLE))
 				continue;
+
+			// Add directly connected data in reverse order
+
+			if (dataObject.getId().equals(DataObjects.CATALOG)) {
+
+				selectBuilder.addVar(DataObjects.CATALOG).addOptional(NodeFactory.createVariable(DataObjects.CATALOG),
+						NodeFactory.createURI(Dcat.PROPERTY_DATASET), "?" + VAR_DATASET);
+			}
 
 			// Add indirectly connected data
 

@@ -17,6 +17,7 @@ import org.apache.jena.rdf.model.Resource;
 import org.dice_research.opal.civet.metrics.CategorizationMetric;
 import org.dice_research.opal.civet.metrics.DescriptionMetric;
 import org.dice_research.opal.civet.metrics.KnownLicenseMetric;
+import org.dice_research.opal.civet.metrics.LinkedDataMetric;
 import org.dice_research.opal.civet.metrics.MultipleSerializationsMetric;
 import org.dice_research.opal.civet.metrics.UpdateRateMetric;
 import org.dice_research.opal.common.vocabulary.Dqv;
@@ -28,7 +29,9 @@ public class CivetApiTest {
 	static final String licenseSpecified = new KnownLicenseMetric().getResultsUri();
 	static final String categorization = new CategorizationMetric().getResultsUri();
 	static final String updateRate = new UpdateRateMetric().getResultsUri();
+	static final String linkedDate = new LinkedDataMetric().getResultsUri();
 	static final String multipleSerializations = new MultipleSerializationsMetric().getResultsUri();
+	static final String linkedData = new LinkedDataMetric().getResultsUri();
 
 	/**
 	 * Tests {@link CivetApi#compute(Model)}
@@ -55,6 +58,9 @@ public class CivetApiTest {
 		// Only one distribution and format
 		assertEquals(metricResults.get(multipleSerializations).floatValue(), 0f, 0);
 
+		// mcloud does not provide RDF
+		assertEquals(metricResults.get(linkedData).floatValue(), 0f, 0);
+
 		// ---
 
 		metricResults = extractMetricResults(compute(Utils.MODEL_STATIONSDATEN));
@@ -75,6 +81,8 @@ public class CivetApiTest {
 
 		metricResults = extractMetricResults(compute(Utils.MODEL_ICELAND));
 		assertTrue(metricResults.get(description) > 0);
+		// europeandataportal supports RDF
+		assertEquals(metricResults.get(linkedData).floatValue(), 5f, 0);
 
 		metricResults = extractMetricResults(compute(Utils.MODEL_DURCHSCHNITTSALTER));
 		assertTrue(metricResults.get(description) > 0);
@@ -93,7 +101,7 @@ public class CivetApiTest {
 	}
 
 	/**
-	 * Extracts all metric resutls for first dataset in model
+	 * Extracts all metric results for first dataset in model
 	 */
 	private Map<String, Float> extractMetricResults(Model model) {
 		Map<String, Float> metricResults = new HashMap<>();

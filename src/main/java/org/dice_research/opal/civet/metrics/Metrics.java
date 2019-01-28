@@ -48,6 +48,15 @@ public abstract class Metrics {
 	}
 
 	/**
+	 * Gets all metrics of the dimension interlinking.
+	 */
+	public static Map<String, Metric> getMetricsInterlinking() {
+		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		putMetricIntoMap(new LinkedDataMetric(), metrics);
+		return metrics;
+	}
+
+	/**
 	 * Gets all metrics.
 	 */
 	public static Map<String, Metric> getMetrics() {
@@ -56,6 +65,7 @@ public abstract class Metrics {
 		metrics.putAll(getMetricsTemporal());
 		metrics.putAll(getMetricsRights());
 		metrics.putAll(getMetricsVersatility());
+		metrics.putAll(getMetricsInterlinking());
 		return metrics;
 	}
 

@@ -25,6 +25,7 @@ public abstract class DataObjects {
 	public final static String NUMBER_OF_CATEGORIES = "NUMBER_OF_CATEGORIES";
 
 	// Dataset properties
+	public final static String CATALOG = "CATALOG";
 	public final static String DESCRIPTION = "DESCRIPTION";
 	public final static String ISSUED = "ISSUED";
 	public final static String PUBLISHER = "PUBLISHER";
@@ -45,6 +46,7 @@ public abstract class DataObjects {
 	static {
 		integerDataObjects.add(NUMBER_OF_CATEGORIES);
 
+		stringDataObjects.add(CATALOG);
 		stringDataObjects.add(DESCRIPTION);
 		stringDataObjects.add(ISSUED);
 		stringDataObjects.add(PUBLISHER);
