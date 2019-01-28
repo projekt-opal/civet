@@ -21,11 +21,11 @@ public abstract class Metrics {
 	}
 
 	/**
-	 * Gets all metrics of the dimension temporal.
+	 * Gets all metrics of the dimension interlinking.
 	 */
-	public static Map<String, Metric> getMetricsTemporal() {
+	public static Map<String, Metric> getMetricsInterlinking() {
 		Map<String, Metric> metrics = new HashMap<String, Metric>();
-		putMetricIntoMap(new UpdateRateMetric(), metrics);
+		putMetricIntoMap(new LinkedDataMetric(), metrics);
 		return metrics;
 	}
 
@@ -39,20 +39,21 @@ public abstract class Metrics {
 	}
 
 	/**
+	 * Gets all metrics of the dimension temporal.
+	 */
+	public static Map<String, Metric> getMetricsTemporal() {
+		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		putMetricIntoMap(new TimelinessMetric(), metrics);
+		putMetricIntoMap(new UpdateRateMetric(), metrics);
+		return metrics;
+	}
+
+	/**
 	 * Gets all metrics of the dimension versatility.
 	 */
 	public static Map<String, Metric> getMetricsVersatility() {
 		Map<String, Metric> metrics = new HashMap<String, Metric>();
 		putMetricIntoMap(new MultipleSerializationsMetric(), metrics);
-		return metrics;
-	}
-
-	/**
-	 * Gets all metrics of the dimension interlinking.
-	 */
-	public static Map<String, Metric> getMetricsInterlinking() {
-		Map<String, Metric> metrics = new HashMap<String, Metric>();
-		putMetricIntoMap(new LinkedDataMetric(), metrics);
 		return metrics;
 	}
 

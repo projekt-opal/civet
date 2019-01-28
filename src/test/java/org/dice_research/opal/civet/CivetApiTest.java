@@ -19,6 +19,7 @@ import org.dice_research.opal.civet.metrics.DescriptionMetric;
 import org.dice_research.opal.civet.metrics.KnownLicenseMetric;
 import org.dice_research.opal.civet.metrics.LinkedDataMetric;
 import org.dice_research.opal.civet.metrics.MultipleSerializationsMetric;
+import org.dice_research.opal.civet.metrics.TimelinessMetric;
 import org.dice_research.opal.civet.metrics.UpdateRateMetric;
 import org.dice_research.opal.common.vocabulary.Dqv;
 import org.junit.Test;
@@ -32,6 +33,7 @@ public class CivetApiTest {
 	static final String linkedDate = new LinkedDataMetric().getResultsUri();
 	static final String multipleSerializations = new MultipleSerializationsMetric().getResultsUri();
 	static final String linkedData = new LinkedDataMetric().getResultsUri();
+	static final String timeliness = new TimelinessMetric().getResultsUri();
 
 	/**
 	 * Tests {@link CivetApi#compute(Model)}
@@ -61,6 +63,9 @@ public class CivetApiTest {
 		// mcloud does not provide RDF
 		assertEquals(metricResults.get(linkedData).floatValue(), 0f, 0);
 
+		// issued 26.10.2018. 2 Stars for 6 month.
+		assertEquals(metricResults.get(timeliness).floatValue(), 2f, 0);
+
 		// ---
 
 		metricResults = extractMetricResults(compute(Utils.MODEL_STATIONSDATEN));
@@ -78,6 +83,8 @@ public class CivetApiTest {
 
 		metricResults = extractMetricResults(compute(Utils.MODEL_ALLERMOEHE));
 		assertTrue(metricResults.get(description) > 0);
+		// issued 2018-11-08. 2 Stars for 6 month.
+		assertEquals(metricResults.get(timeliness).floatValue(), 2f, 0);
 
 		metricResults = extractMetricResults(compute(Utils.MODEL_ICELAND));
 		assertTrue(metricResults.get(description) > 0);
