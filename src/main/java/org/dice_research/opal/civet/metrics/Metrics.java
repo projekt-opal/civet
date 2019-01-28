@@ -44,7 +44,6 @@ public abstract class Metrics {
 	public static Map<String, Metric> getMetricsTemporal() {
 		Map<String, Metric> metrics = new HashMap<String, Metric>();
 		putMetricIntoMap(new TimelinessMetric(), metrics);
-		putMetricIntoMap(new UpdateRateMetric(), metrics);
 		return metrics;
 	}
 

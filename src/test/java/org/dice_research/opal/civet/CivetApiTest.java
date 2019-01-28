@@ -20,7 +20,6 @@ import org.dice_research.opal.civet.metrics.KnownLicenseMetric;
 import org.dice_research.opal.civet.metrics.LinkedDataMetric;
 import org.dice_research.opal.civet.metrics.MultipleSerializationsMetric;
 import org.dice_research.opal.civet.metrics.TimelinessMetric;
-import org.dice_research.opal.civet.metrics.UpdateRateMetric;
 import org.dice_research.opal.common.vocabulary.Dqv;
 import org.junit.Test;
 
@@ -29,7 +28,6 @@ public class CivetApiTest {
 	static final String description = new DescriptionMetric().getResultsUri();
 	static final String licenseSpecified = new KnownLicenseMetric().getResultsUri();
 	static final String categorization = new CategorizationMetric().getResultsUri();
-	static final String updateRate = new UpdateRateMetric().getResultsUri();
 	static final String linkedDate = new LinkedDataMetric().getResultsUri();
 	static final String multipleSerializations = new MultipleSerializationsMetric().getResultsUri();
 	static final String linkedData = new LinkedDataMetric().getResultsUri();
@@ -53,9 +51,6 @@ public class CivetApiTest {
 
 		// Has one theme / category
 		assertEquals(metricResults.get(categorization).floatValue(), 4f, 0);
-
-		// TODO
-		assertEquals(metricResults.get(updateRate).floatValue(), 0f, 0);
 
 		// Only one distribution and format
 		assertEquals(metricResults.get(multipleSerializations).floatValue(), 0f, 0);
