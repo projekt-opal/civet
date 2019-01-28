@@ -12,11 +12,14 @@ import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.vocabulary.Dcat;
 import org.dice_research.opal.civet.vocabulary.DublinCore;
 import org.dice_research.opal.civet.vocabulary.Foaf;
-import org.dice_research.opal.common.vocabulary.Skos;
 
 public class DatasetQueryBuilder {
 
 	public static final String VAR_DATASET = "DATASET";
+
+	// Fixme: It seems that in the OPAL Fuseki graph (2019-01-08) a wrong property
+	// is used. Later this should be: org.apache.jena.vocabulary.SKOS.prefLabel
+	public static final String SKOS_PROPERTY_PREF_LABEL = "https://www.w3.org/2000/01/rdf-schema#label";
 
 	private boolean addInitialDataset = false;
 	private String datasetUri = null;
@@ -114,7 +117,7 @@ public class DatasetQueryBuilder {
 				Node skosConcept = NodeFactory.createVariable("skosConcept");
 				selectBuilder.addVar(DataObjects.THEME)
 						.addOptional("?" + VAR_DATASET, NodeFactory.createURI(Dcat.PROPERTY_THEME), skosConcept)
-						.addOptional(skosConcept, NodeFactory.createURI(Skos.PROPERTY_PREF_LABEL),
+						.addOptional(skosConcept, NodeFactory.createURI(SKOS_PROPERTY_PREF_LABEL),
 								NodeFactory.createVariable(DataObjects.THEME));
 			}
 		}

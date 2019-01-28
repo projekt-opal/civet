@@ -21,7 +21,7 @@ public class LinkedDataMetric extends Metric {
 	private static final String ID = LinkedDataMetric.class.getSimpleName();
 	private static final MetricType METRIC_TYPE = MetricType.FIVE_STAR;
 	private static final Collection<String> REQUIRED_PROPERTIES = Arrays.asList(DataObjects.CATALOG);
-	private static final String RESULTS_URI = Opal.OPAL_METRIC_LINKED_DATA.toString();
+	private static final String RESULTS_URI = Opal.OPAL_METRIC_LINKED_DATA_REPRESENTAION.toString();
 
 	private static final List<String> CATALOGS_RDF;
 
