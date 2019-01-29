@@ -29,6 +29,8 @@ import org.dice_research.opal.civet.sparql.DatasetResultExtractor;
 import org.dice_research.opal.civet.sparql.DistributionQueryBuilder;
 import org.dice_research.opal.civet.sparql.DistributionResultExtractor;
 import org.dice_research.opal.civet.sparql.InsertBuilder;
+import org.dice_research.opal.civet.sparql.PublisherQueryBuilder;
+import org.dice_research.opal.civet.sparql.PublisherResultExtractor;
 
 /**
  * Civet management
@@ -83,6 +85,13 @@ public class Orchestration {
 		queryExecution = QueryExecutionFactory.create(query, model);
 		resultSet = queryExecution.execSelect();
 		new DistributionResultExtractor().extractResults(resultSet, resultsContainer);
+
+		// Add publisher data
+		query = new PublisherQueryBuilder().getQuery(dataContainer, resultsContainer);
+		LOGGER.debug(query.toString());
+		queryExecution = QueryExecutionFactory.create(query, model);
+		resultSet = queryExecution.execSelect();
+		new PublisherResultExtractor().extractResults(resultSet, resultsContainer);
 
 		// Calculate metrics
 		for (DataContainer container : resultsContainer.dataContainers.values()) {

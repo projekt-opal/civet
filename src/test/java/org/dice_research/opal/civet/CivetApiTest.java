@@ -15,6 +15,7 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Resource;
 import org.dice_research.opal.civet.metrics.CategorizationMetric;
+import org.dice_research.opal.civet.metrics.ContactUrlMetric;
 import org.dice_research.opal.civet.metrics.DescriptionMetric;
 import org.dice_research.opal.civet.metrics.KnownLicenseMetric;
 import org.dice_research.opal.civet.metrics.LinkedDataMetric;
@@ -25,6 +26,7 @@ import org.junit.Test;
 
 public class CivetApiTest {
 
+	static final String contactUrl = new ContactUrlMetric().getResultsUri();
 	static final String description = new DescriptionMetric().getResultsUri();
 	static final String licenseSpecified = new KnownLicenseMetric().getResultsUri();
 	static final String categorization = new CategorizationMetric().getResultsUri();
@@ -60,6 +62,9 @@ public class CivetApiTest {
 
 		// issued 26.10.2018. 2 Stars for 6 month.
 		assertEquals(metricResults.get(timeliness).floatValue(), 2f, 0);
+
+		// URL is given
+		assertEquals(metricResults.get(contactUrl).floatValue(), 5f, 0);
 
 		// ---
 

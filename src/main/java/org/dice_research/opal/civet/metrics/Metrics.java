@@ -11,6 +11,15 @@ import java.util.Map;
 public abstract class Metrics {
 
 	/**
+	 * Gets all metrics of the dimension contactability.
+	 */
+	public static Map<String, Metric> getMetricsContactability() {
+		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		putMetricIntoMap(new ContactUrlMetric(), metrics);
+		return metrics;
+	}
+
+	/**
 	 * Gets all metrics of the dimension expressiveness.
 	 */
 	public static Map<String, Metric> getMetricsExpressiveness() {
@@ -61,6 +70,7 @@ public abstract class Metrics {
 	 */
 	public static Map<String, Metric> getMetrics() {
 		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		metrics.putAll(getMetricsContactability());
 		metrics.putAll(getMetricsExpressiveness());
 		metrics.putAll(getMetricsTemporal());
 		metrics.putAll(getMetricsRights());

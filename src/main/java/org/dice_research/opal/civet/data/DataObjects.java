@@ -37,6 +37,11 @@ public abstract class DataObjects {
 	public final static String DOWNLOAD_URL = "DOWNLOAD_URL";
 	public final static String LICENSE = "LICENSE";
 
+	// Publisher properties
+	public final static String PUBLISHER_NAME = "PUBLISHER_NAME";
+	public final static String PUBLISHER_MBOX = "PUBLISHER_MBOX";
+	public final static String PUBLISHER_HOMEPAGE = "PUBLISHER_HOMEPAGE";
+
 	private static List<String> integerDataObjects = new LinkedList<String>();
 	private static List<String> stringDataObjects = new LinkedList<String>();
 
@@ -56,6 +61,10 @@ public abstract class DataObjects {
 		stringDataObjects.add(ACCESS_URL);
 		stringDataObjects.add(DOWNLOAD_URL);
 		stringDataObjects.add(LICENSE);
+
+		stringDataObjects.add(PUBLISHER_NAME);
+		stringDataObjects.add(PUBLISHER_MBOX);
+		stringDataObjects.add(PUBLISHER_HOMEPAGE);
 	}
 
 	/**

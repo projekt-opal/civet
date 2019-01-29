@@ -143,6 +143,8 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		// Get related distribution data
 		getDistributionData(dataContainer, resultsContainer);
 
+		// TODO: Add publisher data
+
 		return resultsContainer;
 	}
 
@@ -199,6 +201,8 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 		queryExecution.close();
 
 		getDistributionData(datasetUri, dataContainer);
+
+		// TODO: Add publisher data
 	}
 
 	private void getDistributionData(DataContainer dataContainer, ResultsContainer resultsContainer) {
