@@ -13,7 +13,7 @@ import java.util.Set;
 import org.dice_research.opal.civet.Config;
 import org.dice_research.opal.civet.Orchestration;
 import org.dice_research.opal.civet.metrics.DescriptionMetric;
-import org.dice_research.opal.civet.metrics.LicenseSpecifiedMetric;
+import org.dice_research.opal.civet.metrics.KnownLicenseMetric;
 import org.junit.Test;
 
 public class OrchestrationTest {
@@ -35,7 +35,7 @@ public class OrchestrationTest {
 		String metricDescription = new DescriptionMetric().toString();
 		metrics.add(metricDescription);
 		// License metric needs distribution
-		String licenseSpecifiedMetric = new LicenseSpecifiedMetric().toString();
+		String licenseSpecifiedMetric = new KnownLicenseMetric().toString();
 		metrics.add(licenseSpecifiedMetric);
 
 		// Compute scores
@@ -64,7 +64,7 @@ public class OrchestrationTest {
 		String metricDescription = new DescriptionMetric().toString();
 		metrics.add(metricDescription);
 		// License metric needs distribution
-		String licenseSpecifiedMetric = new LicenseSpecifiedMetric().toString();
+		String licenseSpecifiedMetric = new KnownLicenseMetric().toString();
 		metrics.add(licenseSpecifiedMetric);
 
 		// Process

@@ -11,6 +11,15 @@ import java.util.Map;
 public abstract class Metrics {
 
 	/**
+	 * Gets all metrics of the dimension contactability.
+	 */
+	public static Map<String, Metric> getMetricsContactability() {
+		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		putMetricIntoMap(new ContactUrlMetric(), metrics);
+		return metrics;
+	}
+
+	/**
 	 * Gets all metrics of the dimension expressiveness.
 	 */
 	public static Map<String, Metric> getMetricsExpressiveness() {
@@ -21,11 +30,11 @@ public abstract class Metrics {
 	}
 
 	/**
-	 * Gets all metrics of the dimension temporal.
+	 * Gets all metrics of the dimension interlinking.
 	 */
-	public static Map<String, Metric> getMetricsTemporal() {
+	public static Map<String, Metric> getMetricsInterlinking() {
 		Map<String, Metric> metrics = new HashMap<String, Metric>();
-		putMetricIntoMap(new UpdateRateMetric(), metrics);
+		putMetricIntoMap(new LinkedDataMetric(), metrics);
 		return metrics;
 	}
 
@@ -34,7 +43,25 @@ public abstract class Metrics {
 	 */
 	public static Map<String, Metric> getMetricsRights() {
 		Map<String, Metric> metrics = new HashMap<String, Metric>();
-		putMetricIntoMap(new LicenseSpecifiedMetric(), metrics);
+		putMetricIntoMap(new KnownLicenseMetric(), metrics);
+		return metrics;
+	}
+
+	/**
+	 * Gets all metrics of the dimension temporal.
+	 */
+	public static Map<String, Metric> getMetricsTemporal() {
+		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		putMetricIntoMap(new TimelinessMetric(), metrics);
+		return metrics;
+	}
+
+	/**
+	 * Gets all metrics of the dimension versatility.
+	 */
+	public static Map<String, Metric> getMetricsVersatility() {
+		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		putMetricIntoMap(new MultipleSerializationsMetric(), metrics);
 		return metrics;
 	}
 
@@ -43,9 +70,12 @@ public abstract class Metrics {
 	 */
 	public static Map<String, Metric> getMetrics() {
 		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		metrics.putAll(getMetricsContactability());
 		metrics.putAll(getMetricsExpressiveness());
 		metrics.putAll(getMetricsTemporal());
 		metrics.putAll(getMetricsRights());
+		metrics.putAll(getMetricsVersatility());
+		metrics.putAll(getMetricsInterlinking());
 		return metrics;
 	}
 

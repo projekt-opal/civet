@@ -25,6 +25,7 @@ public abstract class DataObjects {
 	public final static String NUMBER_OF_CATEGORIES = "NUMBER_OF_CATEGORIES";
 
 	// Dataset properties
+	public final static String CATALOG = "CATALOG";
 	public final static String DESCRIPTION = "DESCRIPTION";
 	public final static String ISSUED = "ISSUED";
 	public final static String PUBLISHER = "PUBLISHER";
@@ -36,6 +37,11 @@ public abstract class DataObjects {
 	public final static String DOWNLOAD_URL = "DOWNLOAD_URL";
 	public final static String LICENSE = "LICENSE";
 
+	// Publisher properties
+	public final static String PUBLISHER_NAME = "PUBLISHER_NAME";
+	public final static String PUBLISHER_MBOX = "PUBLISHER_MBOX";
+	public final static String PUBLISHER_HOMEPAGE = "PUBLISHER_HOMEPAGE";
+
 	private static List<String> integerDataObjects = new LinkedList<String>();
 	private static List<String> stringDataObjects = new LinkedList<String>();
 
@@ -45,6 +51,7 @@ public abstract class DataObjects {
 	static {
 		integerDataObjects.add(NUMBER_OF_CATEGORIES);
 
+		stringDataObjects.add(CATALOG);
 		stringDataObjects.add(DESCRIPTION);
 		stringDataObjects.add(ISSUED);
 		stringDataObjects.add(PUBLISHER);
@@ -54,6 +61,10 @@ public abstract class DataObjects {
 		stringDataObjects.add(ACCESS_URL);
 		stringDataObjects.add(DOWNLOAD_URL);
 		stringDataObjects.add(LICENSE);
+
+		stringDataObjects.add(PUBLISHER_NAME);
+		stringDataObjects.add(PUBLISHER_MBOX);
+		stringDataObjects.add(PUBLISHER_HOMEPAGE);
 	}
 
 	/**

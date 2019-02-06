@@ -10,7 +10,7 @@ import org.dice_research.opal.civet.data.DataContainer;
  * 
  * @author Adrian Wilke
  */
-public class OpalAccessorContainer {
+public class ResultsContainer {
 
 	public Map<String, DataContainer> dataContainers = new HashMap<>();
 	public int refreshIndex;

@@ -70,7 +70,7 @@ public class OpalAccessorTest {
 		orchestration.getConfiguration().setSparqlQueryEndpoint(Config.sparqlQueryEndpoint);
 		orchestration.getConfiguration().setNamedGraph(Config.namedGraph);
 		OpalAccessor opalAccessor = new OpalAccessor(orchestration);
-		OpalAccessorContainer resultsContainer = opalAccessor.getData(dataContainer, limit, offset);
+		ResultsContainer resultsContainer = opalAccessor.getData(dataContainer, limit, offset);
 
 		// Returned number of datasets shout be at least 1. Multiple results specified
 		// by limit may return the same dataset with additional information.

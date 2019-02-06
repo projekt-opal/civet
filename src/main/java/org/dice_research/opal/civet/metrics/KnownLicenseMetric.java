@@ -6,22 +6,22 @@ import java.util.Collection;
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.data.StringDataObject;
-import org.dice_research.opal.civet.vocabulary.Opal;
+import org.dice_research.opal.common.vocabulary.Opal;
 
 /**
  * Single metric.
  *
  * @author Adrian Wilke
  */
-public class LicenseSpecifiedMetric extends Metric {
+public class KnownLicenseMetric extends Metric {
 
 	private static final String DESCRIPTION = "Checks, if a license is given.";
-	private static final String ID = LicenseSpecifiedMetric.class.getSimpleName();
+	private static final String ID = KnownLicenseMetric.class.getSimpleName();
 	private static final MetricType METRIC_TYPE = MetricType.FIVE_STAR;
 	private static final Collection<String> REQUIRED_PROPERTIES = Arrays.asList(DataObjects.LICENSE);
-	private static final String RESULTS_URI = Opal.OPAL_METRIC_LICENSE_SPECIFIED;
+	private static final String RESULTS_URI = Opal.OPAL_METRIC_KNOWN_LICENSE.toString();
 
-	public LicenseSpecifiedMetric() {
+	public KnownLicenseMetric() {
 		this.description = DESCRIPTION;
 		this.id = ID;
 		this.metricType = METRIC_TYPE;

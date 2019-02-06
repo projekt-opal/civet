@@ -1,0 +1,54 @@
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://projekt-opal.de/distribution/https___ckan_govdata_de_8caf780e_825b_4e1c_9a36_440a2ab19ddd>
+        a                 dcat:Distribution ;
+        dct:description   "" ;
+        dct:format        "PDF" ;
+        dct:title         "Begründung des Bebauungsplans als PDF Datei" ;
+        dcat:accessURL    "http://daten-hamburg.de/infrastruktur_bauen_wohnen/bebauungsplaene/pdfs/bplan_begr/allermoehe18.pdf" ;
+        dcat:byteSize     595084 ;
+        dcat:downloadURL  "http://daten-hamburg.de/infrastruktur_bauen_wohnen/bebauungsplaene/pdfs/bplan_begr/allermoehe18.pdf" .
+
+<http://projekt-opal.de/distribution/https___ckan_govdata_de_b34d50db_d303_4f8b_a6e7_8c916ab1575a>
+        a                 dcat:Distribution ;
+        dct:description   "" ;
+        dct:format        "HTML" ;
+        dct:title         "Metadatenbeschreibung aus dem MetaVer" ;
+        dcat:accessURL    "http://metaver.de/trefferanzeige?docuuid=BF9EE2CF-0024-4FD1-9DB1-581AC490AE22" ;
+        dcat:byteSize     56599 ;
+        dcat:downloadURL  "http://metaver.de/trefferanzeige?docuuid=BF9EE2CF-0024-4FD1-9DB1-581AC490AE22" .
+
+<http://projekt-opal.de/dataset/https___ckan_govdata_de_001c9703_3556_4f62_a376_85804f18ab52>
+        a                  dcat:Dataset ;
+        dct:description    "§ 2 Nummer 7 des Gesetzes über den Bebauungsplan Allermöhe 18 vom 9. November 1977 (Hamburgisches Gesetz- und Verordnungsblatt Seite 355) erhält folgende Fassung: '2. In den Wohngebieten mit einer Dachneigung von höchstens 45 Grad darf die Firsthöhe der Gebäude 10,5 m über Normalnull nicht überschreiten.'" ;
+        dct:identifier     "BF9EE2CF-0024-4FD1-9DB1-581AC490AE22" ;
+        dct:issued         "2018-11-08T00:00:00" , "2018-11-08 19:25:54.85164" , "2018-11-08 19:25:54.851645" , "2018-11-08 19:25:54.851643" , "2018-11-08 19:25:54.851635" ;
+        dct:license        "https://www.govdata.de/dl-de/by-2-0" ;
+        dct:modified       "2018-11-10 16:18:54.252592" ;
+        dct:title          "Bebauungsplan Allermöhe 18 1. Änderung Hamburg" ;
+        dcat:distribution  <http://projekt-opal.de/distribution/https___ckan_govdata_de_44d8584f_39d0_4aa6_8389_4bd25a9acb8c> , <http://projekt-opal.de/distribution/https___ckan_govdata_de_8caf780e_825b_4e1c_9a36_440a2ab19ddd> , <http://projekt-opal.de/distribution/https___ckan_govdata_de_b34d50db_d303_4f8b_a6e7_8c916ab1575a> , <http://projekt-opal.de/distribution/https___ckan_govdata_de_aaacd662_f576_4f20_b05d_4076fe211375> ;
+        dcat:keyword       "bebauungsplan" , "öffentliche-pläne" , "geoinformation" , "plis" , "bauleitplanung" , "inspireidentifiziert" , "bodennutzung" , "raumbezogene-information" ;
+        dcat:landingPage   "http://www.hamburg.de/bebauungsplaene-online.de" .
+
+<http://projekt-opal.de/distribution/https___ckan_govdata_de_aaacd662_f576_4f20_b05d_4076fe211375>
+        a                 dcat:Distribution ;
+        dct:description   "" ;
+        dct:format        "gml" ;
+        dct:title         "Download WFS Bebauungsplan (XPlanGML)" ;
+        dcat:accessURL    "https://geodienste.hamburg.de/HH_WFS_xplan_dls?service=WFS&request=GetFeature&version=2.0.0&resolvedepth=*&StoredQuery_ID=urn:ogc:def:query:OGC-WFS::PlanName&planName=Allermoehe18(1Aend)" ;
+        dcat:byteSize     8676 ;
+        dcat:downloadURL  "https://geodienste.hamburg.de/HH_WFS_xplan_dls?service=WFS&request=GetFeature&version=2.0.0&resolvedepth=*&StoredQuery_ID=urn:ogc:def:query:OGC-WFS::PlanName&planName=Allermoehe18(1Aend)" .
+
+<http://projekt-opal.de/catalog/govdata>
+        a             dcat:Catalog ;
+        dcat:dataset  <http://projekt-opal.de/dataset/https___ckan_govdata_de_001c9703_3556_4f62_a376_85804f18ab52> .
+
+<http://projekt-opal.de/distribution/https___ckan_govdata_de_44d8584f_39d0_4aa6_8389_4bd25a9acb8c>
+        a                 dcat:Distribution ;
+        dct:description   "" ;
+        dct:format        "PDF" ;
+        dct:title         "Festsetzungen (Planzeichnung / Verordnung) als PDF Datei" ;
+        dcat:accessURL    "http://daten-hamburg.de/infrastruktur_bauen_wohnen/bebauungsplaene/pdfs/bplan/allermoehe18.pdf" ;
+        dcat:byteSize     11435181 ;
+        dcat:downloadURL  "http://daten-hamburg.de/infrastruktur_bauen_wohnen/bebauungsplaene/pdfs/bplan/allermoehe18.pdf" .

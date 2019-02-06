@@ -1,8 +1,13 @@
 package org.dice_research.opal.civet.metrics;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.data.DataContainer;
+import org.dice_research.opal.civet.data.StringDataObject;
 
 /**
  * Computes metadata quality metric.
@@ -36,6 +41,11 @@ public abstract class Metric {
 	 * implementation.
 	 */
 	protected Collection<String> requiredProperties;
+
+	/**
+	 * Logger for all metrics
+	 */
+	protected static final Logger LOGGER = LogManager.getLogger();
 
 	/**
 	 * Returns description of the metric.
@@ -83,5 +93,19 @@ public abstract class Metric {
 	@Override
 	public String toString() {
 		return this.getClass().getSimpleName();
+	}
+
+	/**
+	 * Gets String-data-object from data-container. Removes empty values.
+	 */
+	protected List<String> getValues(DataContainer dataContainer, String dataObjectId) {
+		List<String> values = new LinkedList<>();
+		StringDataObject stringDataObject = dataContainer.getStringDataObject(dataObjectId);
+		for (String value : stringDataObject.getValues()) {
+			if (value != null && !value.trim().isEmpty()) {
+				values.add(value);
+			}
+		}
+		return values;
 	}
 }

@@ -8,15 +8,29 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.jena.query.Query;
+import org.apache.jena.query.QueryExecution;
+import org.apache.jena.query.QueryExecutionFactory;
+import org.apache.jena.query.ResultSet;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.update.UpdateAction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.access.OpalAccessor;
-import org.dice_research.opal.civet.access.OpalAccessorContainer;
+import org.dice_research.opal.civet.access.ResultsContainer;
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.exceptions.SparqlEndpointRuntimeException;
 import org.dice_research.opal.civet.metrics.Metric;
 import org.dice_research.opal.civet.metrics.Metrics;
+import org.dice_research.opal.civet.sparql.DatasetQueryBuilder;
+import org.dice_research.opal.civet.sparql.DatasetResultExtractor;
+import org.dice_research.opal.civet.sparql.DistributionQueryBuilder;
+import org.dice_research.opal.civet.sparql.DistributionResultExtractor;
+import org.dice_research.opal.civet.sparql.InsertBuilder;
+import org.dice_research.opal.civet.sparql.PublisherQueryBuilder;
+import org.dice_research.opal.civet.sparql.PublisherResultExtractor;
 
 /**
  * Civet management
@@ -28,6 +42,68 @@ public class Orchestration {
 	protected static final Logger LOGGER = LogManager.getLogger();
 	protected Configuration configuration = new Configuration();
 	protected OpalAccessor opalAccessor;
+
+	/**
+	 * Computes metric result values for a dcat:Dataset in the given Model.
+	 * 
+	 * @param model A model containing a dcat:Dataset and related concepts like
+	 *              dcat:Distribution.
+	 * 
+	 * @return A new model with added result values.
+	 */
+	public Model compute(Model model) {
+
+		// Duplicate model object
+		model = ModelFactory.createDefaultModel().add(model);
+
+		// Get required data object-IDs for all metrics.
+		// Create data-container for object-IDs.
+		Set<String> metricIds = Metrics.getMetrics().keySet();
+		Set<String> dataObjectIds = getDataobjectIds(metricIds);
+		DataContainer dataContainer = createDataContainer(dataObjectIds);
+
+		// Build query
+		DatasetQueryBuilder datasetQueryBuilder = new DatasetQueryBuilder();
+		datasetQueryBuilder.setAddInitialDataset(true);
+		Query query = datasetQueryBuilder.getQuery(dataContainer);
+
+		// Execute
+		LOGGER.debug(query.toString());
+		QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
+		ResultSet resultSet = queryExecution.execSelect();
+
+		// Extract
+		DatasetResultExtractor resultExtractor = new DatasetResultExtractor();
+		ResultsContainer resultsContainer = resultExtractor.extractResults(resultSet, dataContainer);
+
+		// Finish
+		queryExecution.close();
+
+		// Add distribution data
+		query = new DistributionQueryBuilder().getQuery(dataContainer, resultsContainer);
+		LOGGER.debug(query.toString());
+		queryExecution = QueryExecutionFactory.create(query, model);
+		resultSet = queryExecution.execSelect();
+		new DistributionResultExtractor().extractResults(resultSet, resultsContainer);
+
+		// Add publisher data
+		query = new PublisherQueryBuilder().getQuery(dataContainer, resultsContainer);
+		LOGGER.debug(query.toString());
+		queryExecution = QueryExecutionFactory.create(query, model);
+		resultSet = queryExecution.execSelect();
+		new PublisherResultExtractor().extractResults(resultSet, resultsContainer);
+
+		// Calculate metrics
+		for (DataContainer container : resultsContainer.dataContainers.values()) {
+			container.calculateMetrics(metricIds);
+		}
+
+		// Add metric results to model
+		String insert = new InsertBuilder().getSparqlInsert(resultsContainer.dataContainers);
+		UpdateAction.parseExecute(insert, model);
+
+		return model;
+	}
 
 	/**
 	 * Computes metrics for a dataset.
@@ -96,7 +172,7 @@ public class Orchestration {
 		while ((loopOffset < endOffset || endOffset == -1) && numberOfResults != 0) {
 
 			// Get data
-			OpalAccessorContainer resultsContainer = opalAccessor.getData(dataContainer, limit, loopOffset);
+			ResultsContainer resultsContainer = opalAccessor.getData(dataContainer, limit, loopOffset);
 
 			// Calculate metrics
 			for (DataContainer container : resultsContainer.dataContainers.values()) {

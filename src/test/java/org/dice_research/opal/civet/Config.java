@@ -25,4 +25,5 @@ public abstract class Config {
 
 	// Fuseki, port 3030, January 2019
 	public static String datasetUriBerlin = "http://projekt-opal.de/dataset/berlinumweltzone-wms";
+	public static String datasetUriZugbildungsplan = "http://projekt-opal.de/dataset/2a490c08-92dd-4aba-af96-cbf9d5f02f9a";
 }

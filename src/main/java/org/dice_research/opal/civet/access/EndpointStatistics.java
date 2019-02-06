@@ -111,6 +111,23 @@ public class EndpointStatistics extends SparqlEndpointAccessor {
 		System.out.println();
 		System.out.println();
 
+		// Publisher/agent
+
+		query = "SELECT DISTINCT ?predicate " + GRAPH
+				+ "WHERE { ?s a <http://xmlns.com/foaf/0.1/Agent> . ?s ?predicate ?o } ORDER BY ?predicate";
+		System.out.println(query);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
+		System.out.println();
+
+		query = "SELECT DISTINCT (COUNT(?agent) as ?agents) " + GRAPH
+				+ "WHERE { ?agent a <http://xmlns.com/foaf/0.1/Agent> }";
+		System.out.println(query);
+		rdfQueryConnection.queryResultSet(query, ResultSetFormatter::out);
+		System.out.println();
+
+		System.out.println();
+		System.out.println();
+
 		// Combinations
 
 		query = "SELECT DISTINCT ?dataset (COUNT(?distribution) as ?distributions) " + GRAPH

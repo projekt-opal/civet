@@ -58,7 +58,7 @@ public class DescriptionMetricTest {
 		data = new DataContainer();
 		data.putDataObject(new StringDataObject(DataObjects.TITLE, "test title: 15!"));
 		data.putDataObject(new StringDataObject(DataObjects.DESCRIPTION,
-				"this is a description with some text which could contain useful informati75"));
+				"this is a description with some text which could contain useful informat74"));
 		assertEquals(4, new DescriptionMetric().getScore(data), 0);
 
 		data = new DataContainer();

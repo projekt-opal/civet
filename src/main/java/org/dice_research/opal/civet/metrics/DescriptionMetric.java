@@ -5,8 +5,7 @@ import java.util.Collection;
 
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObjects;
-import org.dice_research.opal.civet.data.StringDataObject;
-import org.dice_research.opal.civet.vocabulary.Opal;
+import org.dice_research.opal.common.vocabulary.Opal;
 
 /**
  * Single metric.
@@ -22,7 +21,7 @@ public class DescriptionMetric extends Metric {
 	private static final MetricType METRIC_TYPE = MetricType.FIVE_STAR;
 	private static final Collection<String> REQUIRED_PROPERTIES = Arrays.asList(DataObjects.TITLE,
 			DataObjects.DESCRIPTION);
-	private static final String RESULTS_URI = Opal.OPAL_METRIC_DESCRIPTION;
+	private static final String RESULTS_URI = Opal.OPAL_METRIC_DESCRIPTION.toString();
 
 	public DescriptionMetric() {
 		this.description = DESCRIPTION;
@@ -35,23 +34,22 @@ public class DescriptionMetric extends Metric {
 	@Override
 	public float getScore(DataContainer dataContainer) {
 
-		StringDataObject dataObject;
-
-		dataObject = dataContainer.getStringDataObject(DataObjects.TITLE);
-		String title;
-		if (dataObject.isEmpty()) {
-			return 0f;
-		} else {
-			title = dataObject.getValues().get(0);
+		// Get longest title
+		String title = "";
+		for (String value : getValues(dataContainer, DataObjects.TITLE)) {
+			if (value.length() > title.length()) {
+				title = value;
+			}
 		}
 
-		dataObject = dataContainer.getStringDataObject(DataObjects.DESCRIPTION);
-		String description;
-		if (dataObject.isEmpty()) {
-			return 0f;
-		} else {
-			description = dataObject.getValues().get(0);
+		// Single descriptions are unique.
+		// Concatenate all describing information.
+		StringBuilder stringBuilder = new StringBuilder();
+		for (String value : getValues(dataContainer, DataObjects.DESCRIPTION)) {
+			stringBuilder.append(value);
+			stringBuilder.append(System.lineSeparator());
 		}
+		String description = stringBuilder.toString();
 
 		if (title.isEmpty() && description.isEmpty()) {
 			// No title or description set
@@ -60,6 +58,7 @@ public class DescriptionMetric extends Metric {
 		} else if (title.isEmpty()) {
 			// At least title set
 			return 1f;
+
 		} else if (description.isEmpty()) {
 			// At least description set
 			return 1f;
@@ -84,7 +83,5 @@ public class DescriptionMetric extends Metric {
 		} else {
 			return 5f;
 		}
-
 	}
-
 }
