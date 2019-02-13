@@ -9,6 +9,7 @@ import java.util.concurrent.Future;
 
 import org.apache.jena.rdf.model.Model;
 import org.dice_research.opal.civet.access.OpalAccessor;
+import org.dice_research.opal.civet.exceptions.CivetException;
 import org.dice_research.opal.civet.metrics.Metrics;
 
 /**
@@ -26,11 +27,11 @@ public class CivetApi {
 	 * 
 	 * @param endpoint an URL, e.g. http://example.com:8890/sparql
 	 * 
-	 * @throws NullPointerException if endpoint is null
+	 * @throws CivetException if endpoint is null
 	 */
-	public CivetApi setSparqlQueryEndpoint(String endpoint) throws NullPointerException {
+	public CivetApi setSparqlQueryEndpoint(String endpoint) throws CivetException {
 		if (endpoint == null) {
-			throw new NullPointerException("No SPARQL query endpoint specified.");
+			throw new CivetException("No SPARQL query endpoint specified.");
 		}
 		this.orchestration.getConfiguration().setSparqlQueryEndpoint(endpoint);
 		return this;
@@ -41,11 +42,11 @@ public class CivetApi {
 	 * 
 	 * @param endpoint an URL, e.g. http://example.com:8890/update
 	 * 
-	 * @throws NullPointerException if endpoint is null
+	 * @throws CivetException if endpoint is null
 	 */
-	public CivetApi setSparqlUpdateEndpoint(String endpoint) throws NullPointerException {
+	public CivetApi setSparqlUpdateEndpoint(String endpoint) throws CivetException {
 		if (endpoint == null) {
-			throw new NullPointerException("No SPARQL update endpoint specified.");
+			throw new CivetException("No SPARQL update endpoint specified.");
 		}
 		this.orchestration.getConfiguration().setSparqlUpdateEndpoint(endpoint);
 		return this;
@@ -109,19 +110,23 @@ public class CivetApi {
 	 *                  process all results.
 	 * @param limit     Number of items per request
 	 * 
-	 * @throws NullPointerException If one SPARQL endpoint is not set
+	 * @throws CivetException if any exception occurs on computation.
 	 */
-	public void computeAll(int offset, int endOffset, int limit) throws NullPointerException {
+	public void computeAll(int offset, int endOffset, int limit) throws CivetException {
 
 		// Check
 		if (this.orchestration.getConfiguration().getSparqlQueryEndpoint() == null) {
-			throw new NullPointerException("No SPARQL query endpoint specified.");
+			throw new CivetException("No SPARQL query endpoint specified.");
 		} else if (this.orchestration.getConfiguration().getSparqlUpdateEndpoint() == null) {
-			throw new NullPointerException("No SPARQL update endpoint specified.");
+			throw new CivetException("No SPARQL update endpoint specified.");
 		}
 
 		// Run
-		this.orchestration.compute(offset, endOffset, limit, Metrics.getMetrics().keySet());
+		try {
+			this.orchestration.compute(offset, endOffset, limit, Metrics.getMetrics().keySet());
+		} catch (Exception e) {
+			throw new CivetException(e);
+		}
 	}
 
 	/**
@@ -137,21 +142,25 @@ public class CivetApi {
 	 * @param limit     Number of items per request
 	 * @param metrics   Set of metric-Ids to compute
 	 * 
-	 * @throws NullPointerException If one SPARQL endpoint or metrics is not set
+	 * @throws CivetException if any exception occurs on computation.
 	 */
-	public void compute(int offset, int endOffset, int limit, Set<String> metrics) throws NullPointerException {
+	public void compute(int offset, int endOffset, int limit, Set<String> metrics) throws CivetException {
 
 		// Check
 		if (this.orchestration.getConfiguration().getSparqlQueryEndpoint() == null) {
-			throw new NullPointerException("No SPARQL query endpoint specified.");
+			throw new CivetException("No SPARQL query endpoint specified.");
 		} else if (this.orchestration.getConfiguration().getSparqlUpdateEndpoint() == null) {
-			throw new NullPointerException("No SPARQL update endpoint specified.");
+			throw new CivetException("No SPARQL update endpoint specified.");
 		} else if (metrics == null) {
-			throw new NullPointerException("No metric-IDs specified.");
+			throw new CivetException("No metric-IDs specified.");
 		}
 
 		// Run
-		this.orchestration.compute(offset, endOffset, limit, metrics);
+		try {
+			this.orchestration.compute(offset, endOffset, limit, metrics);
+		} catch (Exception e) {
+			throw new CivetException(e);
+		}
 	}
 
 	/**
@@ -161,17 +170,35 @@ public class CivetApi {
 	 *              dcat:Distribution.
 	 * 
 	 * @return A new model with added result values.
+	 * 
+	 * @throws CivetException if any exception occurs on computation.
 	 */
-	public Model compute(Model model) {
-		return orchestration.compute(model);
+	public Model compute(Model model) throws CivetException {
+		try {
+			return orchestration.compute(model);
+		} catch (Exception e) {
+			throw new CivetException(e);
+		}
 	}
 
 	/**
-	 * TODO: Not implemented, just returns model
+	 * Computes metric result values for a dcat:Dataset in the given Model.
+	 * 
+	 * @param model A model containing a dcat:Dataset and related concepts like
+	 *              dcat:Distribution.
+	 * 
+	 * @return A new model with added result values.
+	 * 
+	 * @throws CivetException if any exception occurs on computation.
 	 */
-	public Future<Model> computeFuture(Model model) {
-		return executor.submit(() -> {
-			return orchestration.compute(model);
-		});
+
+	public Future<Model> computeFuture(Model model) throws CivetException {
+		try {
+			return executor.submit(() -> {
+				return orchestration.compute(model);
+			});
+		} catch (Exception e) {
+			throw new CivetException(e);
+		}
 	}
 }
