@@ -12,6 +12,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.dice_research.opal.civet.exceptions.CivetException;
 
 /**
  * Civet interface for the command line.
@@ -41,8 +42,12 @@ public class CivetCli {
 
 			// Configure endpoints
 			CivetApi civetApi = new CivetApi();
-			civetApi.setSparqlQueryEndpoint(commandLine.getOptionValue(CivetCli.OPTION_ENDPOINT_QUERY));
-			civetApi.setSparqlUpdateEndpoint(commandLine.getOptionValue(CivetCli.OPTION_ENDPOINT_UPDATE));
+			try {
+				civetApi.setSparqlQueryEndpoint(commandLine.getOptionValue(CivetCli.OPTION_ENDPOINT_QUERY));
+				civetApi.setSparqlUpdateEndpoint(commandLine.getOptionValue(CivetCli.OPTION_ENDPOINT_UPDATE));
+			} catch (CivetException e) {
+				System.err.println("Exception during computation: " + e.toString());
+			}
 			if (commandLine.hasOption(CivetCli.OPTION_GRAPH)) {
 				civetApi.setNamedGraph(commandLine.getOptionValue(CivetCli.OPTION_GRAPH));
 			}
@@ -58,7 +63,11 @@ public class CivetCli {
 			if (commandLine.hasOption(CivetCli.OPTION_LIMIT)) {
 				limit = Integer.parseInt(commandLine.getOptionValue(CivetCli.OPTION_LIMIT));
 			}
-			civetApi.computeAll(offset, end, limit);
+			try {
+				civetApi.computeAll(offset, end, limit);
+			} catch (CivetException e) {
+				System.err.println("Exception during computation: " + e.toString());
+			}
 			time = System.currentTimeMillis() - time;
 			System.out.println("Runtime in seconds: " + (time / 1000));
 		}

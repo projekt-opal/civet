@@ -14,6 +14,7 @@ import java.util.concurrent.Future;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
 import org.apache.jena.rdf.model.Resource;
+import org.dice_research.opal.civet.exceptions.CivetException;
 import org.dice_research.opal.civet.metrics.CategorizationMetric;
 import org.dice_research.opal.civet.metrics.ContactUrlMetric;
 import org.dice_research.opal.civet.metrics.DescriptionMetric;
@@ -95,7 +96,7 @@ public class CivetApiTest {
 		assertTrue(metricResults.get(description) > 0);
 	}
 
-	private Model compute(String modelResourceFile) {
+	private Model compute(String modelResourceFile) throws CivetException {
 		Model sourceModel = Utils.readModel(modelResourceFile, Utils.LANG_TURTLE);
 
 		// Compute metrics
