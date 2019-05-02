@@ -9,10 +9,12 @@ import org.apache.jena.sparql.core.Var;
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObject;
 import org.dice_research.opal.civet.data.DataObjects;
+import org.dice_research.opal.civet.metrics.Metric;
 import org.dice_research.opal.civet.metrics.Metrics;
 import org.dice_research.opal.civet.vocabulary.Dcat;
 import org.dice_research.opal.civet.vocabulary.DublinCore;
 import org.dice_research.opal.civet.vocabulary.Foaf;
+import org.dice_research.opal.common.vocabulary.Dqv;
 
 public class DatasetQueryBuilder {
 
@@ -27,6 +29,7 @@ public class DatasetQueryBuilder {
 	private Integer limit = null;
 	private String namedGraph = null;
 	private Integer offset = null;
+	private int blankNodeCounter = 0;
 
 	public DatasetQueryBuilder setLimit(Integer limit) {
 		this.limit = limit;
@@ -155,13 +158,25 @@ public class DatasetQueryBuilder {
 		}
 	}
 
-	// TODO
+	/**
+	 * Checks, if dataObjectIdActual represents a metric value. If true, the metric
+	 * value is added to the selectBuilder.
+	 */
 	private boolean addDatasetMetricValueRelation(SelectBuilder selectBuilder, String dataObjectIdActual) {
 
 		// Check, if it is a metric value
 		if (Metrics.getMetrics().containsKey(dataObjectIdActual)) {
+			Metric metric = Metrics.getMetrics().get(dataObjectIdActual);
 
-			// TODO: Create query and get metric value
+			Node blankNode = NodeFactory.createBlankNode("" + blankNodeCounter++);
+			SelectBuilder slctBldr = new SelectBuilder();
+			slctBldr.addWhere("?" + VAR_DATASET, Dqv.HAS_QUALITY_MEASUREMENT, blankNode)
+
+					.addWhere(blankNode, Dqv.IS_MEASUREMENT_OF, NodeFactory.createURI(metric.getResultsUri()))
+
+					.addWhere(blankNode, Dqv.HAS_VALUE, NodeFactory.createVariable(dataObjectIdActual));
+
+			selectBuilder.addVar(dataObjectIdActual).addOptional(slctBldr);
 
 			return true;
 		} else {

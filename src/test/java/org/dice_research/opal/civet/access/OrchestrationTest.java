@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.dice_research.opal.civet.Config;
 import org.dice_research.opal.civet.Orchestration;
+import org.dice_research.opal.civet.aggregation.MetadataQualityAggregation;
 import org.dice_research.opal.civet.metrics.DescriptionMetric;
 import org.dice_research.opal.civet.metrics.KnownLicenseMetric;
 import org.junit.Test;
@@ -44,6 +45,42 @@ public class OrchestrationTest {
 		assertEquals(2, scores.size());
 		assertTrue(scores.get(metricDescription) > 0);
 		assertTrue(scores.get(licenseSpecifiedMetric) > 0);
+	}
+
+	/**
+	 * Tests aggregation of metric scores.
+	 * 
+	 * @throws URISyntaxException
+	 */
+	@Test
+	public void testAggregation() throws URISyntaxException {
+
+		// Configure endpoint
+		Orchestration orchestration = new Orchestration();
+		orchestration.getConfiguration().setSparqlQueryEndpoint(Config.sparqlQueryEndpoint);
+		orchestration.getConfiguration().setSparqlUpdateEndpoint(Config.sparqlUpdateEndpoint);
+		orchestration.getConfiguration().setNamedGraph(Config.namedGraph);
+		pingEndpoint();
+
+		// Set metrics
+		Set<String> metrics = new HashSet<String>();
+		String metricDescription = new DescriptionMetric().toString();
+		metrics.add(metricDescription);
+		// License metric needs distribution
+		String licenseSpecifiedMetric = new KnownLicenseMetric().toString();
+		metrics.add(licenseSpecifiedMetric);
+		String metadataQualityAggregation = new MetadataQualityAggregation().toString();
+		metrics.add(metadataQualityAggregation);
+
+		// Process
+		Map<String, Float> scores = orchestration.compute(new URI(Config.datasetUriBerlin), metrics);
+
+		assertEquals(3, scores.size());
+
+		assertTrue(scores.get(metricDescription) > 0);
+		assertTrue(scores.get(licenseSpecifiedMetric) > 0);
+		assertTrue(scores.get(metadataQualityAggregation) > 0);
+
 	}
 
 	/**

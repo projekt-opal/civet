@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.IntegerDataObject;
+import org.dice_research.opal.civet.exceptions.UnknownIdRuntimeException;
 import org.dice_research.opal.civet.metrics.Metric;
 import org.dice_research.opal.civet.metrics.MetricType;
 import org.dice_research.opal.civet.metrics.Metrics;
@@ -49,7 +50,13 @@ public class MetadataQualityAggregation extends Metric {
 		int sum = 0, number = 0;
 		for (Metric metric : Metrics.getMetrics().values()) {
 			if (metric.getType().equals(MetricType.FIVE_STAR)) {
-				IntegerDataObject dataObject = dataContainer.getIntegerDataObject(metric.getId());
+				IntegerDataObject dataObject = null;
+				try {
+					dataObject = dataContainer.getIntegerDataObject(metric.getId());
+				} catch (UnknownIdRuntimeException e) {
+					continue;
+				}
+
 				if (!dataObject.isEmpty()) {
 					sum += dataObject.getValues().get(0);
 					number++;

@@ -1,5 +1,6 @@
 package org.dice_research.opal.civet;
 
+import org.dice_research.opal.civet.aggregation.MetadataQualityAggregationTest;
 import org.dice_research.opal.civet.data.DataContainerTest;
 import org.dice_research.opal.civet.data.DataObjectTests;
 import org.dice_research.opal.civet.metrics.CategorizationMetricTest;
@@ -33,9 +34,11 @@ import org.junit.runners.Suite.SuiteClasses;
 
 		DescriptionMetricTest.class,
 
-		LicenseSpecifiedTest.class
+		LicenseSpecifiedTest.class,
 
-})
+		// Aggregation metrics
+
+		MetadataQualityAggregationTest.class })
 
 public class LocalTests {
 }

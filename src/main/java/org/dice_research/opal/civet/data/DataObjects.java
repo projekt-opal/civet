@@ -81,7 +81,6 @@ public abstract class DataObjects {
 				LOGGER.info("Not adding " + metric.getId());
 			}
 		}
-
 	}
 
 	/**
