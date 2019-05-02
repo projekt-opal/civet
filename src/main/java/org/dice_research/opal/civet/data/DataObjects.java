@@ -3,7 +3,12 @@ package org.dice_research.opal.civet.data;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.exceptions.UnknownIdRuntimeException;
+import org.dice_research.opal.civet.metrics.Metric;
+import org.dice_research.opal.civet.metrics.MetricType;
+import org.dice_research.opal.civet.metrics.Metrics;
 
 /**
  * Defines IDs and types of {@link DataObject}s.
@@ -20,6 +25,8 @@ import org.dice_research.opal.civet.exceptions.UnknownIdRuntimeException;
  * @author Adrian Wilke
  */
 public abstract class DataObjects {
+
+	protected static final Logger LOGGER = LogManager.getLogger();
 
 	// Definition of data object IDs
 	public final static String NUMBER_OF_CATEGORIES = "NUMBER_OF_CATEGORIES";
@@ -65,6 +72,15 @@ public abstract class DataObjects {
 		stringDataObjects.add(PUBLISHER_NAME);
 		stringDataObjects.add(PUBLISHER_MBOX);
 		stringDataObjects.add(PUBLISHER_HOMEPAGE);
+
+		// 5-Star metric IDs for aggregation
+		for (Metric metric : Metrics.getMetrics().values()) {
+			if (metric.getType().equals(MetricType.FIVE_STAR)) {
+				integerDataObjects.add(metric.getId());
+			} else {
+				LOGGER.info("Not adding " + metric.getId());
+			}
+		}
 	}
 
 	/**

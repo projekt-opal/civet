@@ -3,6 +3,8 @@ package org.dice_research.opal.civet.metrics;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.dice_research.opal.civet.aggregation.MetadataQualityAggregation;
+
 /**
  * Metrics catalog.
  *
@@ -66,6 +68,15 @@ public abstract class Metrics {
 	}
 
 	/**
+	 * Gets all metrics aggregation scores.
+	 */
+	public static Map<String, Metric> getMetricsAggregation() {
+		Map<String, Metric> metrics = new HashMap<String, Metric>();
+		putMetricIntoMap(new MetadataQualityAggregation(), metrics);
+		return metrics;
+	}
+
+	/**
 	 * Gets all metrics.
 	 */
 	public static Map<String, Metric> getMetrics() {
@@ -76,6 +87,7 @@ public abstract class Metrics {
 		metrics.putAll(getMetricsRights());
 		metrics.putAll(getMetricsVersatility());
 		metrics.putAll(getMetricsInterlinking());
+		metrics.putAll(getMetricsAggregation());
 		return metrics;
 	}
 

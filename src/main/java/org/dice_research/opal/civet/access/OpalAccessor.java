@@ -185,7 +185,13 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 					}
 					dataContainer.getDataObject(id).addValue(querySolution.get(id).toString().trim());
 				} catch (ParsingException e) {
-					LOGGER.error(e);
+					try {
+						// Try to remove RDF type information. Assumes integer expressed as float.
+						int intVal = Math.round(querySolution.get(id).asLiteral().getFloat());
+						dataContainer.getDataObject(id).addValue("" + intVal);
+					} catch (ParsingException e1) {
+						LOGGER.error(e + " (value)");
+					}
 				}
 			}
 		}
@@ -193,7 +199,7 @@ public class OpalAccessor extends SparqlEndpointAccessor {
 			if (dataContainer.getIds().contains(DataObjects.NUMBER_OF_CATEGORIES))
 				dataContainer.getDataObject(DataObjects.NUMBER_OF_CATEGORIES).addValue("" + categories);
 		} catch (ParsingException e) {
-			LOGGER.error(e);
+			LOGGER.error(e + " (category)");
 		}
 		if (resultSet.hasNext()) {
 			LOGGER.debug("More than one result returned.");
