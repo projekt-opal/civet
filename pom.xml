@@ -18,7 +18,7 @@
 		<dependency>
 			<groupId>org.dice_research.opal</groupId>
 			<artifactId>common</artifactId>
-			<version>1.0.1.1</version>
+			<version>1.0.2</version>
 		</dependency>
 
 		<!-- RDF / Jena -->
