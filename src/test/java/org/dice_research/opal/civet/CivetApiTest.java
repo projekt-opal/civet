@@ -86,7 +86,8 @@ public class CivetApiTest {
 		metricResults = extractMetricResults(compute(Utils.MODEL_ALLERMOEHE));
 		assertTrue(metricResults.get(description) > 0);
 		// issued 2018-11-08. 2 Stars for 6 month.
-		assertEquals(metricResults.get(timeliness).floatValue(), 2f, 0);
+		// Update: issued 2018-11-08. -> now 10 month -> 1 star
+		assertEquals(metricResults.get(timeliness).floatValue(), 1f, 0);
 
 		metricResults = extractMetricResults(compute(Utils.MODEL_ICELAND));
 		assertTrue(metricResults.get(description) > 0);
