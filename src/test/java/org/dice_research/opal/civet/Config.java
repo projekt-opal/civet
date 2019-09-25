@@ -11,13 +11,13 @@ public abstract class Config {
 
 	public static String sparqlQueryEndpointHost = "opalpro.cs.upb.de";
 	public static int sparqlQueryEndpointPort = 3030;
-	public static String sparqlQueryEndpointPath = "/civet/sparql";
+	public static String sparqlQueryEndpointPath = "/opal/sparql";
 	public static String sparqlQueryEndpoint = "http://" + sparqlQueryEndpointHost + ":" + sparqlQueryEndpointPort
 			+ sparqlQueryEndpointPath;
 
 	public static String sparqlUpdateEndpointHost = "opalpro.cs.upb.de";
 	public static int sparqlUpdateEndpointPort = 3030;
-	public static String sparqlUpdateEndpointPath = "/civet/update";
+	public static String sparqlUpdateEndpointPath = "/opal/update";
 	public static String sparqlUpdateEndpoint = "http://" + sparqlUpdateEndpointHost + ":" + sparqlUpdateEndpointPort
 			+ sparqlUpdateEndpointPath;
 

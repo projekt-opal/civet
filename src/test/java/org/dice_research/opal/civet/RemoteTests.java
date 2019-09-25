@@ -6,16 +6,18 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-@RunWith(Suite.class)
-@SuiteClasses({
+// Commented, as tests should not depend on remote endpoint 
+//@RunWith(Suite.class)
+//@SuiteClasses({
+//
+//		// Access
+//
+//		OpalAccessorTest.class,
+//
+//		// Complete run
+//
+//		OrchestrationTest.class })
 
-		// Access
-
-		OpalAccessorTest.class,
-
-		// Complete run
-
-		OrchestrationTest.class })
-
+@SuppressWarnings("unused")
 public class RemoteTests {
 }
