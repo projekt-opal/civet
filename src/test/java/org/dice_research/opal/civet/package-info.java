@@ -3,9 +3,10 @@
  * 
  * - LocalTests.java run locally without special requirements.
  * 
- * - RemoteTests.java need a running SPARQL endpoint
+ * - Package remote (deprecated) need a running SPARQL endpoint
  * 
- * The configuration for remote tests is set in {@link org.dice_research.opal.civet.Config}.
+ * The configuration for remote tests is set in
+ * {@link org.dice_research.opal.civet.Config}.
  * 
  * @author Adrian Wilke
  */

@@ -8,6 +8,7 @@ import org.dice_research.opal.civet.data.DataObject;
 import org.dice_research.opal.civet.data.DataObjects;
 import org.dice_research.opal.civet.metrics.Metric;
 import org.dice_research.opal.civet.metrics.MetricType;
+import org.dice_research.opal.civet.remote.OpalAccessorTest;
 
 /**
  * Uses all known properties. Calculated score is number of non-empty data

@@ -1,4 +1,4 @@
-package org.dice_research.opal.civet.access;
+package org.dice_research.opal.civet.remote;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -9,13 +9,15 @@ import java.util.Collection;
 
 import org.dice_research.opal.civet.Config;
 import org.dice_research.opal.civet.Orchestration;
+import org.dice_research.opal.civet.access.AllPropertiesMetric;
+import org.dice_research.opal.civet.access.OpalAccessor;
+import org.dice_research.opal.civet.access.ResultsContainer;
 import org.dice_research.opal.civet.data.DataContainer;
 import org.dice_research.opal.civet.data.DataObjects;
-import org.junit.Test;
 
+@Deprecated
 public class OpalAccessorTest {
 
-	@Test
 	public void testAllProperties() throws URISyntaxException {
 
 		// Get all properties
@@ -49,7 +51,6 @@ public class OpalAccessorTest {
 		// System.out.println(dataContainer.toExtendedString());
 	}
 
-	@Test
 	public void testMultipleDatasets() {
 
 		int limit = 20;

@@ -1,4 +1,4 @@
-package org.dice_research.opal.civet.access;
+package org.dice_research.opal.civet.remote;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -12,17 +12,17 @@ import java.util.Set;
 
 import org.dice_research.opal.civet.Config;
 import org.dice_research.opal.civet.Orchestration;
+import org.dice_research.opal.civet.access.IoUtils;
 import org.dice_research.opal.civet.aggregation.MetadataQualityAggregation;
 import org.dice_research.opal.civet.metrics.DescriptionMetric;
 import org.dice_research.opal.civet.metrics.KnownLicenseMetric;
-import org.junit.Test;
 
 public class OrchestrationTest {
 
 	/**
 	 * Tests calculation of description metric.
 	 */
-	@Test
+	@Deprecated
 	public void test() throws URISyntaxException {
 
 		// Configure endpoint
@@ -52,7 +52,6 @@ public class OrchestrationTest {
 	 * 
 	 * @throws URISyntaxException
 	 */
-	@Test
 	public void testAggregation() throws URISyntaxException {
 
 		// Configure endpoint
@@ -86,7 +85,6 @@ public class OrchestrationTest {
 	/**
 	 * Tests calculation using multiple datasets.
 	 */
-	@Test
 	public void testMultipleDatasets() {
 
 		// Configure endpoint
