@@ -2,74 +2,9 @@
 
 OPAL metadata quality component.
 
-## Usage
+## Requirements
 
-To use OPAL Civet, you have to configure the GitHub Maven Package Registry and add OPAL Civet as a dependency.
-
-### 1. Create a GitHub authentication token
-
-For authentication, use the GitHub article [Creating a personal access token for the command line](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line). You need to set the read:packages scope. You can copy your new token directly after generation to continue with the next step.
-
-### 2. Add the Maven repository
-
-Edit the file `~/.m2/settings.xml` and insert the code below.
-Replace _TOKEN_ with the data from the step above and replace also _USERNAME_ with your GitHub username.
-This is additionally described in the GitHub article [Authenticating to GitHub Package Registry](https://help.github.com/en/articles/configuring-apache-maven-for-use-with-github-package-registry#authenticating-to-github-package-registry).
-
-```
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
-                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
-
-  <activeProfiles>
-    <activeProfile>github</activeProfile>
-  </activeProfiles>
-
-  <profiles>
-    <profile>
-      <id>github</id>
-      <repositories>
-        <repository>
-          <id>central</id>
-          <url>https://repo1.maven.org/maven2</url>
-          <releases><enabled>true</enabled></releases>
-          <snapshots><enabled>true</enabled></snapshots>
-        </repository>
-        <repository>
-          <id>github-projekt-opal</id>
-          <name>GitHub projekt-opal Apache Maven Packages</name>
-          <url>https://maven.pkg.github.com/projekt-opal</url>
-        </repository>
-      </repositories>
-    </profile>
-  </profiles>
-
-  <servers>
-    <server>
-      <id>github-projekt-opal</id>
-      <username>USERNAME</username>
-      <password>TOKEN</password>
-    </server>
-  </servers>
-</settings>
-```
-
-### 3. Add the Maven dependency
-
-Edit the `pom.xml` of your project and insert the following code:
-
-```
-<dependencies>
-  <!-- OPAL Civet 0.0.* -->
-  <!-- https://github.com/projekt-opal/civet -->
-  <dependency>
-    <groupId>org.dice_research.opal</groupId>
-    <artifactId>civet</artifactId>
-    <version>[0,0.1)</version>
-    </dependency>
-</dependencies>
-```
+The installation of the [OPAL common](https://github.com/projekt-opal/common) component is required.
 
 ## Credits
 
