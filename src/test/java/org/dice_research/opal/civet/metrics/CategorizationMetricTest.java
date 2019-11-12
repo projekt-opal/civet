@@ -1,39 +1,40 @@
 package org.dice_research.opal.civet.metrics;
 
-import static org.junit.Assert.assertEquals;
-
-import org.dice_research.opal.civet.data.DataContainer;
-import org.dice_research.opal.civet.data.DataObjects;
-import org.dice_research.opal.civet.data.IntegerDataObject;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.vocabulary.DCAT;
+import org.apache.jena.vocabulary.RDF;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Single metric test.
- *
+ * Tests {@link CategorizationMetric}.
+ * 
  * @author Adrian Wilke
  */
 public class CategorizationMetricTest {
 
+	/**
+	 * Tests all 3 cases.
+	 */
 	@Test
-	public void test() {
+	public void test() throws Exception {
+		CategorizationMetric metric = new CategorizationMetric();
 
-		DataContainer data = new DataContainer();
+		Model model = ModelFactory.createDefaultModel();
+		String datasetUri = "https://example.org/dataset-1";
+		Resource dataset = ResourceFactory.createResource(datasetUri);
+		model.add(dataset, RDF.type, DCAT.Dataset);
 
-		data.putDataObject(new IntegerDataObject(DataObjects.NUMBER_OF_CATEGORIES, 0));
-		assertEquals(0, new CategorizationMetric().getScore(data), 0);
+		Assert.assertEquals("No keywords", 0, metric.compute(model, datasetUri).intValue());
 
-		data.putDataObject(new IntegerDataObject(DataObjects.NUMBER_OF_CATEGORIES, 1));
-		assertEquals(4, new CategorizationMetric().getScore(data), 0);
+		model.addLiteral(dataset, DCAT.keyword, ResourceFactory.createPlainLiteral("keyword-1"));
+		Assert.assertEquals("One keyword", 4, metric.compute(model, datasetUri).intValue());
 
-		data.putDataObject(new IntegerDataObject(DataObjects.NUMBER_OF_CATEGORIES, 2));
-		assertEquals(5, new CategorizationMetric().getScore(data), 0);
-
-		data.putDataObject(new IntegerDataObject(DataObjects.NUMBER_OF_CATEGORIES, 3));
-		assertEquals(5, new CategorizationMetric().getScore(data), 0);
-
-		data.putDataObject(new IntegerDataObject(DataObjects.NUMBER_OF_CATEGORIES, 4));
-		assertEquals(5, new CategorizationMetric().getScore(data), 0);
-
+		model.addLiteral(dataset, DCAT.keyword, ResourceFactory.createPlainLiteral("keyword-2"));
+		Assert.assertEquals("Two keywords", 5, metric.compute(model, datasetUri).intValue());
 	}
 
 }

@@ -1,15 +1,15 @@
-package org.dice_research.opal.civet.access;
+package org.dice_research.opal.civet.utils;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
 /**
- * I/O utilities
+ * Ping utility.
  *
  * @author Adrian Wilke
  */
-public abstract class IoUtils {
+public abstract class Ping {
 
 	/**
 	 * Connects socket to the server with a specified timeout value.
