@@ -2,10 +2,6 @@
 
 OPAL metadata quality component.
 
-## Requirements
-
-The installation of the [OPAL common](https://github.com/projekt-opal/common) component is required.
-
 ## Credits
 
 [Data Science Group (DICE)](https://dice-research.org/) at [Paderborn University](https://www.uni-paderborn.de/)
