@@ -13,16 +13,12 @@ import org.junit.Test;
 
 /**
  * Tests {@link VersionMetric}.
- * 
- * @author Adrian Wilke
  */
 public class VersioningMetricTest {
 
 	TestData testdata;
 
 	private static final String TEST_GOV_AMH = "Govdata-Allermoehe.ttl";
-	private static final String TEST_EDP_ICE_DATASET =
-			"http://projekt-opal.de/dataset/http___europeandataportal_eu_set_data__3dff988d_59d2_415d_b2da_818e8ef3111701";
 	private static final String TEST_GOV_AMH_DISTRIBUTION =
 			"http://projekt-opal.de/distribution/https___ckan_govdata_de_aaacd662_f576_4f20_b05d_4076fe211375";
 
