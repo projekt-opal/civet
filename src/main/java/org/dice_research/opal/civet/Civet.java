@@ -30,6 +30,8 @@ public class Civet implements JenaModelProcessor {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 
+	private boolean logNoScoreComputed = true;
+
 	/**
 	 * Computes quality metric scores.
 	 */
@@ -52,7 +54,14 @@ public class Civet implements JenaModelProcessor {
 				continue;
 			}
 
-			returnModel.add(createMetricStatements(dataset, metric.getKey(), score));
+			if (score == null) {
+				if (logNoScoreComputed) {
+					LOGGER.info("No result for metric " + metric.getValue().getUri() + " and dataset " + datasetUri);
+				}
+			} else {
+				returnModel.add(createMetricStatements(dataset, metric.getKey(), score));
+			}
+
 		}
 
 		return returnModel;
