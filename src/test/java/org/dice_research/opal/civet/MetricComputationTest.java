@@ -26,7 +26,7 @@ public class MetricComputationTest {
 	 * Tests computation of metric(s) and extension of the related model.
 	 */
 	@Test
-	public void test() throws Exception {
+	public void testComputation() throws Exception {
 
 		Model model = testdata.getModel(TEST_EDP_ICE);
 		Model returnModel = new Civet().process(model, TEST_EDP_ICE_DATASET);
@@ -34,4 +34,26 @@ public class MetricComputationTest {
 		Assert.assertEquals("Model contains 4 additional statements.", model.size() + 4, returnModel.size());
 	}
 
+	/**
+	 * Tests computation of metric(s) and extension of the related model.
+	 */
+	@Test
+	public void testRemove() throws Exception {
+
+		Model model = testdata.getModel(TEST_EDP_ICE);
+
+		// Will add measurements
+		Model extendedModel = new Civet().process(model, TEST_EDP_ICE_DATASET);
+		Assert.assertNotSame("Measurements added.", model.size(), extendedModel.size());
+
+		// Will remove existing measurements and add them again
+		Model reprocessedModel = new Civet().process(extendedModel, TEST_EDP_ICE_DATASET);
+		Assert.assertEquals("Measurements removed and added.", extendedModel.size(), reprocessedModel.size());
+
+		// Will add additional measurements (duplicates)
+		Civet civet = new Civet();
+		civet.setRemoveMeasurements(false);
+		reprocessedModel = civet.process(extendedModel, TEST_EDP_ICE_DATASET);
+		Assert.assertNotSame("Measurements added twice.", extendedModel.size(), reprocessedModel.size());
+	}
 }
