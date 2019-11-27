@@ -40,9 +40,9 @@ import org.dice_research.opal.common.vocabulary.Opal;
 public class Civet implements JenaModelProcessor {
 
 	private static final Logger LOGGER = LogManager.getLogger();
-	private boolean removeMeasurements = true;
 
-	private boolean logNoScoreComputed = true;
+	private boolean removeMeasurements = true;
+	private boolean logNotComputed = true;
 
 	/**
 	 * Computes quality metric scores (measurements).
@@ -75,7 +75,7 @@ public class Civet implements JenaModelProcessor {
 			}
 
 			if (score == null) {
-				if (logNoScoreComputed) {
+				if (logNotComputed) {
 					LOGGER.info("No result for metric " + metric.getValue().getUri() + " and dataset " + datasetUri);
 				}
 			} else {
@@ -96,21 +96,6 @@ public class Civet implements JenaModelProcessor {
 		metrics.put(Opal.OPAL_METRIC_CATEGORIZATION, new CategorizationMetric());
 
 		return metrics;
-	}
-
-	/**
-	 * Gets setting, if existing measurements will be removed.
-	 */
-	public boolean isRemovingMeasurements() {
-		return removeMeasurements;
-	}
-
-	/**
-	 * Sets, if existing measurements will be removed.
-	 */
-	public Civet setRemoveMeasurements(boolean removeMeasurements) {
-		this.removeMeasurements = removeMeasurements;
-		return this;
 	}
 
 	/**
@@ -144,5 +129,34 @@ public class Civet implements JenaModelProcessor {
 						"Measurement is not a resource: " + measurement.toString() + ", dataset " + dataset.getURI());
 			}
 		}
+	}
+
+	/**
+	 * Gets setting, if existing measurements will be removed.
+	 */
+	public boolean isRemovingMeasurements() {
+		return removeMeasurements;
+	}
+
+	/**
+	 * Sets, if existing measurements will be removed.
+	 */
+	public Civet setRemoveMeasurements(boolean removeMeasurements) {
+		this.removeMeasurements = removeMeasurements;
+		return this;
+	}
+
+	/**
+	 * Gets setting, if it is logged, when a measurement could not be computed.
+	 */
+	public boolean isLogNotComputed() {
+		return logNotComputed;
+	}
+
+	/**
+	 * Sets, if it should be logged, when a measurement could not be computed.
+	 */
+	public void setLogNotComputed(boolean logNotComputed) {
+		this.logNotComputed = logNotComputed;
 	}
 }
