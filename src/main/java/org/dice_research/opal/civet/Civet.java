@@ -19,6 +19,7 @@ import org.apache.jena.vocabulary.RDF;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.metrics.CategorizationMetric;
+import org.dice_research.opal.civet.metrics.MultipleSerializationsMetric;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
 import org.dice_research.opal.common.vocabulary.Dqv;
 import org.dice_research.opal.common.vocabulary.Opal;
@@ -53,6 +54,8 @@ public class Civet implements JenaModelProcessor {
 	@Override
 	public Model process(Model model, String datasetUri) throws Exception {
 		Resource dataset = ResourceFactory.createResource(datasetUri);
+
+		LOGGER.info("Processing dataset " + datasetUri);
 
 		// Create a new model
 		Model returnModel = ModelFactory.createDefaultModel();
@@ -94,6 +97,7 @@ public class Civet implements JenaModelProcessor {
 		Map<Resource, Metric> metrics = new HashMap<Resource, Metric>();
 
 		metrics.put(Opal.OPAL_METRIC_CATEGORIZATION, new CategorizationMetric());
+		metrics.put(Opal.OPAL_METRIC_MULTIPLE_SERIALIZATIONS, new MultipleSerializationsMetric());
 
 		return metrics;
 	}

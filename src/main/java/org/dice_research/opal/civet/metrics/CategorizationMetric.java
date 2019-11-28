@@ -9,8 +9,6 @@ import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.vocabulary.DCAT;
 import org.apache.jena.vocabulary.RDF;
 import org.apache.jena.vocabulary.SKOS;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
@@ -24,18 +22,13 @@ import org.dice_research.opal.common.vocabulary.Opal;
  */
 public class CategorizationMetric implements Metric {
 
-	private static final Logger LOGGER = LogManager.getLogger();
-
 	private static final String DESCRIPTION = "Computes a score based on the use of "
 			+ "keywords (tags) and themes (categories). "
 			+ "For each case, 1 star is awarded: Keyords used at all, several keywords used, "
-			+ "keywords of correct type, themes used at all, and themes of correct type.";
+			+ "all keywords of correct type, themes used at all, and all themes of correct type.";
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
-
-		LOGGER.info("Processing dataset " + datasetUri);
-
 		Resource dataset = ResourceFactory.createResource(datasetUri);
 
 		// Count keywords and check types
@@ -97,7 +90,7 @@ public class CategorizationMetric implements Metric {
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription() throws Exception {
 		return DESCRIPTION;
 	}
 
