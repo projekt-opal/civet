@@ -37,14 +37,15 @@ public class MultipleSerializationsMetricTest {
 
 		// No download URL provided
 		// Should result in 0 stars
-		Assert.assertEquals(TEST_EDP_ICE, 0, stars.intValue());
+		Assert.assertEquals(TEST_EDP_ICE_DATASET, 0, stars.intValue());
 
 		// Compute stars
 		metric = new MultipleSerializationsMetric();
 		stars = metric.compute(testdata.getModel(TEST_GOV_ALLER), TEST_GOV_ALLER_DATASET);
 
 		// Several download URLs provided. File extension only pdf.
-		// Should result in 0 stars
-		Assert.assertEquals(TEST_EDP_ICE, 0, stars.intValue());
+		// Several formats provided: [PDF, gml, HTML]
+		// Should result in 5 stars
+		Assert.assertEquals(TEST_GOV_ALLER_DATASET, 5, stars.intValue());
 	}
 }
