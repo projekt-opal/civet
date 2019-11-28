@@ -1,14 +1,12 @@
 package org.dice_research.opal.civet.metrics;
 
-import org.apache.jena.rdf.model.Model;
-import org.dice_research.opal.civet.Civet;
 import org.dice_research.opal.civet.TestData;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Tests for {@link Civet}.
+ * Tests {@link MultipleSerializationsMetric}.
  *
  * @author Adrian Wilke
  */

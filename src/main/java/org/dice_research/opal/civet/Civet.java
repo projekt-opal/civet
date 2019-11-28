@@ -1,28 +1,18 @@
 package org.dice_research.opal.civet;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.jena.datatypes.xsd.XSDDatatype;
-import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
-import org.apache.jena.rdf.model.NodeIterator;
-import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.vocabulary.RDF;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.metrics.CategorizationMetric;
+import org.dice_research.opal.civet.metrics.MetadataQualityMetric;
 import org.dice_research.opal.civet.metrics.MultipleSerializationsMetric;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
-import org.dice_research.opal.common.vocabulary.Dqv;
-import org.dice_research.opal.common.vocabulary.Opal;
 
 /**
  * Civet - OPAL quality metric component.
@@ -63,26 +53,27 @@ public class Civet implements JenaModelProcessor {
 
 		// Remove existing measurements
 		if (removeMeasurements) {
-			removeAllMeasurements(returnModel, dataset);
+			Utils.removeAllMeasurements(returnModel, dataset);
 		}
 
 		// Compute and add new measurements
-		for (Entry<Resource, Metric> metric : getMetrics().entrySet()) {
+		for (Metric metric : getMetrics()) {
 			Integer score = null;
 
 			try {
-				score = metric.getValue().compute(model, datasetUri);
+				score = metric.compute(model, datasetUri);
 			} catch (Exception e) {
-				LOGGER.error("Exception on computing " + metric.getValue().getUri() + " for " + datasetUri, e);
+				LOGGER.error("Exception on computing " + metric.getUri() + " for " + datasetUri, e);
 				continue;
 			}
 
 			if (score == null) {
 				if (logNotComputed) {
-					LOGGER.info("No result for metric " + metric.getValue().getUri() + " and dataset " + datasetUri);
+					LOGGER.info("No result for metric " + metric.getUri() + " and dataset " + datasetUri);
 				}
 			} else {
-				returnModel.add(createMetricStatements(dataset, metric.getKey(), score));
+				returnModel.add(
+						Utils.createMetricStatements(dataset, ResourceFactory.createResource(metric.getUri()), score));
 			}
 
 		}
@@ -91,48 +82,16 @@ public class Civet implements JenaModelProcessor {
 	}
 
 	/**
-	 * Gets map of metric URIs and related metric instances.
+	 * Gets list of available metrics.
 	 */
-	public Map<Resource, Metric> getMetrics() {
-		Map<Resource, Metric> metrics = new HashMap<Resource, Metric>();
+	public List<Metric> getMetrics() {
+		List<Metric> metrics = new LinkedList<Metric>();
 
-		metrics.put(Opal.OPAL_METRIC_CATEGORIZATION, new CategorizationMetric());
-		metrics.put(Opal.OPAL_METRIC_MULTIPLE_SERIALIZATIONS, new MultipleSerializationsMetric());
+		metrics.add(new CategorizationMetric());
+		metrics.add(new MultipleSerializationsMetric());
+		metrics.add(new MetadataQualityMetric());
 
 		return metrics;
-	}
-
-	/**
-	 * Creates statements to insert a metric score.
-	 */
-	protected List<Statement> createMetricStatements(Resource dataset, Resource metric, int score) {
-		Resource measurement = ResourceFactory.createResource();
-		Literal scoreLiteral = ResourceFactory.createTypedLiteral(String.valueOf(score), XSDDatatype.XSDinteger);
-
-		List<Statement> statements = new ArrayList<Statement>(4);
-		statements.add(ResourceFactory.createStatement(dataset, Dqv.HAS_QUALITY_MEASUREMENT, measurement));
-		statements.add(ResourceFactory.createStatement(measurement, RDF.type, Dqv.QUALITY_MEASUREMENT));
-		statements.add(ResourceFactory.createStatement(measurement, Dqv.IS_MEASUREMENT_OF, metric));
-		statements.add(ResourceFactory.createStatement(measurement, Dqv.HAS_VALUE, scoreLiteral));
-
-		return statements;
-	}
-
-	/**
-	 * Removes existing measurements.
-	 */
-	protected void removeAllMeasurements(Model model, Resource dataset) {
-		NodeIterator measurements = model.listObjectsOfProperty(dataset, Dqv.HAS_QUALITY_MEASUREMENT);
-		while (measurements.hasNext()) {
-			RDFNode measurement = measurements.next();
-			if (measurement.isResource()) {
-				measurement.asResource().removeProperties();
-				model.remove(dataset, Dqv.HAS_QUALITY_MEASUREMENT, measurement);
-			} else {
-				LOGGER.warn(
-						"Measurement is not a resource: " + measurement.toString() + ", dataset " + dataset.getURI());
-			}
-		}
 	}
 
 	/**
