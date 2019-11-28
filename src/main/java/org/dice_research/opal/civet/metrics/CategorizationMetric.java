@@ -1,56 +1,102 @@
 package org.dice_research.opal.civet.metrics;
 
-import java.util.Arrays;
-import java.util.Collection;
-
-import org.dice_research.opal.civet.data.DataContainer;
-import org.dice_research.opal.civet.data.DataObjects;
-import org.dice_research.opal.civet.data.IntegerDataObject;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Statement;
+import org.apache.jena.vocabulary.DCAT;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.SKOS;
+import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
 /**
- * Single metric.
- *
+ * The CategorizationMetric awards stars based on the number of keywords and
+ * themes of a dataset.
+ * 
+ * Keywords/tags are literals. Themes/categories should be of type skos:Concept.
+ * 
  * @author Adrian Wilke
  */
-public class CategorizationMetric extends Metric {
+public class CategorizationMetric implements Metric {
 
-	private static final String DESCRIPTION = "Calculates a score based on the number of categories.";
-	private static final String ID = CategorizationMetric.class.getSimpleName();
-	private static final MetricType METRIC_TYPE = MetricType.FIVE_STAR;
-	private static final Collection<String> REQUIRED_PROPERTIES = Arrays.asList(DataObjects.NUMBER_OF_CATEGORIES,
-			DataObjects.THEME);
-	private static final String RESULTS_URI = Opal.OPAL_METRIC_CATEGORIZATION.toString();
+	private static final String DESCRIPTION = "Computes a score based on the use of "
+			+ "keywords (tags) and themes (categories). "
+			+ "For each case, 1 star is awarded: Keyords used at all, several keywords used, "
+			+ "all keywords of correct type, themes used at all, and all themes of correct type.";
 
-	public CategorizationMetric() {
-		this.description = DESCRIPTION;
-		this.id = ID;
-		this.metricType = METRIC_TYPE;
-		this.requiredProperties = REQUIRED_PROPERTIES;
-		this.resultsUri = RESULTS_URI;
+	@Override
+	public Integer compute(Model model, String datasetUri) throws Exception {
+		Resource dataset = ResourceFactory.createResource(datasetUri);
+
+		// Count keywords and check types
+		NodeIterator keywordIterator = model.listObjectsOfProperty(dataset, DCAT.keyword);
+		int numberOfKeywords = 0;
+		boolean allKeywordsOfCorrectType = true;
+		while (keywordIterator.hasNext()) {
+			numberOfKeywords++;
+			if (!keywordIterator.next().isLiteral()) {
+				allKeywordsOfCorrectType = false;
+			}
+		}
+
+		// Count themes and check types
+		NodeIterator themeIterator = model.listObjectsOfProperty(dataset, DCAT.theme);
+		int numberOfThemes = 0;
+		boolean allThemesOfCorrectType = true;
+		while (themeIterator.hasNext()) {
+			numberOfThemes++;
+			RDFNode theme = themeIterator.next();
+			if (theme.isResource()) {
+				Statement typeStatement = theme.asResource().getProperty(RDF.type);
+				if (typeStatement == null) {
+					allThemesOfCorrectType = false;
+				} else {
+					RDFNode type = typeStatement.getObject();
+					if (type.isResource()) {
+						if (!type.asResource().getURI().equals(SKOS.Concept.getURI())) {
+							allThemesOfCorrectType = false;
+						}
+					} else {
+						allThemesOfCorrectType = false;
+					}
+				}
+			} else {
+				allThemesOfCorrectType = false;
+			}
+		}
+
+		// Compute score
+		int score = 0;
+		if (numberOfKeywords > 0) {
+			score++;
+			if (numberOfKeywords > 1) {
+				score++;
+			}
+			if (allKeywordsOfCorrectType) {
+				score++;
+			}
+		}
+		if (numberOfThemes > 0) {
+			score++;
+			if (allThemesOfCorrectType) {
+				score++;
+			}
+		}
+
+		return score;
 	}
 
 	@Override
-	public float getScore(DataContainer dataContainer) {
-		IntegerDataObject dataObject = dataContainer.getIntegerDataObject(DataObjects.NUMBER_OF_CATEGORIES);
+	public String getDescription() throws Exception {
+		return DESCRIPTION;
+	}
 
-		int numberOfCategories = 0;
-		if (dataObject.isEmpty()) {
-			return 0f;
-		} else {
-			numberOfCategories = dataObject.getValues().get(0);
-		}
-
-		if (numberOfCategories <= 0) {
-			// No categories used
-			return 0f;
-		} else if (numberOfCategories <= 1) {
-			// Categories used
-			return 4f;
-		} else {
-			// More than 1 category: Indicator for extensive use
-			return 5f;
-		}
+	@Override
+	public String getUri() throws Exception {
+		return Opal.OPAL_METRIC_CATEGORIZATION.getURI();
 	}
 
 }
