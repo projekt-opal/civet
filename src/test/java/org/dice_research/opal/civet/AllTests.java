@@ -1,5 +1,6 @@
 package org.dice_research.opal.civet;
 
+import org.dice_research.opal.civet.example.ExampleTest;
 import org.dice_research.opal.civet.metrics.CategorizationMetricTest;
 import org.dice_research.opal.civet.metrics.MetadataQualityMetricTest;
 import org.dice_research.opal.civet.metrics.MultipleSerializationsMetricTest;
@@ -22,7 +23,13 @@ import org.junit.runners.Suite.SuiteClasses;
 
 		// Metric aggregation
 
-		MetadataQualityMetricTest.class })
+		MetadataQualityMetricTest.class,
+
+		// Minimal working example
+
+		ExampleTest.class
+
+})
 
 public class AllTests {
 
