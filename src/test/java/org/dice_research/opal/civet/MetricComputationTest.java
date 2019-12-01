@@ -1,6 +1,7 @@
 package org.dice_research.opal.civet;
 
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,9 +30,10 @@ public class MetricComputationTest {
 	public void testComputation() throws Exception {
 
 		Model model = testdata.getModel(TEST_EDP_ICE);
-		Model returnModel = new Civet().process(model, TEST_EDP_ICE_DATASET);
+		Model inputModel = ModelFactory.createDefaultModel().add(model);
+		new Civet().processModel(inputModel, TEST_EDP_ICE_DATASET);
 
-		Assert.assertTrue("Model contains additional statements.", model.size() < returnModel.size());
+		Assert.assertTrue("Model contains additional statements.", model.size() < inputModel.size());
 	}
 
 	/**
@@ -43,17 +45,21 @@ public class MetricComputationTest {
 		Model model = testdata.getModel(TEST_EDP_ICE);
 
 		// Will add measurements
-		Model extendedModel = new Civet().process(model, TEST_EDP_ICE_DATASET);
+		Model extendedModel = ModelFactory.createDefaultModel().add(model);
+		new Civet().processModel(extendedModel, TEST_EDP_ICE_DATASET);
 		Assert.assertNotSame("Measurements added.", model.size(), extendedModel.size());
 
 		// Will remove existing measurements and add them again
-		Model reprocessedModel = new Civet().process(extendedModel, TEST_EDP_ICE_DATASET);
+		Model reprocessedModel = ModelFactory.createDefaultModel().add(extendedModel);
+		new Civet().processModel(reprocessedModel, TEST_EDP_ICE_DATASET);
 		Assert.assertEquals("Measurements removed and added.", extendedModel.size(), reprocessedModel.size());
 
 		// Will add additional measurements (duplicates)
 		Civet civet = new Civet();
 		civet.setRemoveMeasurements(false);
-		reprocessedModel = civet.process(extendedModel, TEST_EDP_ICE_DATASET);
+		reprocessedModel = ModelFactory.createDefaultModel().add(extendedModel);
+		civet.processModel(reprocessedModel, TEST_EDP_ICE_DATASET);
+
 		Assert.assertNotSame("Measurements added twice.", extendedModel.size(), reprocessedModel.size());
 	}
 }

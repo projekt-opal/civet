@@ -34,7 +34,7 @@ public class Example {
 		civet.setLogNotComputed(true);
 
 		// Update model
-		model = civet.process(model, datasetUri);
+		civet.processModel(model, datasetUri);
 
 		// Write updated model into TURTLE file
 		FileHandler.export(turtleOutputFile, model);

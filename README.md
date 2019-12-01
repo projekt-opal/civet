@@ -76,6 +76,55 @@ public class Example {
 
 ```
 
+Example input:
+
+```
+<https://example.org/>
+        a       <http://www.w3.org/ns/dcat#Dataset> ;
+        <http://www.w3.org/ns/dcat#keyword>
+                "keywordB" , "keywordA" ;
+        <http://www.w3.org/ns/dcat#theme>
+                <https://example.org/theme> .
+
+<https://example.org/theme>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> .
+```
+
+Example output:
+
+```
+<https://example.org/>
+        a       <http://www.w3.org/ns/dcat#Dataset> ;
+        <http://www.w3.org/ns/dcat#keyword>
+                "keywordA" , "keywordB" ;
+        <http://www.w3.org/ns/dcat#theme>
+                <https://example.org/theme> ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                [ a       <http://www.w3.org/ns/dqv#QualityMeasurement> ;
+                  <http://www.w3.org/ns/dqv#isMeasurementOf>
+                          <http://metric.projekt-opal.de/MetadataQuality> ;
+                  <http://www.w3.org/ns/dqv#value>
+                          3
+                ] ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                [ a       <http://www.w3.org/ns/dqv#QualityMeasurement> ;
+                  <http://www.w3.org/ns/dqv#isMeasurementOf>
+                          <http://metric.projekt-opal.de/MultipleSerializations> ;
+                  <http://www.w3.org/ns/dqv#value>
+                          0
+                ] ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                [ a       <http://www.w3.org/ns/dqv#QualityMeasurement> ;
+                  <http://www.w3.org/ns/dqv#isMeasurementOf>
+                          <http://metric.projekt-opal.de/Categorization> ;
+                  <http://www.w3.org/ns/dqv#value>
+                          5
+                ] .
+
+<https://example.org/theme>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> .
+```
+
 
 ## Note
 

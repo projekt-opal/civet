@@ -4,7 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.logging.log4j.LogManager;
@@ -13,6 +12,7 @@ import org.dice_research.opal.civet.metrics.CategorizationMetric;
 import org.dice_research.opal.civet.metrics.MetadataQualityMetric;
 import org.dice_research.opal.civet.metrics.MultipleSerializationsMetric;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
+import org.dice_research.opal.common.interfaces.ModelProcessor;
 
 /**
  * Civet - OPAL quality metric component.
@@ -28,7 +28,8 @@ import org.dice_research.opal.common.interfaces.JenaModelProcessor;
  *
  * @author Adrian Wilke
  */
-public class Civet implements JenaModelProcessor {
+@SuppressWarnings("deprecation")
+public class Civet implements ModelProcessor, JenaModelProcessor {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 
@@ -42,18 +43,15 @@ public class Civet implements JenaModelProcessor {
 	 * default. To change that, use {@link #removeMeasurements}.
 	 */
 	@Override
-	public Model process(Model model, String datasetUri) throws Exception {
+	public void processModel(Model model, String datasetUri) throws Exception {
+
 		Resource dataset = ResourceFactory.createResource(datasetUri);
 
 		LOGGER.info("Processing dataset " + datasetUri);
 
-		// Create a new model
-		Model returnModel = ModelFactory.createDefaultModel();
-		returnModel.add(model);
-
 		// Remove existing measurements
 		if (removeMeasurements) {
-			Utils.removeAllMeasurements(returnModel, dataset);
+			Utils.removeAllMeasurements(model, dataset);
 		}
 
 		// Compute and add new measurements
@@ -72,13 +70,21 @@ public class Civet implements JenaModelProcessor {
 					LOGGER.info("No result for metric " + metric.getUri() + " and dataset " + datasetUri);
 				}
 			} else {
-				returnModel.add(
+				model.add(
 						Utils.createMetricStatements(dataset, ResourceFactory.createResource(metric.getUri()), score));
 			}
 
 		}
+	}
 
-		return returnModel;
+	/**
+	 * @deprecated Replaced by {@link #processModel(Model, String)}.
+	 */
+	@Deprecated
+	@Override
+	public Model process(Model model, String datasetUri) throws Exception {
+		processModel(model, datasetUri);
+		return model;
 	}
 
 	/**
