@@ -59,9 +59,6 @@ public class AvailabilityOfLicensesMetric implements Metric {
 
 		Resource dataset = ResourceFactory.createResource(datasetUri);
 
-		// NodeIterator nodeIterator = model.listObjectsOfProperty(dataset,
-		// DCAT.keyword);
-
 		// For Score calculation
 		int TotalDistributions = 0;
 		int TotalDistributionsWithLicense = 0;
