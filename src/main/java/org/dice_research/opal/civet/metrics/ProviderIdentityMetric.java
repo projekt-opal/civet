@@ -229,8 +229,6 @@ public class ProviderIdentityMetric implements Metric {
 				// It could be possible that more than 1 landing pages exist in a dataset.
 				//So here also we must do consistency check and deduct 2 stars if found inconsistent.
 				StmtIterator landingpages = Dataset.listProperties(DCAT.landingPage);
-				
-				if(landingpages.hasNext()) {
 					
 					while(landingpages.hasNext()) {
 						
@@ -253,8 +251,7 @@ public class ProviderIdentityMetric implements Metric {
 							 */
 						}
 					}
-					
-				}
+
 				if(LandingPageStore.size()==1)
 					PublisherScore.put("LandingPageScore",5);
 				else
