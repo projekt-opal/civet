@@ -131,9 +131,12 @@ public class AvailabilityOfLicensesMetric implements Metric {
 		if (NumberOfLicensesInDataset > 0)
 			score = 5;
 		else {
-			if (TotalDistributionsWithLicense == 0 && TotalDistributionsWithRights == 0)
-				score = 0;
-			else if (TotalDistributionsWithLicense > 0 || TotalDistributionsWithRights > 0) {
+			 /**
+			  * if TotalDistributionsWithLicense == 0 and TotalDistributionsWithRights == 0
+			  * then score = 0
+			  */
+
+			    if (TotalDistributionsWithLicense > 0 || TotalDistributionsWithRights > 0) {
 				int TotalKnownLicenses = TotalDistributionsWithLicense + TotalDistributionsWithRights;
 
 				int EvaluationInPercentage = ((TotalKnownLicenses * 100) / TotalDistributions);
@@ -148,8 +151,6 @@ public class AvailabilityOfLicensesMetric implements Metric {
 					score = 2;
 				else if (EvaluationInPercentage < 25 && EvaluationInPercentage > 0)
 					score = 1;
-				else if (EvaluationInPercentage==0)
-					score = 0;
 			}
 		}
 
