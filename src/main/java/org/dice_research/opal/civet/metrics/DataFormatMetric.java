@@ -124,10 +124,7 @@ public class DataFormatMetric implements Metric {
 		}
 		return isValidFileType;
 	}
-	
-	
-	
-	
+
 	// To check if dct:format has valid file extension if no IANA type found
 		public static boolean ValidFileExtension(String extension) throws Exception {
 
@@ -146,10 +143,7 @@ public class DataFormatMetric implements Metric {
 			else
 				return true;
 		}
-	
-	
-	
-	
+
 	
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
