@@ -263,7 +263,6 @@ public class ProviderIdentityMetric implements Metric {
 			if(LandingPageStore.size()==0) {
 				
 				ResIterator DistributionIterator = model.listSubjectsWithProperty(RDF.type, DCAT.Distribution);
-				if (DistributionIterator.hasNext()) {
 					while (DistributionIterator.hasNext()) {
 						
 						TotalNumberOfDistributions++;
@@ -276,7 +275,6 @@ public class ProviderIdentityMetric implements Metric {
 								AccessURLStore.add(Distribution.getProperty(DCAT.accessURL).getObject().toString());
 						}
 					}
-				}
 				
 				//Calculate a score based on availability of AccessURL and store a score in PublisherScore.
 				if(AccessURLStore.size()> 0) {
