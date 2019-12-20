@@ -170,8 +170,6 @@ public class DataFormatMetric implements Metric {
 				 * This MediaType class conforms to IANA specifications as mentioned in RFCs 2045 . 
 				 */
 				NodeIterator DistributionsIterator = model.listObjectsOfProperty(dataset, DCAT.distribution);
-				
-				if(DistributionsIterator.hasNext()) {
 					
 					while(DistributionsIterator.hasNext()) {
 						
@@ -256,7 +254,7 @@ public class DataFormatMetric implements Metric {
 						
 						//To calculate how many distributions in a dataset. It will be used for scoring.
 						TotalDistributions++;
-					}
+
 				}
 				
 				/**
