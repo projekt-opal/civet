@@ -96,8 +96,6 @@ public class ProviderIdentityMetric implements Metric {
 		StmtIterator IteratorOverPublisher = model
 				.listStatements(new SimpleSelector(null, DCTerms.publisher, (RDFNode) null));
 
-		if (IteratorOverPublisher.hasNext()) {
-
 			while (IteratorOverPublisher.hasNext()) {
 
 				Statement StatementWithPublisher = IteratorOverPublisher.nextStatement();
@@ -215,7 +213,6 @@ public class ProviderIdentityMetric implements Metric {
 					//This is the 3rd case. Award 0 star 
 					PublisherScore.put("EmptyBlankNodeForPublisher",0);
 			}
-		}
 
 		/*
 		 * If PublisherInfo=0 then check if dcat:landingPage is available in
