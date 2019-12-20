@@ -92,8 +92,6 @@ public class AvailabilityOfLicensesMetric implements Metric {
 
 			NodeIterator DistributionsIteratorLicense = model.listObjectsOfProperty(dataset,DCAT.distribution);
 
-			if (DistributionsIteratorLicense.hasNext()) {
-
 				while (DistributionsIteratorLicense.hasNext()) {
 
 					TotalDistributions++;
@@ -106,7 +104,6 @@ public class AvailabilityOfLicensesMetric implements Metric {
 							TotalDistributionsWithLicense++;
 					}
 				}
-			}
 
 			if (TotalDistributionsWithLicense == 0 || TotalDistributionsWithLicense != TotalDistributions)
 
