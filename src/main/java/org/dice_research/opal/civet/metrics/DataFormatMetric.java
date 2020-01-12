@@ -88,17 +88,27 @@ public class DataFormatMetric implements Metric {
 				 * Total aggregated scores of all distributions = y
 				 * Overall Score = y/x
 				 */
-				float AggregatedScoreOfAllDistributions = 0;
-				float OverallScore = 0;
+				int AggregatedScoreOfAllDistributions = 0;
+				int score = 0;
 				for (String key : DistributionsAndScores.keySet()) {
 					AggregatedScoreOfAllDistributions+=DistributionsAndScores.get(key);
 					System.out.println(key +":"+ DistributionsAndScores.get(key));
 				}
 				
-				OverallScore = (float) Math.ceil(AggregatedScoreOfAllDistributions/TotalDistributions);
+				int OverallScoreinPercent = (AggregatedScoreOfAllDistributions*100)/TotalDistributions;
 				
+				if (OverallScoreinPercent == 100)
+					score = 5;
+				else if (OverallScoreinPercent < 100 && OverallScoreinPercent >= 75)
+					score = 4;
+				else if (OverallScoreinPercent < 75 && OverallScoreinPercent >= 50)
+					score = 3;
+				else if (OverallScoreinPercent < 50 && OverallScoreinPercent >= 25)
+					score = 2;
+				else if (OverallScoreinPercent < 25 && OverallScoreinPercent > 0)
+					score = 1;
 
-				return (int)(OverallScore);
+				return score;
 
 	}
 
