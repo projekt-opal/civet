@@ -20,22 +20,22 @@ public class ProviderIdentityMetricTest {
 
 	TestData testdata;
 
-//	// Publisher with empty blank node but all distributions have valid accessURLS ---> 5 stars
-//	private static final String TestCase1 = "TestCaseforProviderIdentityEmptyBlanknodeButValidAccessURLs5star.ttl";
-//
-//	private static final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/http___europeandataportal_eu_set_data__3dff988d_59d2_415d_b2da_818e8ef3111701";
-//
-//	@Before
-//	public void setUp() throws Exception {
-//		testdata = new TestData();
-//	}
-//
-//	@Test
-//	public void TestCase1() throws Exception {
-//
-//		ProviderIdentityMetric metric = new ProviderIdentityMetric();
-//		Integer stars_test1 = metric.compute(testdata.getModel(TestCase1), TEST_EDP_ICE_DATASET);
-//		Assert.assertEquals("Provider Identity Test: Test Case 1", 5, stars_test1.intValue());
-//	}
+	// Publisher with empty blank node but all distributions have valid accessURLS ---> 5 stars
+	private static final String TestCase1 = "TestCaseforProviderIdentityNonemptyBlanknodeInconsistentProviders3stars.ttl";
+
+	private static final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/http___europeandataportal_eu_set_data__3dff988d_59d2_415d_b2da_818e8ef3111701";
+
+	@Before
+	public void setUp() throws Exception {
+		testdata = new TestData();
+	}
+
+	@Test
+	public void TestCase1() throws Exception {
+
+		ProviderIdentityMetric metric = new ProviderIdentityMetric();
+		Integer stars_test1 = metric.compute(testdata.getModel(TestCase1), TEST_EDP_ICE_DATASET);
+		Assert.assertEquals("Provider Identity Test: Test Case 1", 3, stars_test1.intValue());
+	}
 
 }

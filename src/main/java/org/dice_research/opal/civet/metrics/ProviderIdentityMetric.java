@@ -184,6 +184,8 @@ public class ProviderIdentityMetric implements Metric {
 		 * If PublisherInfo=0 then check if dcat:landingPage is available in
 		 * dcat:catalog
 		 */
+		// System.out.println(PublisherScore.size());
+		// System.out.println(PublisherScore.containsKey("EmptyBlankNodeForPublisher"));
 		if (PublisherScore.size() == 0 || PublisherScore.containsKey("EmptyBlankNodeForPublisher")) {
 
 			NodeIterator landingpages = model.listObjectsOfProperty(dataset, DCAT.landingPage);
@@ -214,46 +216,45 @@ public class ProviderIdentityMetric implements Metric {
 				PublisherScore.put("LandingPageScore", 5);
 			else
 				PublisherScore.put("LandingPageScore", 3);
-		}
+		
+			// If LandingPage is not there then check for AccessURL in the distribution
+			if (LandingPageStore.size() == 0) {
 
-		// If LandingPage is not there then check for AccessURL in the distribution
-		if (LandingPageStore.size() == 0) {
+				NodeIterator DistributionIterator = model.listObjectsOfProperty(dataset,DCAT.distribution);
+				while (DistributionIterator.hasNext()) {
 
-			ResIterator DistributionIterator = model.listSubjectsWithProperty(RDF.type, DCAT.Distribution);
-			while (DistributionIterator.hasNext()) {
+					TotalNumberOfDistributions++;
 
-				TotalNumberOfDistributions++;
+					Resource Distribution = (Resource) DistributionIterator.next();
 
-				Resource Distribution = DistributionIterator.nextResource();
+					if (Distribution.hasProperty(DCAT.accessURL)) {
 
-				if (Distribution.hasProperty(DCAT.accessURL)) {
+						if (isValidURL(Distribution.getProperty(DCAT.accessURL).getObject().toString()))
+							AccessURLStore.add(Distribution.getProperty(DCAT.accessURL).getObject().toString());
+					}
+				}
 
-					if (isValidURL(Distribution.getProperty(DCAT.accessURL).getObject().toString()))
-						AccessURLStore.add(Distribution.getProperty(DCAT.accessURL).getObject().toString());
+				// Calculate a score based on availability of AccessURL and store a score in
+				// PublisherScore.
+				if (AccessURLStore.size() > 0) {
+
+					int TotalPercentageOfAccessURL = (AccessURLStore.size() * 100) / TotalNumberOfDistributions;
+
+					if (TotalPercentageOfAccessURL == 100)
+						PublisherScore.put("AccessURLScore", 5);
+					else if (TotalPercentageOfAccessURL < 100 && TotalPercentageOfAccessURL >= 75)
+						PublisherScore.put("AccessURLScore", 4);
+					else if (TotalPercentageOfAccessURL < 75 && TotalPercentageOfAccessURL >= 50)
+						PublisherScore.put("AccessURLScore", 3);
+					else if (TotalPercentageOfAccessURL < 50 && TotalPercentageOfAccessURL >= 25)
+						PublisherScore.put("AccessURLScore", 2);
+					else if (TotalPercentageOfAccessURL < 25 && TotalPercentageOfAccessURL >= 0)
+						PublisherScore.put("AccessURLScore", 1);
+					else
+						PublisherScore.put("AccessURLScore", 0);
 				}
 			}
-
-			// Calculate a score based on availability of AccessURL and store a score in
-			// PublisherScore.
-			if (AccessURLStore.size() > 0) {
-
-				int TotalPercentageOfAccessURL = (AccessURLStore.size() * 100) / TotalNumberOfDistributions;
-
-				if (TotalPercentageOfAccessURL == 100)
-					PublisherScore.put("AccessURLScore", 5);
-				else if (TotalPercentageOfAccessURL < 100 && TotalPercentageOfAccessURL >= 75)
-					PublisherScore.put("AccessURLScore", 4);
-				else if (TotalPercentageOfAccessURL < 75 && TotalPercentageOfAccessURL >= 50)
-					PublisherScore.put("AccessURLScore", 3);
-				else if (TotalPercentageOfAccessURL < 50 && TotalPercentageOfAccessURL >= 25)
-					PublisherScore.put("AccessURLScore", 2);
-				else if (TotalPercentageOfAccessURL < 25 && TotalPercentageOfAccessURL >= 0)
-					PublisherScore.put("AccessURLScore", 1);
-				else
-					PublisherScore.put("AccessURLScore", 0);
-			}
 		}
-
 		// There will be always only one key and value
 		for (String key : PublisherScore.keySet())
 			score = PublisherScore.get(key);
