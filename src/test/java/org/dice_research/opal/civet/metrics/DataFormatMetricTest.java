@@ -14,7 +14,7 @@ import org.junit.Test;
 /**
  * Tests {@link AvailabilityOfLicensesMetric}.
  * 
- * @author Adrian Wilke
+ * @author Gourab Sahu
  */
 public class DataFormatMetricTest {
 
