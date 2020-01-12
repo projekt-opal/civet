@@ -21,23 +21,11 @@ public class ReadabilityMetricTest {
 	private static final String TEST_EDP_ICE = "Europeandataportal-Iceland.ttl";
 	private static final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/http___europeandataportal_eu_set_data__3dff988d_59d2_415d_b2da_818e8ef3111701";
 
+	private static final String TEST_MODEL1080 = "model1080.ttl";
+
 	@Before
 	public void setUp() throws Exception {
 		testdata = new TestData();
-	}
-
-	@Test
-	public void testCases() throws Exception {
-		ReadabilityMetric metric = new ReadabilityMetric();
-
-		Model model = ModelFactory.createDefaultModel();
-		String datasetUri = "https://example.org/dataset-1";
-		Resource dataset = ResourceFactory.createResource(datasetUri);
-		model.add(dataset, RDF.type, DCAT.Dataset);
-
-		Assert.assertEquals("Bad Description", 0, metric.compute
-				(model, datasetUri).intValue());
-
 	}
 
 	@Test
@@ -49,7 +37,12 @@ public class ReadabilityMetricTest {
 
 		Assert.assertEquals(TEST_EDP_ICE, 2, stars.intValue());
 
-		//TODO for 0,1,3,4,5, stars
+
+		final String TEST_MODEL1080_DATASET = "http://projekt-opal.de/dataset/https___" +
+				"europeandataportal_eu_set_data_designated_neighbourhood_plan_areas49";
+		metric = new ReadabilityMetric();
+		stars = metric.compute(testdata.getModel(TEST_MODEL1080), TEST_MODEL1080_DATASET);
+		Assert.assertEquals(TEST_MODEL1080, 3, stars.intValue());
 
 	}
 
