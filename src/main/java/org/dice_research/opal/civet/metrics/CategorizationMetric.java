@@ -2,56 +2,95 @@ package org.dice_research.opal.civet.metrics;
 
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.vocabulary.DCAT;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.jena.vocabulary.RDF;
+import org.apache.jena.vocabulary.SKOS;
 import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
 /**
- * The CategorizationMetric awards stars based on the number of keywords of a
- * dataset.
+ * The CategorizationMetric awards stars based on the number of keywords and
+ * themes of a dataset.
+ * 
+ * Keywords/tags are literals. Themes/categories should be of type skos:Concept.
  * 
  * @author Adrian Wilke
  */
 public class CategorizationMetric implements Metric {
 
-	private static final Logger LOGGER = LogManager.getLogger();
-	private static final String DESCRIPTION = "Computes the number of keywords. "
-			+ "If exactly one keyword is given, 4 stars are awarded. "
-			+ "If more than one keyword is given, 5 stars are awarded.";
+	private static final String DESCRIPTION = "Computes a score based on the use of "
+			+ "keywords (tags) and themes (categories). "
+			+ "For each case, 1 star is awarded: Keyords used at all, several keywords used, "
+			+ "all keywords of correct type, themes used at all, and all themes of correct type.";
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
-
-		LOGGER.info("Processing dataset " + datasetUri);
-
 		Resource dataset = ResourceFactory.createResource(datasetUri);
 
-		NodeIterator nodeIterator = model.listObjectsOfProperty(dataset, DCAT.keyword);
-
+		// Count keywords and check types
+		NodeIterator keywordIterator = model.listObjectsOfProperty(dataset, DCAT.keyword);
 		int numberOfKeywords = 0;
-		while (nodeIterator.hasNext()) {
+		boolean allKeywordsOfCorrectType = true;
+		while (keywordIterator.hasNext()) {
 			numberOfKeywords++;
-			nodeIterator.next();
+			if (!keywordIterator.next().isLiteral()) {
+				allKeywordsOfCorrectType = false;
+			}
 		}
 
-		if (numberOfKeywords <= 0) {
-			// No keywords used
-			return 0;
-		} else if (numberOfKeywords <= 1) {
-			// Keywords used
-			return 4;
-		} else {
-			// More than 1 keyword: Indicator for extensive use
-			return 5;
+		// Count themes and check types
+		NodeIterator themeIterator = model.listObjectsOfProperty(dataset, DCAT.theme);
+		int numberOfThemes = 0;
+		boolean allThemesOfCorrectType = true;
+		while (themeIterator.hasNext()) {
+			numberOfThemes++;
+			RDFNode theme = themeIterator.next();
+			if (theme.isResource()) {
+				Statement typeStatement = theme.asResource().getProperty(RDF.type);
+				if (typeStatement == null) {
+					allThemesOfCorrectType = false;
+				} else {
+					RDFNode type = typeStatement.getObject();
+					if (type.isResource()) {
+						if (!type.asResource().getURI().equals(SKOS.Concept.getURI())) {
+							allThemesOfCorrectType = false;
+						}
+					} else {
+						allThemesOfCorrectType = false;
+					}
+				}
+			} else {
+				allThemesOfCorrectType = false;
+			}
 		}
+
+		// Compute score
+		int score = 0;
+		if (numberOfKeywords > 0) {
+			score++;
+			if (numberOfKeywords > 1) {
+				score++;
+			}
+			if (allKeywordsOfCorrectType) {
+				score++;
+			}
+		}
+		if (numberOfThemes > 0) {
+			score++;
+			if (allThemesOfCorrectType) {
+				score++;
+			}
+		}
+
+		return score;
 	}
 
 	@Override
-	public String getDescription() {
+	public String getDescription() throws Exception {
 		return DESCRIPTION;
 	}
 
