@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import org.apache.tika.Tika;
-import com.google.common.net.MediaType;
 import java.io.File;
 import java.io.IOException;
 
@@ -27,7 +25,6 @@ import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
-import com.google.common.net.MediaType;
 
 /**
  * The DataFormatMetric gives a rating to a dataset based on informations provided 
@@ -69,10 +66,14 @@ public class DataFormatMetric implements Metric {
 						 * MediaType or Dataformat. Else give 0 stars.
 						 */
 						Resource Distribution = (Resource) DistributionsIterator.nextNode();
-						if( (Distribution.hasProperty(DCAT.mediaType) || Distribution.hasProperty(DCTerms.format)) &&
-								(!(Distribution.getProperty(DCAT.mediaType).toString().isEmpty()) || 
-										!(Distribution.getProperty(DCTerms.format).toString().isEmpty())))  {
-
+						if(Distribution.hasProperty(DCTerms.format))
+						{
+							if(!(Distribution.getProperty(DCTerms.format).getObject().isAnon()) && !(Distribution.getProperty(DCTerms.format).getObject().toString().isEmpty()))
+									DistributionsAndScores.put(Distribution.toString(), 5);
+						}
+						else if(Distribution.hasProperty(DCAT.mediaType)) {
+							
+							if(!(Distribution.getProperty(DCAT.mediaType).getObject().isAnon()) && !(Distribution.getProperty(DCAT.mediaType).getObject().toString().isEmpty()))
 								DistributionsAndScores.put(Distribution.toString(), 5);
 						}
 						else
@@ -82,33 +83,22 @@ public class DataFormatMetric implements Metric {
 						TotalDistributions++;
 				}
 				
-				/**
-				 * Score Evaluation:
-				 * Total Number of distributions in Dataset = x
-				 * Total aggregated scores of all distributions = y
-				 * Overall Score = y/x
-				 */
-				int AggregatedScoreOfAllDistributions = 0;
-				int score = 0;
-				for (String key : DistributionsAndScores.keySet()) {
-					AggregatedScoreOfAllDistributions+=DistributionsAndScores.get(key);
-					System.out.println(key +":"+ DistributionsAndScores.get(key));
-				}
-				
-				int OverallScoreinPercent = (AggregatedScoreOfAllDistributions*100)/TotalDistributions;
-				
-				if (OverallScoreinPercent == 100)
-					score = 5;
-				else if (OverallScoreinPercent < 100 && OverallScoreinPercent >= 75)
-					score = 4;
-				else if (OverallScoreinPercent < 75 && OverallScoreinPercent >= 50)
-					score = 3;
-				else if (OverallScoreinPercent < 50 && OverallScoreinPercent >= 25)
-					score = 2;
-				else if (OverallScoreinPercent < 25 && OverallScoreinPercent > 0)
-					score = 1;
+					/**
+					 * Score Evaluation:
+					 * Total Number of distributions in Dataset = x
+					 * Total aggregated scores of all distributions = y
+					 * Overall Score = y/x
+					 */
+					float AggregatedScoreOfAllDistributions = 0;
+					int OverallScore = 0;
+					for (String key : DistributionsAndScores.keySet()) {
+						AggregatedScoreOfAllDistributions+=DistributionsAndScores.get(key);
+						System.out.println(key +":"+ DistributionsAndScores.get(key));
+					}
+					
+					OverallScore = (int) Math.ceil(AggregatedScoreOfAllDistributions/TotalDistributions);
 
-				return score;
+				return OverallScore;
 
 	}
 
