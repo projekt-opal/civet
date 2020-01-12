@@ -62,13 +62,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.dice-research.opal</groupId>
-			<artifactId>test-cases</artifactId>
-			<version>[1,2)</version>
-			<scope>test</scope>
-		</dependency>
-
 	</dependencies>
 
 	<repositories>
