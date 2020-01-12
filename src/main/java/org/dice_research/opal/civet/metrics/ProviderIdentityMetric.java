@@ -24,8 +24,6 @@ import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
-import com.google.common.net.MediaType;
-
 /**
  * The ProviderIdentity gives a rating to a dataset based on available
  * informations about the dataset publisher.
