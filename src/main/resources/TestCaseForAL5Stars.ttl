@@ -1,0 +1,31 @@
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_brownfield_land_register_blackburn_with_darwen>
+        a                  dcat:Dataset ;
+        dct:description    "The Town and Country Planning (brownfield land register) regulations 2017 and the Town and Country Planning (permission in principle) order 2017 require local authorities to prepare and maintain registers of brownfield land suitable for residential development. \r\n\r\nPart 1 of the brownfield land register is a list of all brownfield sites in a local authority area that are suitable for housing, irrespective of their planning status. Registers will also be a vehicle for granting permission in principle for suitable sites where authorities have followed the relevant procedures. If the authority considers that permission in principle should be granted for a site the local authority is required to enter that site in Part 2 of their register."@en ;
+        dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                             dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                             <http://xmlns.com/foaf/0.1/name>
+                                     "Blackburn with Darwen Council"
+                           ] ;
+        dct:title          "Brownfield land register Blackburn with Darwen"@en ;
+        dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_fada0f23_3da8_4004_9be3_ef1b41f0df72> , <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_ad1d1e67_f250_4057_acbd_8e5ec52e2882> ;
+        dcat:theme         <http://publications.europa.eu/resource/authority/data-theme/REGI> ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                <http://projekt-opal.de/measurement16480> , <http://projekt-opal.de/measurement16482> , <http://projekt-opal.de/measurement16483> , <http://projekt-opal.de/measurement16484> , <http://projekt-opal.de/measurement16481> , <http://projekt-opal.de/measurement16485> , <http://projekt-opal.de/measurement16479> .
+				
+
+<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_ad1d1e67_f250_4057_acbd_8e5ec52e2882>
+        a                dcat:Distribution ;
+        dct:description  "Brownfield land register"@en ;
+        dct:format       <http://publications.europa.eu/resource/authority/file-type/ASPX> ;
+        dct:license      <http://reference.data.gov.uk/id/open-government-licence> ;
+        dcat:accessURL   <http://www.blackburn.gov.uk/Pages/Brownfield-register.aspx> .
+		
+<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_fada0f23_3da8_4004_9be3_ef1b41f0df72>
+        a                dcat:Distribution ;
+        dct:description  "Brownfield land register"@en ;
+        dct:format       <http://publications.europa.eu/resource/authority/file-type/CSV> ;
+        dct:license      <http://reference.data.gov.uk/id/open-government-licence> ;
+        dcat:accessURL   <http://www.blackburn.gov.uk/Lists/DownloadableDocuments/blackburnwithdarwen_brownfieldregister_2017-12-20_rev1.csv> .
