@@ -121,9 +121,12 @@ public class AvailabilityOfLicensesMetric implements Metric {
 
 					if (Distribution.hasProperty(DCTerms.rights)) {
 						// Rights indidicate an organisation which has the rights
-						//to the distribution
-						if (!(Distribution.getProperty(DCTerms.rights).getObject().toString().isEmpty()))
+						//to the distribution has range dct:RightsStatement
+						if (!(Distribution.getProperty(DCTerms.rights).getObject().toString().isEmpty()) && 
+								!Distribution.getProperty(DCTerms.rights).getObject().isAnon()) {
 							TotalDistributionsWithRights++;
+							System.out.println("TEST");
+						}
 					}
 				}
 			}
