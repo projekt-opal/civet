@@ -25,7 +25,7 @@ public class TimelinessMetric implements Metric {
 			+ "If updated between 2 months and an year, 3 stars are awarded."
 			+ "If updated between 1 year and 2 year, 2 stars are awarded."
 			+ "If updated between 2 year and 4 year, 1 stars are awarded."
-			+ "If updated between before 4 year, 0 stars are awarded.";
+			+ "If updated before 4 year, 0 stars are awarded.";
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
