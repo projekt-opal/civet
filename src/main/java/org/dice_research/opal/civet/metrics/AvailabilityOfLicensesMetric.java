@@ -120,8 +120,9 @@ public class AvailabilityOfLicensesMetric implements Metric {
 					Resource Distribution = (Resource) DistributionsIteratorRights.nextNode();
 
 					if (Distribution.hasProperty(DCTerms.rights)) {
-						// Even if license info is given, check if a valid URI
-						if (isValidLicenseURL(Distribution.getProperty(DCTerms.rights).getObject().toString()))
+						// Rights indidicate an organisation which has the rights
+						//to the distribution
+						if (!(Distribution.getProperty(DCTerms.rights).getObject().toString().isEmpty()))
 							TotalDistributionsWithRights++;
 					}
 				}
