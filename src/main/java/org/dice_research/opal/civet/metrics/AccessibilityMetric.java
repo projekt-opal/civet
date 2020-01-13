@@ -56,53 +56,54 @@ public class AccessibilityMetric implements Metric {
  		int result = 0;
  		HashMap<URL,  Integer> URLRatingMap=new HashMap<URL,Integer>();    
  		int count=0;
-
-		while(distributionObjectsIterator.hasNext()) {	
+		URL urlObj;
+		while(distributionObjectsIterator.hasNext()) {
 			count++;
 			Resource distribution = (Resource) distributionObjectsIterator.next();
-			RDFNode accessUrl = distribution.getProperty(DCAT.accessURL).getObject();
- 		
-			URL urlObj = new URL(accessUrl.toString());
-			HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
-			try {
-				con.setRequestMethod("HEAD");
-				con.setConnectTimeout(3000);
-				con.connect();
-				int responseCode = con.getResponseCode();
-	
-				if (200 <= responseCode && responseCode <= 399) {
-					result = 5;
-					URLRatingMap.put(urlObj, result);
-				}
-				else if (400 <= responseCode && responseCode < 500) {
-					result = 2;
-					URLRatingMap.put(urlObj, result);
-				}
-				else if(500 <= responseCode && responseCode <= 521) {
-					result = 1;
-					URLRatingMap.put(urlObj, result);
-				}
-				else {
+
+			if (distribution.hasProperty(DCAT.accessURL)) {
+				RDFNode accessUrl = distribution.getProperty(DCAT.accessURL).getObject();
+
+				urlObj = new URL(accessUrl.toString());
+				HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
+				try {
+					con.setRequestMethod("HEAD");
+					con.setConnectTimeout(3000);
+					con.connect();
+					int responseCode = con.getResponseCode();
+
+					if (200 <= responseCode && responseCode <= 399) {
+						result = 5;
+						URLRatingMap.put(urlObj, result);
+					} else if (400 <= responseCode && responseCode < 500) {
+						result = 2;
+						URLRatingMap.put(urlObj, result);
+					} else if (500 <= responseCode && responseCode <= 521) {
+						result = 1;
+						URLRatingMap.put(urlObj, result);
+					} else {
+						result = 0;
+						URLRatingMap.put(urlObj, result);
+					}
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
 					result = 0;
-					URLRatingMap.put(urlObj, result);
+				} catch (IOException e) {
+					e.printStackTrace();
+					result = 0;
+				} catch (Exception e) {
+					result = 0;
+				} finally {
+					if (con != null) {
+						con.disconnect();
+					}
 				}
-			} 
-			catch (MalformedURLException e) {
-		        e.printStackTrace();
-				result = 0;
-			} 
-			catch (IOException e) {
-		        e.printStackTrace();
-				result = 0;
 			}
-			catch (Exception e) {
+			else{
 				result = 0;
+				urlObj=new URL(null);
+				URLRatingMap.put(urlObj, result);
 			}
-			finally {
-		        if (con != null) {
-		        	con.disconnect();
-		        }
-			}			
 		}
 		
 		int sumRating=0;
