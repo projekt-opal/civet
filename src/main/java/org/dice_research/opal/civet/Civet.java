@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.metrics.CategorizationMetric;
 import org.dice_research.opal.civet.metrics.MetadataQualityMetric;
 import org.dice_research.opal.civet.metrics.MultipleSerializationsMetric;
+import org.dice_research.opal.civet.metrics.UpdateRateMetric;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
 import org.dice_research.opal.common.interfaces.ModelProcessor;
 
@@ -93,8 +94,14 @@ public class Civet implements ModelProcessor, JenaModelProcessor {
 	public List<Metric> getMetrics() {
 		List<Metric> metrics = new LinkedList<Metric>();
 
+		// TODO: Add correct URI for metric
+		// metrics.add(new LicenseAvailabilityMetric());
+
 		metrics.add(new CategorizationMetric());
 		metrics.add(new MultipleSerializationsMetric());
+		metrics.add(new UpdateRateMetric());
+
+		// Has to be last metric as it aggregates
 		metrics.add(new MetadataQualityMetric());
 
 		return metrics;

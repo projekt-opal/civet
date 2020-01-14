@@ -126,6 +126,13 @@ Example output:
 ```
 
 
+## How to add additional metrics
+
+Metrics have to implement the interface [Metric](src/main/java/org/dice_research/opal/civet/Metric.java).
+To add an implemented metric, use the [getMetrics()](src/main/java/org/dice_research/opal/civet/Civet.java#L93) method.
+Tests should be added to [AllTests](src/test/java/org/dice_research/opal/civet/AllTests.java) test suite.
+
+
 ## Note
 
 Civet version 1 can be found at [branch civet-version-1](https://github.com/projekt-opal/civet/tree/civet-version-1).

@@ -22,14 +22,14 @@ public class UpdateRateMetricTest {
 	}
 
 	@Test
-	public void testStarNull() throws Exception {
+	public void testStar0() throws Exception {
 
 		final String TEST_DATASET = "http://projekt-opal.de/dataset/https___"
 				+ "europeandataportal_eu_set_data_debat_dorientations_budgetaires_2019";
 
 		UpdateRateMetric metric = new UpdateRateMetric();
 		Integer stars = metric.compute(model, TEST_DATASET);
-		Assert.assertNull(TEST_FILE, stars);
+		Assert.assertEquals(TEST_FILE, 0, stars.intValue());
 
 	}
 

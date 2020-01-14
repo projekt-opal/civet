@@ -8,6 +8,8 @@ import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.vocabulary.DCTerms;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
@@ -37,12 +39,15 @@ import org.dice_research.opal.common.vocabulary.Opal;
 
 public class UpdateRateMetric implements Metric {
 
+	private static final Logger LOGGER = LogManager.getLogger();
+
 	private static final String DESCRIPTION = "Computes the update rate/frequency. "
 			+ "If data is updated at least weekly, 5 stars are awarded. "
 			+ "If data is updated at least monthly, 4 stars are awarded."
 			+ "If data is updated at least four times a year, 3 stars are awarded. "
 			+ "If data is updated at least once a year, 2 stars are awarded. "
-			+ "If data is updated sometimes, 1 star is awarded.";
+			+ "If data is updated sometimes, 1 star is awarded."
+			+ "If data is never updated or no metadata information is given, 0 stars are awarded.";
 
 	protected static List<String> listUnknown = Arrays.asList(new String[] { "UNKNOWN" });
 
@@ -68,13 +73,14 @@ public class UpdateRateMetric implements Metric {
 		Statement statement = model.getProperty(dataset, DCTerms.accrualPeriodicity);
 		String updateRate;
 		if (statement == null) {
-			return null;
+			// Bad: No update information given in metadata
+			return 0;
 		} else {
 			updateRate = String.valueOf(statement.getObject()).toUpperCase();
 		}
 
 		if (stringContainsListEntry(updateRate, listUnknown)) {
-			return null;
+			return 0;
 		}
 
 		else if (stringContainsListEntry(updateRate, listNo)) {
@@ -102,6 +108,7 @@ public class UpdateRateMetric implements Metric {
 		}
 
 		else {
+			LOGGER.warn("Unknown update rate for " + datasetUri + ": " + updateRate);
 			return null;
 		}
 	}
