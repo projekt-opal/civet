@@ -35,7 +35,7 @@ public class ReadabilityMetricTest {
 		ReadabilityMetric metric = new ReadabilityMetric();
 		Integer stars = metric.compute(testdata.getModel(TEST_EDP_ICE), TEST_EDP_ICE_DATASET);
 
-		Assert.assertEquals(TEST_EDP_ICE, 2, stars.intValue());
+		Assert.assertEquals(TEST_EDP_ICE, null, stars);
 
 
 		final String TEST_MODEL1080_DATASET = "http://projekt-opal.de/dataset/https___" +

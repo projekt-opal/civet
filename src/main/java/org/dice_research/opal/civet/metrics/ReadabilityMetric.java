@@ -15,6 +15,17 @@ import java.util.regex.Pattern;
  * The ReadabilityMetric awards stars based on the how readable
  * is the description..
  *
+ * The readability of text can be estimated by
+ * sentence length and parts of speech. Usage of a readability test, e.g.
+ * Flesch-Reading-Ease
+ *
+ * Flesch Index = 206.835  - 84.6 *( Syllables/ Words) - 1.015 *(Words / Sentences)
+ * http://users.csc.calpoly.edu/~jdalbey/305/Projects/FleschReadabilityProject.html
+ *
+ * - get description through dc:description .
+ * Pattern References:
+ * References - https://github.com/ogrodnek/java_fathom
+ *
  */
 public class ReadabilityMetric implements Metric {
 
@@ -40,6 +51,10 @@ public class ReadabilityMetric implements Metric {
 		else
 			return 0;
 
+		if(!description.contains("@en"))
+			return null;
+
+		System.out.println(description);
 		String[] words = description.split("[^A-Za-z0-9]+");
 		for (int i = 0; i < words.length; i++)
 			words[i] = words[i].replaceAll("[^\\w]", "");
@@ -47,10 +62,8 @@ public class ReadabilityMetric implements Metric {
 		int numberOfWords = words.length;
 		int totalSyllables = 0;
 
-		for (int i = 0 ; i < words.length ;i++)
-		{
-			totalSyllables += getSyllableslablesCount(words[i]);
-		}
+		for (String word : words)
+			totalSyllables += getSyllableslablesCount(word);
 
 		int sentencesNumber = description.split("[!?.:]+").length;
 		double fleschIndex = 206.835-84.6*totalSyllables/numberOfWords
