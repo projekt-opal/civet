@@ -21,20 +21,14 @@ import org.junit.Test;
 public class AccessabilityMetricTest {
 
 	TestData testdata;
-
 	private static final String TEST_EDP_ICE = "model4881.ttl";
-	
-//	It should return a status code 200
-	
-	
-//	private static final String TEST_DATASET_RATING5_POSITIVE = "http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_aaa86820_459c_4636_9cc4_5c55236fc898";
+
 	private static final String TEST_DATASET_RATING5_POSITIVE1 = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_bsii3_zdos";
 	
 //	It should return a status code 200
-	private static final String TEST_DATASET_RATING5_POSITIVE2 = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_boundary_dataset_guidance_2001_to_20115";
+	private static final String TEST_DATASET_RATING5_STATUS200 = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_boundary_dataset_guidance_2001_to_20115";
 	
 //	It should return status code 301: “The requested resource has been moved permanently.” 
-//	private static final String TEST_DATASET_STATUS301 = "http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_4456ca73_dfec_4da7_9b81_7bbec4ad8882";
 	private static final String TEST_DATASET_STATUS301 = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_bristol_city_council_contracts_tenders";
 	
 //	It should return status code 500: “There was an error on the server and the request could not be completed.”	
@@ -43,24 +37,13 @@ public class AccessabilityMetricTest {
 //	It should return status code 400: Bad Request
 	private static final String TEST4_DATASET_STATUS400 = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_brownfield_land_register_polygons";
 
-	private static final String Testnew = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_broad_rental_market_areas_brma1";
-//		http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_brentwood_borough_boundary
-	
 	@Before
 	public void setUp() throws Exception {
 		testdata = new TestData();
 	}
 	
 	@Test
-	public void Testnew() throws Exception {
-		// Compute stars
-		AccessibilityMetric metric = new AccessibilityMetric();
-		Integer stars = metric.compute(testdata.getModel(TEST_EDP_ICE), Testnew);
-		Assert.assertEquals(TEST_EDP_ICE, 5, stars.intValue());
-	}
-	
-	@Test
-	public void testRating5_1() throws Exception {
+	public void testRating4() throws Exception {
 		// Compute stars
 		AccessibilityMetric metric = new AccessibilityMetric();
 		Integer stars = metric.compute(testdata.getModel(TEST_EDP_ICE), TEST_DATASET_RATING5_POSITIVE1);
@@ -68,15 +51,15 @@ public class AccessabilityMetricTest {
 	}
 	
 	@Test
-	public void testRating5_2() throws Exception {
+	public void testRating5_1() throws Exception {
 		// Compute stars
 		AccessibilityMetric metric = new AccessibilityMetric();
-		Integer stars = metric.compute(testdata.getModel(TEST_EDP_ICE), TEST_DATASET_RATING5_POSITIVE2);
+		Integer stars = metric.compute(testdata.getModel(TEST_EDP_ICE), TEST_DATASET_RATING5_STATUS200);
 		Assert.assertEquals(TEST_EDP_ICE, 5, stars.intValue());
 	}
 	
 	@Test
-	public void testRating5_3() throws Exception {
+	public void testRating5_2() throws Exception {
 		// Compute stars
 		AccessibilityMetric metric = new AccessibilityMetric();
 		Integer stars = metric.compute(testdata.getModel(TEST_EDP_ICE), TEST_DATASET_STATUS301);
@@ -84,18 +67,17 @@ public class AccessabilityMetricTest {
 	}
 	
 	@Test
-	public void testRating1_1() throws Exception {
+	public void testRating0() throws Exception {
 		// Compute stars
 		AccessibilityMetric metric = new AccessibilityMetric();
 		Integer stars = metric.compute(testdata.getModel(TEST_EDP_ICE), TEST3_DATASET_STATUS500);
-		Assert.assertEquals(TEST_EDP_ICE, 1, stars.intValue());
+		Assert.assertEquals(TEST_EDP_ICE, 0, stars.intValue());
 	}
 	
 	@Test
-	public void testRating2_1() throws Exception {
+	public void testRating2() throws Exception {
 		AccessibilityMetric metric = new AccessibilityMetric();
 		Integer stars = metric.compute(testdata.getModel(TEST_EDP_ICE), TEST4_DATASET_STATUS400);
 		Assert.assertEquals(TEST_EDP_ICE, 2, stars.intValue());
 	}
-
 }

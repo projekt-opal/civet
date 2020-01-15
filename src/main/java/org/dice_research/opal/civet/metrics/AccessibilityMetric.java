@@ -3,23 +3,14 @@ package org.dice_research.opal.civet.metrics;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.Socket;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.NodeIterator;
-import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.apache.jena.rdf.model.Statement;
-import org.apache.jena.rdf.model.StmtIterator;
-import org.apache.jena.sparql.vocabulary.FOAF;
 import org.apache.jena.vocabulary.DCAT;
-import org.apache.jena.vocabulary.DCTerms;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
@@ -27,16 +18,13 @@ import org.dice_research.opal.common.vocabulary.Opal;
 
 /**
  * The Accessibility awards stars based on the Accessibility of metadata.
- * A connection is made using the URL of metadata and ratings are evaluated based on returned status code.
- * 
+ * A connection is made using the URL and ratings are evaluated based on returned status code.
+ *
+ * @see https://kinsta.com/blog/http-status-codes/
+ * @see https://stackoverflow.com/a/3584332
+ *
  * @author Amit Kumar
  */
-
-//HTTP 200: “Everything is OK.”
-//401: “Unauthorized” or “Authorization Required.”
-//403: “Access to that resource is forbidden.”
-//404: “The requested resource was not found.” 
-//499: “Client closed request.”
 
 public class AccessibilityMetric implements Metric {
 
@@ -55,15 +43,16 @@ public class AccessibilityMetric implements Metric {
 		NodeIterator distributionObjectsIterator = model.listObjectsOfProperty(dataset,DCAT.distribution);
  		int result = 0;
  		HashMap<URL,  Integer> URLRatingMap=new HashMap<URL,Integer>();    
- 		int count=0;
+ 		int countURL=0;
 		URL urlObj;
 		while(distributionObjectsIterator.hasNext()) {
-			count++;
+			countURL++;
 			Resource distribution = (Resource) distributionObjectsIterator.next();
 
 			if (distribution.hasProperty(DCAT.accessURL)) {
 				RDFNode accessUrl = distribution.getProperty(DCAT.accessURL).getObject();
 
+				// creating a connection using URL and providing a rating based on the status code returned.
 				urlObj = new URL(accessUrl.toString());
 				HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
 				try {
@@ -101,22 +90,20 @@ public class AccessibilityMetric implements Metric {
 			}
 			else{
 				result = 0;
-				urlObj=new URL(null);
-				URLRatingMap.put(urlObj, result);
+				URLRatingMap.put(null, result);
 			}
 		}
-		
+		// computing an average of URL ratings from hashmap
 		int sumRating=0;
 		int averageRating=0;
 		
 		for (Integer i : URLRatingMap.values()) {
 			sumRating+=i;
 		    }
-		
-		averageRating=sumRating/count;
-	    int rating = Math.round(averageRating);
 
-		return rating;
+		averageRating=Math.round(sumRating/countURL);
+
+		return averageRating;
 	}
 
 	@Override
