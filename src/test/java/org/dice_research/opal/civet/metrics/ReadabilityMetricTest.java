@@ -37,13 +37,10 @@ public class ReadabilityMetricTest {
 
 		Assert.assertEquals(TEST_EDP_ICE, null, stars);
 
-
 		final String TEST_MODEL1080_DATASET = "http://projekt-opal.de/dataset/https___" +
 				"europeandataportal_eu_set_data_designated_neighbourhood_plan_areas49";
 		metric = new ReadabilityMetric();
 		stars = metric.compute(testdata.getModel(TEST_MODEL1080), TEST_MODEL1080_DATASET);
 		Assert.assertEquals(TEST_MODEL1080, 3, stars.intValue());
-
 	}
-
 }
