@@ -26,7 +26,9 @@ import org.dice_research.opal.common.vocabulary.Opal;
 
 /**
  * The ProviderIdentity gives a rating to a dataset based on available
- * informations about the dataset publisher.
+ * information about the publisher of the dataset which is provided
+ * through the predicate dct:publisher. If dct:publisher does not provide
+ * any publisher information 
  * 
  * @author Gourab Sahu
  */
