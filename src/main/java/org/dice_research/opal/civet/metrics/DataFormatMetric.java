@@ -27,8 +27,17 @@ import org.dice_research.opal.common.vocabulary.Opal;
 
 
 /**
- * The DataFormatMetric gives a rating to a dataset based on informations provided 
- * about the mediaType/Format of all distributions.
+ * The DataFormatMetric gives a rating to a dataset based on 
+ * whether a data-format or file-format information is available
+ * or not.
+ * 
+ * Datasets are available in the form of distributions where 
+ * each distribution is supposed to provide data/file format information
+ * through dct:format or dcat:mediaType predicate. In this metric the 
+ * validity of data/file format is not checked.
+ * 
+ * @see https://www.w3.org/TR/vocab-dcat-1/#Property:distribution_format
+ * @see https://www.w3.org/TR/vocab-dcat-1/#Property:distribution_media_type
  * 
  * @author Gourab Sahu
  */
