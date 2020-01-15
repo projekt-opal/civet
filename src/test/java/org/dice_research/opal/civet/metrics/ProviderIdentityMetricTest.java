@@ -20,10 +20,31 @@ public class ProviderIdentityMetricTest {
 
 	TestData testdata;
 
-	// Publisher with empty blank node but all distributions have valid accessURLS ---> 5 stars
-	private static final String TestCase1 = "TestCaseforProviderIdentityNonemptyBlanknodeInconsistentProviders3stars.ttl";
+	/*
+	 *  Dataset no dct:publisher and no accessURL at distributions but 
+	 *  the dataset has a landingPage which as per Data Catalog can be 
+	 *  treated as publisher information ---> 5 stars
+	 */
+	private static final String TestCase_5stars = "TestCaseForPIs_LPatDataset_5star.ttl";
+	
+	
+	/*
+	 * The dataset has no dcat:landingPage, no dct:publisher and out of 
+	 * 2 distributions only 1 has dcat:accessURL. As per Data Catalog, 
+	 * accessURL can be used as landingPage is distributions are accessed 
+	 * only through accessURL.
+	 */
+	private static final String TestCase_3stars = "TestCaseForPI_Access_URL_3Stars__synthetic.ttl";
+	
+	
+	/*
+	 * No publisher information at all
+	 */
+	private static final String TestCase_0stars = "TestCaseForPI_0Stars__synthetic.ttl";
 
-	private static final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/http___europeandataportal_eu_set_data__3dff988d_59d2_415d_b2da_818e8ef3111701";
+	private static final String TEST_dataset_5stars = "http://projekt-opal.de/dataset/https___ckan_govdata_de_a642d7e5_bf1c_57f9_89df_cdad67c7c0fc";
+	private static final String TEST_dataset_3stars = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_c0e483fd_9d29_328f_9b83_9eb950c9f022";
+	private static final String TEST_dataset_0stars = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_c0e483fd_9d29_328f_9b83_9eb950c9f022";
 
 	@Before
 	public void setUp() throws Exception {
@@ -34,8 +55,24 @@ public class ProviderIdentityMetricTest {
 	public void TestCase1() throws Exception {
 
 		ProviderIdentityMetric metric = new ProviderIdentityMetric();
-		Integer stars_test1 = metric.compute(testdata.getModel(TestCase1), TEST_EDP_ICE_DATASET);
-		Assert.assertEquals("Provider Identity Test: Test Case 1", 3, stars_test1.intValue());
+		Integer stars = metric.compute(testdata.getModel(TestCase_5stars), TEST_dataset_5stars);
+		Assert.assertEquals("Provider Identity Test: Test Case 5 stars", 5, stars.intValue());
+	}
+	
+	@Test
+	public void TestCase2() throws Exception {
+
+		ProviderIdentityMetric metric = new ProviderIdentityMetric();
+		Integer stars = metric.compute(testdata.getModel(TestCase_3stars), TEST_dataset_3stars);
+		Assert.assertEquals("Provider Identity Test: Test Case 3 stars", 3, stars.intValue());
+	}
+	
+	@Test
+	public void TestCase3() throws Exception {
+
+		ProviderIdentityMetric metric = new ProviderIdentityMetric();
+		Integer stars = metric.compute(testdata.getModel(TestCase_0stars), TEST_dataset_0stars);
+		Assert.assertEquals("Provider Identity Test: Test Case 0 stars", 0, stars.intValue());
 	}
 
 }

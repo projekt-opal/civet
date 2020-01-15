@@ -53,8 +53,7 @@ public class ProviderIdentityMetric implements Metric {
 		 * If a publisher is of type foaf:org or foaf:person and has an non-empty name
 		 * then 5 stars are awarded.
 		 */
-		if ((Publisher.hasProperty(RDF.type, FOAF.Organization) || Publisher.hasProperty(RDF.type, FOAF.Person))
-				&& (!Publisher.getProperty(FOAF.name).getObject().toString().isEmpty())) {
+		if ((Publisher.hasProperty(RDF.type, FOAF.Agent) && (!Publisher.getProperty(FOAF.name).getObject().toString().isEmpty()))) {
 
 			/*
 			 * If we do not have a publisher yet, then rate the first publisher ( of type
@@ -246,11 +245,12 @@ public class ProviderIdentityMetric implements Metric {
 						PublisherScore.put("AccessURLScore", 3);
 					else if (TotalPercentageOfAccessURL < 50 && TotalPercentageOfAccessURL >= 25)
 						PublisherScore.put("AccessURLScore", 2);
-					else if (TotalPercentageOfAccessURL < 25 && TotalPercentageOfAccessURL >= 0)
+					else if (TotalPercentageOfAccessURL < 25 && TotalPercentageOfAccessURL > 0)
 						PublisherScore.put("AccessURLScore", 1);
-					else
-						PublisherScore.put("AccessURLScore", 0);
+						
 				}
+				else
+					PublisherScore.put("No provider identity information at all", 0);
 			}
 		}
 		// There will be always only one key and value

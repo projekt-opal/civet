@@ -1,0 +1,26 @@
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_countries_december_2015_names_and_codes_in_the_united_kingdom5>
+        a                  dcat:Dataset ;
+        dct:description    "This file contains the names and codes for the countries of the United Kingdom as at 31 December 2015.  (File Size - 1 KB)"@en ;
+        dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                             dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                             <http://xmlns.com/foaf/0.1/name>
+                                     "Office for National Statistics"
+                           ] ;
+        dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                             dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                             <http://xmlns.com/foaf/0.1/name>
+                                     "Office for National Statistics"
+                           ] ;
+        dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                             dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                             <http://xmlns.com/foaf/0.1/name>
+                                     "British Museum"
+                           ] ;
+        dct:title          "Countries (December 2015) Names and Codes in the United Kingdom"@en ;
+        dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_84fec8cc_837a_41d8_ba12_ad7c7467b842> , <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_dfa6f1a2_5b87_4e27_8dfb_3fc7c1b1f07a> , <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_5892bbd4_2a63_4bdc_9f60_583b6c686473> , <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_979ecd63_aad5_419b_85a4_7e54cf7f1325> ;
+        dcat:keyword       "United Kingdom"@en , "Names and Codes for ONSPD and NSPL"@en , "CTRY"@en , "Countries December 2015 Names and Codes in the United Kingdom"@en , "Countries"@en , "2015"@en , "Names and Codes"@en , "Administrative Names and Codes"@en ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                <http://projekt-opal.de/measurement189784> , <http://projekt-opal.de/measurement189781> , <http://projekt-opal.de/measurement189782> , <http://projekt-opal.de/measurement189783> , <http://projekt-opal.de/measurement189779> , <http://projekt-opal.de/measurement189778> , <http://projekt-opal.de/measurement189780> .
