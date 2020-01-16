@@ -97,8 +97,7 @@ public class LicenseAvailabilityMetric implements Metric {
 
 	@Override
 	public String getUri() throws Exception {
-		// TODO: New URI required
-		return Opal.OPAL_METRIC_KNOWN_LICENSE.getURI();
+		return Opal.OPAL_METRIC_LICENSE_AVAILABLE.getURI();
 	}
 
 }
