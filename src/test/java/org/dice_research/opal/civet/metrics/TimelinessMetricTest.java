@@ -18,18 +18,6 @@ public class TimelinessMetricTest {
 	}
 
 	@Test
-	public void test0Stars() throws Exception {
-		//DCTerms.modified -> before 4 year
-		final String TEST_FILE = "TestData.ttl";
-		final String TEST_DATASET = "http://projekt-opal.de/distribution/https___" +
-				"europeandataportal_eu_set_distribution_8a262a3b_8cf5_4908_a607_cacfb319a906";
-
-		TimelinessMetric metric = new TimelinessMetric();
-		Integer stars = metric.compute(testdata.getModel(TEST_FILE), TEST_DATASET);
-		Assert.assertEquals(TEST_FILE, 0, stars.intValue());
-	}
-
-	@Test
 	public void test1Stars() throws Exception {
 		//DCTerms.modified -> updated between 2 year and 4 year
 		final String TEST_FILE = "TestData.ttl";
@@ -48,7 +36,6 @@ public class TimelinessMetricTest {
 		final String TEST_DATASET = "http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_18d846ba_45c2_483f_9a59_a776d15b8dad";
 
 		Integer stars = metric.compute(testdata.getModel(TEST_FILE), TEST_DATASET);
-		System.out.print("data" +stars);
 		Assert.assertEquals(TEST_FILE, 2, stars.intValue());
 	}
 
@@ -63,16 +50,6 @@ public class TimelinessMetricTest {
 		Assert.assertEquals(TEST_FILE, 3, stars.intValue());
 	}
 
-	@Test
-	public void test4Stars() throws Exception {
-		//DCTerms.modified -> updated between 7 days and 2 months
-		final String TEST_FILE = "TestData.ttl";
-		final String TEST_DATASET = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_dedef102_93d7_0001_ae90_43f2a6a54581";
-
-		TimelinessMetric metric = new TimelinessMetric();
-		Integer stars = metric.compute(testdata.getModel(TEST_FILE), TEST_DATASET);
-		Assert.assertEquals(TEST_FILE, 4, stars.intValue());
-	}
 
 	@Test
 	public void test5Stars() throws Exception {

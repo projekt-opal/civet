@@ -53,7 +53,10 @@ public class TimelinessMetric implements Metric {
 			patterns.add(Pattern.compile("\\d{4}[-]\\d{2}[-]\\d{2}[T][0-9]{2}" +
 					"[:]\\d{2}[:]\\d{2}[.]\\d{2}[+]\\d{2}[:]\\d{2}"));
 
+			//^^<http://www.w3.org/2001/XMLSchema#date>
 			datetext = String.valueOf(statement.getObject());
+			datetext.replaceAll("^^http://www.w3.org/2001/XMLSchema#date","");
+
 			long millis=System.currentTimeMillis();
 			java.sql.Date current=new java.sql.Date(millis);
 
@@ -61,7 +64,6 @@ public class TimelinessMetric implements Metric {
 				String modifiedDay = "";
 				Matcher matcher = pattern.matcher(datetext);
 				if(matcher.matches()) {
-					System.out.println("63");
 					modifiedDay = matcher.group(0).substring(0, 10);
 					Date modified = new SimpleDateFormat("yyyy-MM-dd").parse(modifiedDay);
 					long diff = current.getTime() - modified.getTime();
@@ -98,8 +100,6 @@ public class TimelinessMetric implements Metric {
 
 	private int getRating(long days)
 	{
-		System.out.println(days +"days");
-
 		if (days < 7) // A week
 			return 5;
 		else if (days < 60) // 2 months
@@ -112,7 +112,6 @@ public class TimelinessMetric implements Metric {
 			return 1;
 		else
 			return 0;
-
 	}
 
 	@Override
