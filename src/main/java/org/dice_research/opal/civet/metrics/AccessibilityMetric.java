@@ -92,6 +92,53 @@ public class AccessibilityMetric implements Metric {
 				result = 0;
 				URLRatingMap.put(null, result);
 			}
+			if(distribution.hasProperty(DCAT.downloadURL)){
+				RDFNode downloadUrl = distribution.getProperty(DCAT.downloadURL).getObject();
+
+				// creating a connection using URL and providing a rating based on the status code returned.
+				urlObj = new URL(downloadUrl.toString());
+				System.out.println(urlObj);
+
+				HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
+				try {
+					con.setRequestMethod("HEAD");
+					con.setConnectTimeout(3000);
+					con.connect();
+					int responseCode = con.getResponseCode();
+
+					if (200 <= responseCode && responseCode <= 399) {
+						result = 5;
+						URLRatingMap.put(urlObj, result);
+					} else if (400 <= responseCode && responseCode < 500) {
+						result = 2;
+						URLRatingMap.put(urlObj, result);
+					} else if (500 <= responseCode && responseCode <= 521) {
+						result = 1;
+						URLRatingMap.put(urlObj, result);
+					} else {
+						result = 0;
+						URLRatingMap.put(urlObj, result);
+					}
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+					result = 0;
+				} catch (IOException e) {
+					e.printStackTrace();
+					result = 0;
+				} catch (Exception e) {
+					result = 0;
+				} finally {
+					if (con != null) {
+						con.disconnect();
+					}
+				}
+
+			}
+			else{
+				result = 0;
+				URLRatingMap.put(null, result);
+			}
+
 		}
 		// computing an average of URL ratings from hashmap
 		int sumRating=0;
@@ -100,8 +147,12 @@ public class AccessibilityMetric implements Metric {
 		for (Integer i : URLRatingMap.values()) {
 			sumRating+=i;
 		    }
-
-		averageRating=Math.round(sumRating/countURL);
+		try {
+			averageRating = Math.round(sumRating / countURL);
+		}
+		catch(ArithmeticException e){
+			averageRating=0;
+		}
 
 		return averageRating;
 	}

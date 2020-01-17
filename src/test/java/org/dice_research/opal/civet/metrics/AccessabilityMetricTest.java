@@ -27,8 +27,8 @@ public class AccessabilityMetricTest {
 	
 //	It should return a status code 200
 	private static final String TEST_DATASET_RATING5_STATUS200 = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_boundary_dataset_guidance_2001_to_20115";
-	
-//	It should return status code 301: “The requested resource has been moved permanently.” 
+
+//	It should return status code 301: “The requested resource has been moved permanently.”
 	private static final String TEST_DATASET_STATUS301 = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_bristol_city_council_contracts_tenders";
 	
 //	It should return status code 500: “There was an error on the server and the request could not be completed.”	
@@ -36,6 +36,11 @@ public class AccessabilityMetricTest {
 	
 //	It should return status code 400: Bad Request
 	private static final String TEST4_DATASET_STATUS400 = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_brownfield_land_register_polygons";
+
+	private static final String TEST4_DATASET_DOWNLOADURL = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_broad_rental_market_areas_brma1";
+
+	//http://projekt-opal.de/dataset/https___ckan_govdata_de_d96cb43e_8ae5_418f_b53c_0e43bc73bcd3
+//	private static final String TEST4_DATASET_DOWNLOADURL = "\thttp://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_broad_rental_market_areas_brma1";
 
 	@Before
 	public void setUp() throws Exception {
@@ -49,7 +54,15 @@ public class AccessabilityMetricTest {
 		Integer stars = metric.compute(testdata.getModel(TEST_EDP_ICE), TEST_DATASET_RATING5_POSITIVE1);
 		Assert.assertEquals(TEST_EDP_ICE, 4, stars.intValue());
 	}
-	
+
+
+	@Test
+	public void testRatingDownloadURL() throws Exception {
+		// Compute stars
+		AccessibilityMetric metric = new AccessibilityMetric();
+		Integer stars = metric.compute(testdata.getModel(TEST_EDP_ICE), TEST4_DATASET_DOWNLOADURL);
+		Assert.assertEquals(TEST_EDP_ICE, 5, stars.intValue());
+	}
 	@Test
 	public void testRating5_1() throws Exception {
 		// Compute stars
