@@ -1,0 +1,28 @@
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_birth_registrations_by_month_since_january_2009_to_june_2011>
+        a                  dcat:Dataset ;
+        dct:description    "This dataset as reported to the Rural Payments Agency contains cattle passport applications received for live animals, cattle born in Great Britain, applications received by all sources (Cattle Tracing System online, Cattle Tracing System web services, Standard Interface System email, paper) Attribution statement:"@en ;
+        dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                             dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                             <http://xmlns.com/foaf/0.1/name>
+                                     "Rural Payments Agency"
+                           ] ;
+        dct:title          "Birth registrations by month since January 2009 to June 2011"@en ;
+        dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_f948b971_b4fe_46df_8191_e862c56b848d> , <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_850b9199_390f_456b_b45e_da3932ce560a>.
+		
+<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_f948b971_b4fe_46df_8191_e862c56b848d>
+        a                dcat:Distribution ;
+        dct:description  ""@en ;
+        dct:format       <http://publications.europa.eu/resource/authority/file-type/CSV> ;
+        dct:license      <http://reference.data.gov.uk/id/open-government-licence> ;
+        dct:title        "Unnamed resource"@en ;
+        dcat:accessURL   <https://s3-eu-west-1.amazonaws.com/data.defra.gov.uk/AnimalWelfare/birth-registrations-by-month-since_january-2009-to-june-2011.csv> .
+		
+<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_850b9199_390f_456b_b45e_da3932ce560a>
+        a                dcat:Distribution ;
+        dct:description  "Rural Payments Agency Website"@en ;
+        dct:license      <http://reference.data.gov.uk/id/open-government-licence> ;
+        dct:title        "Unnamed resource"@en ;
+        dcat:accessURL   <https://www.gov.uk/government/organisations/rural-payments-agency> .
