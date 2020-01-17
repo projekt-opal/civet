@@ -4,10 +4,15 @@ import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.DCAT;
 import org.apache.jena.vocabulary.RDF;
+import org.dice_research.opal.civet.Civet;
 import org.dice_research.opal.civet.Utils;
+import org.dice_research.opal.common.vocabulary.Dqv;
 import org.dice_research.opal.common.vocabulary.Opal;
+import org.dice_research.opal.test_cases.OpalTestCases;
+import org.dice_research.opal.test_cases.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -22,7 +27,7 @@ public class MetadataQualityMetricTest {
 	 * Tests calculation of average.
 	 */
 	@Test
-	public void test() throws Exception {
+	public void testAverage() throws Exception {
 
 		String datasetUri = "https://example.org/dataset";
 		Resource dataset = ResourceFactory.createResource(datasetUri);
@@ -41,6 +46,34 @@ public class MetadataQualityMetricTest {
 		Integer score = metric.compute(model, datasetUri);
 
 		Assert.assertEquals("Calculated average", 3, score.intValue());
+	}
+
+	/**
+	 * Tests number of metrics.
+	 */
+	@Test
+	public void testIncludedMetrics() throws Exception {
+
+		TestCase testCase = OpalTestCases.getTestCase("opal-2019-06-24", "edp-corine-iceland");
+
+		Model model = ModelFactory.createDefaultModel();
+		model.add(testCase.getModel());
+
+		Civet civet = new Civet();
+		civet.processModel(model, testCase.getDatasetUri());
+
+		Resource dataset = model.getResource(testCase.getDatasetUri());
+
+		StmtIterator stmtIterator = dataset.listProperties(Dqv.HAS_QUALITY_MEASUREMENT);
+		int counter = 0;
+		while (stmtIterator.hasNext()) {
+			stmtIterator.next().getObject();
+			counter++;
+		}
+
+		// Note: Metrics integrated in the future may return null, if it is not possible
+		// to calculate a score for the test model.
+		Assert.assertEquals("Number of computed metrics", civet.getMetrics().size(), counter);
 	}
 
 }

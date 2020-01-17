@@ -9,6 +9,7 @@ import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.metrics.CategorizationMetric;
+import org.dice_research.opal.civet.metrics.DataFormatMetric;
 import org.dice_research.opal.civet.metrics.LicenseAvailabilityMetric;
 import org.dice_research.opal.civet.metrics.MetadataQualityMetric;
 import org.dice_research.opal.civet.metrics.MultipleSerializationsMetric;
@@ -96,6 +97,7 @@ public class Civet implements ModelProcessor, JenaModelProcessor {
 		List<Metric> metrics = new LinkedList<Metric>();
 
 		metrics.add(new CategorizationMetric());
+		metrics.add(new DataFormatMetric());
 		metrics.add(new LicenseAvailabilityMetric());
 		metrics.add(new MultipleSerializationsMetric());
 		metrics.add(new UpdateRateMetric());
