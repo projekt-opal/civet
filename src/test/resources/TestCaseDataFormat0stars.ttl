@@ -1,0 +1,105 @@
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_ac1218e9_2ae0_0002_ba5e_f88d969555ba>
+        a                  dcat:Dataset ;
+        dct:conformsTo     [ dct:issued  "2010-03-10"^^<http://www.w3.org/2001/XMLSchema#date> ;
+                             dct:title   "Service Abstract Suite"@de
+                           ] ;
+        dct:conformsTo     [ dct:issued  "2010-03-10"^^<http://www.w3.org/2001/XMLSchema#date> ;
+                             dct:title   "Service Abstract Suite"@de
+                           ] ;
+        dct:conformsTo     [ dct:issued  "2010-03-10"^^<http://www.w3.org/2001/XMLSchema#date> ;
+                             dct:title   "Service Abstract Suite"@de
+                           ] ;
+        dct:description    "Beschreibung des INSPIRE Download Service (predefined Atom): Bebauungsplan -Nördlich der Langgasse- der Ortsgemeinde Albig - Der/die Link(s) für das Herunterladen der Datensätze wird/werden dynamisch aus Get Map Aufrufen eines WMS Interfaces generiert"@de ;
+        dct:hasPart        <file:///usr/verticles/http%3A%2F%2Fwww.alzey-land.de%2Fregistry%2Fspatial%2Fdataset%2F0b922d4e-ea9d-f5e2-ba5e-f88d969555ba> ;
+        dct:issued         "2017-10-09"^^<http://www.w3.org/2001/XMLSchema#date> ;
+        dct:modified       "2018-05-12"^^<http://www.w3.org/2001/XMLSchema#date> ;
+        dct:publisher      []  ;
+        dct:publisher      [ a       <http://xmlns.com/foaf/0.1/Organization> ;
+                             <http://www.w3.org/ns/locn#address>
+                                     []  ;
+                             <http://xmlns.com/foaf/0.1/mbox>
+                                     <mailto:poststelle@vermkv.rlp.de> ;
+                             <http://xmlns.com/foaf/0.1/name>
+                                     "LVermGeo im Auftrag von Albig"
+                           ] ;
+        dct:publisher      [ a       <http://xmlns.com/foaf/0.1/Organization> ;
+                             <http://www.w3.org/ns/locn#address>
+                                     []  ;
+                             <http://xmlns.com/foaf/0.1/mbox>
+                                     <mailto:poststelle@vermkv.rlp.de> ;
+                             <http://xmlns.com/foaf/0.1/name>
+                                     "LVermGeo im Auftrag von Albig"
+                           ] ;
+        dct:spatial        [ a       dct:Location ;
+                             <http://www.w3.org/ns/locn#geometry>
+                                     "POLYGON((8.11364 49.7735,8.11629 49.7735,8.11629 49.772,8.11364 49.772,8.11364 49.7735))"^^<http://www.openlinksw.com/schemas/virtrdf#Geometry> , "<gml:Envelope srsName=\"http://www.opengis.net/def/EPSG/0/4326\"><gml:lowerCorner>49.772 8.11364</gml:lowerCorner><gml:upperCorner>49.7735 8.11629</gml:upperCorner></gml:Envelope>"^^<http://www.opengis.net/ont/geosparql#gmlLiteral>
+                           ] ;
+        dct:spatial        []  ;
+        dct:spatial        [ a       dct:Location ;
+                             <http://www.w3.org/ns/locn#geometry>
+                                     "POLYGON((8.11364 49.7735,8.11629 49.7735,8.11629 49.772,8.11364 49.772,8.11364 49.7735))"^^<http://www.openlinksw.com/schemas/virtrdf#Geometry> , "<gml:Envelope srsName=\"http://www.opengis.net/def/EPSG/0/4326\"><gml:lowerCorner>49.772 8.11364</gml:lowerCorner><gml:upperCorner>49.7735 8.11629</gml:upperCorner></gml:Envelope>"^^<http://www.opengis.net/ont/geosparql#gmlLiteral>
+                           ] ;
+        dct:title          "INSPIRE Download Service (predefined ATOM) für Datensatz Nördlich der Langgasse"@de ;
+        dct:type           <http://inspire.ec.europa.eu/metadata-codelist/ResourceType/services> , <http://inspire.ec.europa.eu/metadata-codelist/SpatialDataServiceType/download> ;
+        dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_94be3da0_c269_4c94_8dee_b5609ac0abb9> ;
+        dcat:keyword       "inspireidentifiziert"@de , "Bauleitplan"@de , "Bplan"@de , "infoFeatureAccessService"@de , "Albig"@de , "Bebauungsplan"@de ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                <http://projekt-opal.de/measurement792273> , <http://projekt-opal.de/measurement792272> , <http://projekt-opal.de/measurement792270> , <http://projekt-opal.de/measurement792268> , <http://projekt-opal.de/measurement792269> , <http://projekt-opal.de/measurement792274> , <http://projekt-opal.de/measurement792271> ;
+        <http://www.w3.org/ns/prov#wasUsedBy>
+                [ a       <http://www.w3.org/ns/prov#Activity> ;
+                  <http://www.w3.org/ns/prov#generated>
+                          []  ;
+                  <http://www.w3.org/ns/prov#qualifiedAssociation>
+                          [] 
+                ] ;
+        <http://www.w3.org/ns/prov#wasUsedBy>
+                [ a       <http://www.w3.org/ns/prov#Activity> ;
+                  <http://www.w3.org/ns/prov#generated>
+                          []  ;
+                  <http://www.w3.org/ns/prov#qualifiedAssociation>
+                          [] 
+                ] ;
+        <http://www.w3.org/ns/prov#wasUsedBy>
+                []  ;
+        <http://xmlns.com/foaf/0.1/isPrimaryTopicOf>
+                [ a                  dcat:CatalogRecord ;
+                  dct:identifier     "ac1218e9-2ae0-0002-ba5e-f88d969555ba" ;
+                  dct:language       <http://publications.europa.eu/resource/authority/language/GER> ;
+                  dct:modified       "2018-05-12"^^<http://www.w3.org/2001/XMLSchema#date> ;
+                  dct:source         []  ;
+                  <http://www.w3.org/2011/content#characterEncoding>
+                          "UTF-8" ;
+                  dcat:contactPoint  [] 
+                ] ;
+        <http://xmlns.com/foaf/0.1/isPrimaryTopicOf>
+                []  ;
+        <http://xmlns.com/foaf/0.1/isPrimaryTopicOf>
+                [ a                  dcat:CatalogRecord ;
+                  dct:identifier     "ac1218e9-2ae0-0002-ba5e-f88d969555ba" ;
+                  dct:language       <http://publications.europa.eu/resource/authority/language/GER> ;
+                  dct:modified       "2018-05-12"^^<http://www.w3.org/2001/XMLSchema#date> ;
+                  dct:source         []  ;
+                  <http://www.w3.org/2011/content#characterEncoding>
+                          "UTF-8" ;
+                  dcat:contactPoint  [] 
+                ] .
+				
+<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_94be3da0_c269_4c94_8dee_b5609ac0abb9>
+        a               dcat:Distribution ;
+        dct:format      []  ;
+        dct:format      []  ;
+        dct:format      []  ;
+        dct:license     []  ;
+        dct:license     []  ;
+        dct:license     []  ;
+        dct:rights      []  ;
+        dct:rights      []  ;
+        dct:rights      []  ;
+        dct:rights      []  ;
+        dct:rights      []  ;
+        dct:rights      []  ;
+        dct:title       "download"@en ;
+        dcat:accessURL  <http://www.geoportal.rlp.de/mapbender/php/mod_inspireDownloadFeed.php?id=0b922d4e-ea9d-f5e2-ba5e-f88d969555ba&type=SERVICE&generateFrom=wmslayer&layerid=55550> .

@@ -1,0 +1,52 @@
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_bilancio_previsione_2015_2017_entrate>
+        a                  dcat:Dataset ;
+        dct:description    "<p>Dati del bilancio di previsione 2015-2017, parte entrata</p>\n"@it ;
+        dct:title          "Bilancio di previsione 2015-2017 Entrate"@it ;
+        dcat:contactPoint  [ a       <http://www.w3.org/2006/vcard/ns#Kind> ;
+                             <http://www.w3.org/2006/vcard/ns#fn>
+                                     "Regione Friuli Venezia Giulia" ;
+                             <http://www.w3.org/2006/vcard/ns#hasEmail>
+                                     <mailto:mailto:finanze@regione.fvg.it>
+                           ] ;
+        dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_6ddc00bf_0a03_4e9c_9961_d5e9a54ae12f> , <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_306b9fe9_0843_4188_8ba3_6f26a82a1ed4> , <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_f8860dec_fca4_44ab_abb4_a9e603186969> , <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_19e93bf4_6d9d_4051_aa95_d0c8660a447c> ;
+        dcat:keyword       "entrate"@it , "stanziamenti"@it , "bilancio"@it ;
+        dcat:theme         <http://publications.europa.eu/resource/authority/data-theme/ECON>.
+		
+<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_6ddc00bf_0a03_4e9c_9961_d5e9a54ae12f>
+        a                dcat:Distribution ;
+        dct:description  ""@it ;
+        dct:format       <http://publications.europa.eu/resource/authority/file-type/html> ;
+        dct:license      <http://www.dati.gov.it/iodl/2.0/> ;
+        dct:title        "https://www.dati.friuliveneziagiulia.it/api/views/rcc5-7st5/rows.json?accessType=DOWNLOAD"@it ;
+        dcat:accessURL   <https://www.dati.friuliveneziagiulia.it/api/views/rcc5-7st5/rows.json?accessType=DOWNLOAD> ;
+        dcat:mediaType   "html"^^dct:MediaTypeOrExtent .
+
+<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_306b9fe9_0843_4188_8ba3_6f26a82a1ed4>
+        a                dcat:Distribution ;
+        dct:description  ""@it ;
+        dct:format       <http://publications.europa.eu/resource/authority/file-type/xml> ;
+        dct:license      <http://www.dati.gov.it/iodl/2.0/> ;
+        dct:title        "https://www.dati.friuliveneziagiulia.it/api/views/rcc5-7st5/rows.xml?accessType=DOWNLOAD"@it ;
+        dcat:accessURL   <https://www.dati.friuliveneziagiulia.it/api/views/rcc5-7st5/rows.xml?accessType=DOWNLOAD> ;
+        dcat:mediaType   "xml"^^dct:MediaTypeOrExtent .
+
+<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_f8860dec_fca4_44ab_abb4_a9e603186969>
+        a                dcat:Distribution ;
+        dct:description  ""@it ;
+        dct:format       <http://publications.europa.eu/resource/authority/file-type/rdf> ;
+        dct:license      <http://www.dati.gov.it/iodl/2.0/> ;
+        dct:title        "https://www.dati.friuliveneziagiulia.it/api/views/rcc5-7st5/rows.rdf?accessType=DOWNLOAD"@it ;
+        dcat:accessURL   <https://www.dati.friuliveneziagiulia.it/api/views/rcc5-7st5/rows.rdf?accessType=DOWNLOAD> ;
+        dcat:mediaType   "rdf"^^dct:MediaTypeOrExtent .
+
+<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_19e93bf4_6d9d_4051_aa95_d0c8660a447c>
+        a                dcat:Distribution ;
+        dct:description  ""@it ;
+        dct:format       <http://publications.europa.eu/resource/authority/file-type/csv> ;
+        dct:license      <http://www.dati.gov.it/iodl/2.0/> ;
+        dct:title        "https://www.dati.friuliveneziagiulia.it/api/views/rcc5-7st5/rows.csv?accessType=DOWNLOAD"@it ;
+        dcat:accessURL   <https://www.dati.friuliveneziagiulia.it/api/views/rcc5-7st5/rows.csv?accessType=DOWNLOAD> ;
+        dcat:mediaType   "csv"^^dct:MediaTypeOrExtent .
