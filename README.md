@@ -2,78 +2,144 @@
 
 OPAL metadata quality component.
 
-## Usage
 
-To use OPAL Civet, you have to configure the GitHub Maven Package Registry and add OPAL Civet as a dependency.
+## Usage with Apache Maven
 
-### 1. Create a GitHub authentication token
+Add the following lines to your `pom.xml` configuration file:
 
-For authentication, use the GitHub article [Creating a personal access token for the command line](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line). You need to set the read:packages scope. You can copy your new token directly after generation to continue with the next step.
+	<dependencies>
+		<dependency>
+			<groupId>org.dice-research.opal</groupId>
+			<artifactId>civet</artifactId>
+			<version>[2,3)</version>
+		</dependency>
+	</dependencies>
+	
+	<repositories>
+		<repository>
+			<id>maven.aksw.internal</id>
+			<name>AKSW Repository</name>
+			<url>http://maven.aksw.org/archiva/repository/internal</url>
+		</repository>
+		<repository>
+			<id>maven.aksw.snapshots</id>
+			<name>AKSW Snapshot Repository</name>
+			<url>http://maven.aksw.org/archiva/repository/snapshots</url>
+		</repository>
+	</repositories>
 
-### 2. Add the Maven repository
+Available versions are listed at [maven.aksw.org](https://maven.aksw.org/archiva/#advancedsearch~internal/org.dice-research.opal~civet~~~~~30).
 
-Edit the file `~/.m2/settings.xml` and insert the code below.
-Replace _TOKEN_ with the data from the step above and replace also _USERNAME_ with your GitHub username.
-This is additionally described in the GitHub article [Authenticating to GitHub Package Registry](https://help.github.com/en/articles/configuring-apache-maven-for-use-with-github-package-registry#authenticating-to-github-package-registry).
+
+## Example
+
+```Java
+import java.io.File;
+import org.apache.jena.rdf.model.Model;
+import org.dice_research.opal.civet.Civet;
+import org.dice_research.opal.common.utilities.FileHandler;
+
+public class Example {
+
+	/**
+	 * Computes quality metric scores (measurements).
+	 * 
+	 * @param turtleInputFile  A TURTLE file to read
+	 * @param turtleOutputFile A TURTLE file to write results
+	 * @param datasetUri       A URI of a dcat:Dataset inside the TURTLE data
+	 * 
+	 * @see https://www.w3.org/TR/turtle/
+	 * @see https://www.w3.org/TR/vocab-dcat/
+	 */
+	public void evaluateMetadata(File turtleInputFile, File turtleOutputFile, String datasetUri) throws Exception {
+
+		// Load TURTLE file into model
+		Model model = FileHandler.importModel(turtleInputFile);
+
+		Civet civet = new Civet();
+
+		// If existing measurements should be removed
+		// (optional method call, default: true)
+		civet.setRemoveMeasurements(true);
+
+		// If it should be logged, if a measurement could not be computed
+		// (optional method call, default: true)
+		civet.setLogNotComputed(true);
+
+		// Update model
+		model = civet.process(model, datasetUri);
+
+		// Write updated model into TURTLE file
+		FileHandler.export(turtleOutputFile, model);
+	}
+}
 
 ```
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
-                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
 
-  <activeProfiles>
-    <activeProfile>github</activeProfile>
-  </activeProfiles>
-
-  <profiles>
-    <profile>
-      <id>github</id>
-      <repositories>
-        <repository>
-          <id>central</id>
-          <url>https://repo1.maven.org/maven2</url>
-          <releases><enabled>true</enabled></releases>
-          <snapshots><enabled>true</enabled></snapshots>
-        </repository>
-        <repository>
-          <id>github-projekt-opal</id>
-          <name>GitHub projekt-opal Apache Maven Packages</name>
-          <url>https://maven.pkg.github.com/projekt-opal</url>
-        </repository>
-      </repositories>
-    </profile>
-  </profiles>
-
-  <servers>
-    <server>
-      <id>github-projekt-opal</id>
-      <username>USERNAME</username>
-      <password>TOKEN</password>
-    </server>
-  </servers>
-</settings>
-```
-
-### 3. Add the Maven dependency
-
-Edit the `pom.xml` of your project and insert the following code:
+Example input:
 
 ```
-<dependencies>
-  <!-- OPAL Civet 0.0.* -->
-  <!-- https://github.com/projekt-opal/civet -->
-  <dependency>
-    <groupId>org.dice_research.opal</groupId>
-    <artifactId>civet</artifactId>
-    <version>[0,0.1)</version>
-    </dependency>
-</dependencies>
+<https://example.org/>
+        a       <http://www.w3.org/ns/dcat#Dataset> ;
+        <http://www.w3.org/ns/dcat#keyword>
+                "keywordB" , "keywordA" ;
+        <http://www.w3.org/ns/dcat#theme>
+                <https://example.org/theme> .
+
+<https://example.org/theme>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> .
 ```
+
+Example output:
+
+```
+<https://example.org/>
+        a       <http://www.w3.org/ns/dcat#Dataset> ;
+        <http://www.w3.org/ns/dcat#keyword>
+                "keywordA" , "keywordB" ;
+        <http://www.w3.org/ns/dcat#theme>
+                <https://example.org/theme> ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                [ a       <http://www.w3.org/ns/dqv#QualityMeasurement> ;
+                  <http://www.w3.org/ns/dqv#isMeasurementOf>
+                          <http://metric.projekt-opal.de/MetadataQuality> ;
+                  <http://www.w3.org/ns/dqv#value>
+                          3
+                ] ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                [ a       <http://www.w3.org/ns/dqv#QualityMeasurement> ;
+                  <http://www.w3.org/ns/dqv#isMeasurementOf>
+                          <http://metric.projekt-opal.de/MultipleSerializations> ;
+                  <http://www.w3.org/ns/dqv#value>
+                          0
+                ] ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                [ a       <http://www.w3.org/ns/dqv#QualityMeasurement> ;
+                  <http://www.w3.org/ns/dqv#isMeasurementOf>
+                          <http://metric.projekt-opal.de/Categorization> ;
+                  <http://www.w3.org/ns/dqv#value>
+                          5
+                ] .
+
+<https://example.org/theme>
+        a       <http://www.w3.org/2004/02/skos/core#Concept> .
+```
+
+
+## How to add additional metrics
+
+Metrics have to implement the interface [Metric](src/main/java/org/dice_research/opal/civet/Metric.java).
+To add an implemented metric, use the [getMetrics()](src/main/java/org/dice_research/opal/civet/Civet.java#L93) method.
+Tests should be added to [AllTests](src/test/java/org/dice_research/opal/civet/AllTests.java) test suite.
+
+
+## Note
+
+Civet version 1 can be found at [branch civet-version-1](https://github.com/projekt-opal/civet/tree/civet-version-1).
+
 
 ## Credits
 
 [Data Science Group (DICE)](https://dice-research.org/) at [Paderborn University](https://www.uni-paderborn.de/)
 
 This work has been supported by the German Federal Ministry of Transport and Digital Infrastructure (BMVI) in the project [Open Data Portal Germany (OPAL)](http://projekt-opal.de/) (funding code 19F2028A).
-  

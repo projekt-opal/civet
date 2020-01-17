@@ -1,82 +1,98 @@
 package org.dice_research.opal.civet.metrics;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.dice_research.opal.civet.data.DataContainer;
-import org.dice_research.opal.civet.data.DataObjects;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.NodeIterator;
+import org.apache.jena.rdf.model.RDFNode;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.vocabulary.DCAT;
+import org.apache.jena.vocabulary.DCTerms;
+import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
 /**
- * Single metric.
- *
+ * The MultipleSerializationsMetric awards stars based on the existence of
+ * multiple file formats are provided for download.
+ * 
  * @author Adrian Wilke
  */
-public class MultipleSerializationsMetric extends Metric {
+public class MultipleSerializationsMetric implements Metric {
 
-	private static final String DESCRIPTION = "Checks, if links to different file formats are provided..";
-	private static final String ID = MultipleSerializationsMetric.class.getSimpleName();
-	private static final MetricType METRIC_TYPE = MetricType.FIVE_STAR;
-	private static final Collection<String> REQUIRED_PROPERTIES = Arrays.asList(DataObjects.ACCESS_URL,
-			DataObjects.DOWNLOAD_URL);
-	private static final String RESULTS_URI = Opal.OPAL_METRIC_MULTIPLE_SERIALIZATIONS.toString();
-
-	public MultipleSerializationsMetric() {
-		this.description = DESCRIPTION;
-		this.id = ID;
-		this.metricType = METRIC_TYPE;
-		this.requiredProperties = REQUIRED_PROPERTIES;
-		this.resultsUri = RESULTS_URI;
-	}
+	private static final String DESCRIPTION = "Checks, if multiple file formats are provided for download.";
 
 	@Override
-	public float getScore(DataContainer dataContainer) {
+	public Integer compute(Model model, String datasetUri) throws Exception {
+		Resource dataset = ResourceFactory.createResource(datasetUri);
 
 		Set<String> extensions = new HashSet<>();
-		Set<String> urls = new HashSet<>();
+		Set<String> typesAndFormats = new HashSet<>();
 
-		// Collect unique URLs
-		// Collect unique extensions
-		for (String value : getValues(dataContainer, DataObjects.ACCESS_URL)) {
-			urls.add(value);
-			addExtension(value, extensions);
+		// Go through distributions
+		NodeIterator distributionIterator = model.listObjectsOfProperty(dataset, DCAT.distribution);
+		while (distributionIterator.hasNext()) {
+			RDFNode distributionNode = distributionIterator.next();
+			if (distributionNode.isResource()) {
+				Resource distribution = distributionNode.asResource();
+
+				// Get download URL extensions
+				NodeIterator downloadUrlIterator = model.listObjectsOfProperty(distribution, DCAT.downloadURL);
+				while (downloadUrlIterator.hasNext()) {
+					RDFNode downloadUrl = downloadUrlIterator.next();
+					if (downloadUrl.isURIResource()) {
+						addExtension(downloadUrl.asResource().getURI().toLowerCase(), extensions);
+					}
+				}
+
+				// Get media types
+				NodeIterator mediaTypeIterator = model.listObjectsOfProperty(distribution, DCAT.mediaType);
+				while (mediaTypeIterator.hasNext()) {
+					RDFNode mediaTypeNode = mediaTypeIterator.next();
+					if (mediaTypeNode.isLiteral()) {
+						typesAndFormats.add(mediaTypeNode.asLiteral().getString());
+					}
+				}
+
+				// Get formats
+				NodeIterator formatIterator = model.listObjectsOfProperty(distribution, DCTerms.format);
+				while (formatIterator.hasNext()) {
+					RDFNode formatNode = formatIterator.next();
+					if (formatNode.isLiteral()) {
+						typesAndFormats.add(formatNode.asLiteral().getString());
+					}
+				}
+
+			}
 		}
-		for (String value : getValues(dataContainer, DataObjects.DOWNLOAD_URL)) {
-			urls.add(value);
-			addExtension(value, extensions);
-		}
 
-		if (extensions.size() > 2) {
-			// 3 or more formats
-			return 5f;
-
-		} else if (extensions.size() > 1) {
-			// 2 or more formats
-			return 4f;
-
-		} else if (urls.size() > 1) {
-			// More than 1 URL, maybe there are several formats
-			return 1f;
-
+		if (extensions.size() > 1 || typesAndFormats.size() > 1) {
+			return 5;
 		} else {
-
-			// Only one URL
-			return 0f;
+			return 0;
 		}
-
 	}
 
-	private void addExtension(String value, Set<String> set) {
+	protected void addExtension(String value, Set<String> set) {
 		int dotIndex = value.lastIndexOf('.');
 		// Has to contain dot
 		if (dotIndex != -1) {
 			// Allow 4 characters for extension
-			if (value.length() - dotIndex < (4 + 2)) {
+			if (value.length() - dotIndex <= (4 + 1)) {
 				set.add(value.substring(dotIndex + 1));
 			}
 		}
+	}
+
+	@Override
+	public String getDescription() throws Exception {
+		return DESCRIPTION;
+	}
+
+	@Override
+	public String getUri() throws Exception {
+		return Opal.OPAL_METRIC_MULTIPLE_SERIALIZATIONS.getURI();
 	}
 
 }
