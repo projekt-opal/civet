@@ -38,10 +38,7 @@ public class AccessabilityMetricTest {
 	private static final String TEST4_DATASET_STATUS400 = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_brownfield_land_register_polygons";
 
 	private static final String TEST4_DATASET_DOWNLOADURL = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_broad_rental_market_areas_brma1";
-
-	//http://projekt-opal.de/dataset/https___ckan_govdata_de_d96cb43e_8ae5_418f_b53c_0e43bc73bcd3
-//	private static final String TEST4_DATASET_DOWNLOADURL = "\thttp://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_broad_rental_market_areas_brma1";
-
+	
 	@Before
 	public void setUp() throws Exception {
 		testdata = new TestData();
