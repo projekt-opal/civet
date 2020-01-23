@@ -14,7 +14,7 @@ public interface Metric {
 	 * 
 	 * @param model      Jena input model
 	 * @param datasetUri datasetUri URI of DCAT dataset to process
-	 * @return A score in range [0, 5]
+	 * @return A score in range [0, 5] or null if no score could be calculated
 	 * @throws Exception On errors
 	 */
 	public Integer compute(Model model, String datasetUri) throws Exception;
