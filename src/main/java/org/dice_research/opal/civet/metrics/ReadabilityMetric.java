@@ -30,11 +30,11 @@ import org.dice_research.opal.common.vocabulary.Opal;
 public class ReadabilityMetric implements Metric {
 
 	private static final String DESCRIPTION = "Computes the flesch reading score for English descriptions. "
-			+ "If the score is greater than 92, 5 stars are awarded. "
-			+ "If the score is greater than 70, 4 stars are awarded. "
-			+ "If the score is greater than 40, 3 stars are awarded. "
-			+ "If the score is greater than 15, 2 stars are awarded. "
-			+ "If the score is greater than 0, 1 stars are awarded. " + "else, 0 stars are awarded.";
+			+ "If the score is greater than 60, 5 stars are awarded. "
+			+ "If the score is greater than 50, 4 stars are awarded. "
+			+ "If the score is greater than 30, 3 stars are awarded. "
+			+ "If the score is greater than 20, 2 stars are awarded. "
+			+ "If the score is greater than 10, 1 stars are awarded. " + "else, 0 stars are awarded.";
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
