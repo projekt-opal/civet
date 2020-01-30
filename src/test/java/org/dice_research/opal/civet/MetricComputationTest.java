@@ -17,7 +17,7 @@ public class MetricComputationTest {
 
 	TestData testdata;
 
-	private static final boolean PRINT_MODEL = true;
+	private static final boolean PRINT_MODEL = false;
 
 	private static final String TEST_EDP_ICE = "Europeandataportal-Iceland.ttl";
 	private static final String TEST_EDP_ICE_DATASET = "http://projekt-opal.de/dataset/http___europeandataportal_eu_set_data__3dff988d_59d2_415d_b2da_818e8ef3111701";
