@@ -1,0 +1,143 @@
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_c0e483fd_9d29_328f_9b83_9eb950c9f022>
+        a                  dcat:Dataset ;
+        dct:conformsTo     []  ;
+        dct:conformsTo     [ dct:type  <http://inspire.ec.europa.eu/metadata-codelist/SpatialReferenceSystem> ;
+                             <http://www.w3.org/2002/07/owl#versionInfo>
+                                     "7.8"@de ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "25833"@de
+                           ] ;
+        dct:conformsTo     []  ;
+        dct:conformsTo     [ dct:type  <http://inspire.ec.europa.eu/metadata-codelist/SpatialReferenceSystem> ;
+                             <http://www.w3.org/2002/07/owl#versionInfo>
+                                     "7.8"@de ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     [] 
+                           ] ;
+        dct:conformsTo     []  ;
+        dct:conformsTo     [ dct:type  <http://inspire.ec.europa.eu/metadata-codelist/SpatialReferenceSystem> ;
+                             <http://www.w3.org/2002/07/owl#versionInfo>
+                                     "7.8"@de ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "31468"@de
+                           ] ;
+        dct:description    "Digitale Orthophotos (DOP) sind vollständig entzerrte, maßstabsgetreue Luftbilder auf Grundlage der Bayernbefliegung.\nDas DOP steht in Echtfarben(RGB), in Farbinfrarot(CIR) und als gedruckte Luftbildkarte zur Verfügung."@de ;
+        dct:identifier     "DEBY_19c91a81-465c-3d88-b53e-3aaa2f2f11c1" ;
+        dct:isPartOf       [ dct:identifier  "62701a7a-a96f-325c-bbb8-25f0d5432940" ] ;
+        dct:isPartOf       [ dct:identifier  "62701a7a-a96f-325c-bbb8-25f0d5432940" ] ;
+        dct:language       <http://publications.europa.eu/resource/authority/language/GER> ;
+        dct:modified       "2013-08-01"^^<http://www.w3.org/2001/XMLSchema#date> ;
+        dct:provenance     [ a       dct:ProvenanceStatement ;
+                             <http://www.w3.org/2000/01/rdf-schema#label>
+                                     "Die Digitalen Orthophotos werden aus orientierten Luftbildern und dem Digitalen Geländemodell (DGM) abgeleitet. Die Orientierten Luftbilder werden mit digitalen Luftbildkameras mit einer Farbtiefe von 12 bit aufgenommen. Über ein digitales Verfahren werden die Verzerrungen des Orientierten Luftbildes maßstabsgetreu korrigiert und auf die Kartenebene projeziert; dadurch erhält das Orthophoto die Eigenschaften einer Karte. Das DOP wird mit einer Farbtiefe von 8 bit gespeichert. Die Lagegenauigkeit jedes Pixels beträgt etwa 0.5 - 2 m. Der Betrag der Lagegenauigkeit ist im Wesentlichen von der Qualität des vorhandenen Digitalen Geländemodells abhängig."@de
+                           ] ;
+        dct:provenance     [ a       dct:ProvenanceStatement ;
+                             <http://www.w3.org/2000/01/rdf-schema#label>
+                                     "Die Digitalen Orthophotos werden aus orientierten Luftbildern und dem Digitalen Geländemodell (DGM) abgeleitet. Die Orientierten Luftbilder werden mit digitalen Luftbildkameras mit einer Farbtiefe von 12 bit aufgenommen. Über ein digitales Verfahren werden die Verzerrungen des Orientierten Luftbildes maßstabsgetreu korrigiert und auf die Kartenebene projeziert; dadurch erhält das Orthophoto die Eigenschaften einer Karte. Das DOP wird mit einer Farbtiefe von 8 bit gespeichert. Die Lagegenauigkeit jedes Pixels beträgt etwa 0.5 - 2 m. Der Betrag der Lagegenauigkeit ist im Wesentlichen von der Qualität des vorhandenen Digitalen Geländemodells abhängig."@de
+                           ] ;
+        dct:spatial        []  ;
+        dct:spatial        []  ;
+        dct:subject        <http://inspire.ec.europa.eu/metadata-codelist/TopicCategory/environment> ;
+        dct:title          "Digitales Orthophoto 113009-1"@de ;
+        dct:type           <http://inspire.ec.europa.eu/metadata-codelist/ResourceType/dataset> ;
+        dcat:contactPoint  [ a       <http://www.w3.org/2006/vcard/ns#Individual> ;
+                             <http://www.w3.org/2006/vcard/ns#fn>
+                                     "Kundenservice der Bayerischen Vermessungsverwaltung" ;
+                             <http://www.w3.org/2006/vcard/ns#hasAddress>
+                                     []  ;
+                             <http://www.w3.org/2006/vcard/ns#hasEmail>
+                                     <mailto:service@geodaten.bayern.de> ;
+                             <http://www.w3.org/2006/vcard/ns#hasTelephone>
+                                     <tel:+%2B49-89-2129-1111> ;
+                             <http://www.w3.org/2006/vcard/ns#hasURL>
+                                     <http://www.geodaten.bayern.de> ;
+                             <http://www.w3.org/2006/vcard/ns#organization-name>
+                                     "Landesamt für Digitalisierung, Breitband und Vermessung"
+                           ] ;
+        dcat:contactPoint  [ a       <http://www.w3.org/2006/vcard/ns#Individual> ;
+                             <http://www.w3.org/2006/vcard/ns#fn>
+                                     "Kundenservice der Bayerischen Vermessungsverwaltung" ;
+                             <http://www.w3.org/2006/vcard/ns#hasAddress>
+                                     []  ;
+                             <http://www.w3.org/2006/vcard/ns#hasEmail>
+                                     <mailto:service@geodaten.bayern.de> ;
+                             <http://www.w3.org/2006/vcard/ns#hasTelephone>
+                                     <tel:+%2B49-89-2129-1111> ;
+                             <http://www.w3.org/2006/vcard/ns#hasURL>
+                                     <http://www.geodaten.bayern.de> ;
+                             <http://www.w3.org/2006/vcard/ns#organization-name>
+                                     "Landesamt für Digitalisierung, Breitband und Vermessung"
+                           ] ;
+        dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_0ea64498_13ce_48db_b5e5_e4de58976ab2> , <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_931c9b47_10fd_4f78_b351_95fe1e3e242a> ;
+        dcat:keyword       "Infrarot"@de , "Bayernbefliegung"@de , "Farbinfrarot"@de , "Topographie"@de , "CIR"@de , "AdVMIS"@de , "Luftbildkarte"@de , "Bodenpixelgröße"@de , "DOP"@de , "Fluglos"@de , "Orthophoto"@de , "Entzerrung"@de , "Echtfarben"@de , "entzerrtes Luftbild"@de , "Bodenauflösung"@de , "RGB"@de , "Befliegung"@de , "Luftbild"@de , "Colorinfrarot"@de ;
+        dcat:theme         <http://inspire.ec.europa.eu/theme/oi> ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                <http://projekt-opal.de/measurement477> , <http://projekt-opal.de/measurement479> , <http://projekt-opal.de/measurement482> , <http://projekt-opal.de/measurement478> , <http://projekt-opal.de/measurement481> , <http://projekt-opal.de/measurement480> , <http://projekt-opal.de/measurement483> ;
+        <http://www.w3.org/ns/prov#wasUsedBy>
+                [ a       <http://www.w3.org/ns/prov#Activity> ;
+                  <http://www.w3.org/ns/prov#generated>
+                          []  ;
+                  <http://www.w3.org/ns/prov#qualifiedAssociation>
+                          [] 
+                ] ;
+        <http://www.w3.org/ns/prov#wasUsedBy>
+                [ a       <http://www.w3.org/ns/prov#Activity> ;
+                  <http://www.w3.org/ns/prov#generated>
+                          []  ;
+                  <http://www.w3.org/ns/prov#qualifiedAssociation>
+                          [] 
+                ] ;
+        <http://xmlns.com/foaf/0.1/isPrimaryTopicOf>
+                []  ;
+        <http://xmlns.com/foaf/0.1/isPrimaryTopicOf>
+                [ a                  dcat:CatalogRecord ;
+                  dct:identifier     "c0e483fd-9d29-328f-9b83-9eb950c9f022" ;
+                  dct:language       <http://publications.europa.eu/resource/authority/language/GER> ;
+                  dct:modified       "2016-06-06"^^<http://www.w3.org/2001/XMLSchema#date> ;
+                  dct:source         []  ;
+                  <http://www.w3.org/2011/content#characterEncoding>
+                          "UTF-8" ;
+                  dcat:contactPoint  [] 
+                ] ;
+        <http://xmlns.com/foaf/0.1/page>
+                <http://www.ldbv.bayern.de/produkte/luftbild/luftbilder.html> , <http://vermessung.bayern.de/service/kontakt.html> , <https://geoportal.bayern.de/geodatenonline/seiten/wms_dop40cm> , <https://geoportal.bayern.de/geodatenonline/seiten/wms_dop_cir_20cm> , <http://www.ldbv.bayern.de/vermessung/luftbilder/bayernbefliegung.html> , <https://geoportal.bayern.de/geodatenonline/seiten/wms_dop20cm> , <http://vermessung.bayern.de/file/pdf/1039/download_faltblatt-luftbilder08.pdf> , <https://geoportal.bayern.de/geodatenonline/seiten/wms_dop_cir_40cm> , <http://v.bayern.de/SbgZH> .
+				
+	
+	<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_0ea64498_13ce_48db_b5e5_e4de58976ab2>
+        a                dcat:Distribution ;
+        dct:description  "Testdaten zu den DOP20 und DOP40"@de ;
+        dct:license      []  ;
+        dct:license      []  ;
+        dct:rights       []  ;
+        dct:rights       []  ;
+        dct:rights       []  ;
+        dct:rights       []  ;
+        dct:title        "Testdaten"@de ;
+        <http://www.w3.org/2011/content#characterEncoding>
+                "UTF-8" ;
+        <http://www.w3.org/ns/adms#representationTechnique>
+                <http://inspire.ec.europa.eu/metadata-codelist/SpatialRepresentationTypeCode/grid>. 
+        #dcat:accessURL   <http://www.ldbv.bayern.de/service/testdaten.html> 
+		
+	<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_931c9b47_10fd_4f78_b351_95fe1e3e242a>
+        a                dcat:Distribution ;
+        dct:description  "DOP rund um die Uhr online bestellen"@de ;
+        dct:license      []  ;
+        dct:license      []  ;
+        dct:rights       []  ;
+        dct:rights       []  ;
+        dct:rights       []  ;
+        dct:rights       []  ;
+        dct:title        "Bestellen auf GeodatenOnline"@de ;
+        <http://www.w3.org/2011/content#characterEncoding>
+                "UTF-8" ;
+        <http://www.w3.org/ns/adms#representationTechnique>
+                <http://inspire.ec.europa.eu/metadata-codelist/SpatialRepresentationTypeCode/grid>;
+        dcat:accessURL   <https://geoportal.bayern.de/geodatenonline/seiten/dop_info>.

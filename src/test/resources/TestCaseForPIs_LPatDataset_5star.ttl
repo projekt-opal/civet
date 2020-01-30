@@ -1,0 +1,15 @@
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://projekt-opal.de/dataset/https___ckan_govdata_de_a642d7e5_bf1c_57f9_89df_cdad67c7c0fc>
+        a                  dcat:Dataset ;
+        dct:description    "Die VGR bietet Kennzahlen zur Wirtschaftsleistung. Es werden jährlich Kennzahlen, wie die Bruttowertschöpfung oder das Arbeitnehmerentgelt, gegliedert nach Wirtschaftszweigen, veröffentlicht. Es handelt sich um ein Gesamtrechnungssystem, d. h. Ergebnisse aus unterschiedlichen Statistiken werden herangezogen und fließen in die weiteren Berechnungen ein. Regional differenziert sind die Daten bis auf die Ebene der kreisfreien Städte und Kreise.  Hier finden Sie weiterführende Informationen zu der Statistik der VGR der Länder - Kreisberechnungen.   Hier finden Sie die statistischen Fachpublikationen (i.d.R. im PDF-Format) für Nordrhein-Westfalen:   [Link auf Webshop von IT.NRW, Geschäftsbereich Statistik]" ;
+        dct:identifier     "https://www.landesdatenbank.nrw.de/ldbnrw/online?sequenz=tabelleErgebnis&selectionname=82711-06iz&regionalschluessel=00" ;
+        dct:issued         "2018-10-09 07:34:31.791908" , "2018-10-09 07:34:31.791898" , "2018-10-09 07:34:31.791886" , "2018-06-27 00:00:00" , "2018-10-09 07:34:31.791862" ;
+        dct:license        "https://www.govdata.de/dl-de/by-2-0" ;
+        dct:modified       "2018-10-11 04:02:45.585449" ;
+        dct:title          "NRW: VGR der Länder: Arbeitnehmerentgelte nach Wirtschaftsbereichen (7) der WZ 2008 und je Arbeitnehmer - kreisfrei Städte und Kreise - Jahr" ;
+        dcat:distribution  <http://projekt-opal.de/distribution/https___ckan_govdata_de_ea06399b_951e_4674_a933_fb52e040b2a0> , <http://projekt-opal.de/distribution/https___ckan_govdata_de_a517aa99_a0e3_4083_803d_f81df0782869> , <http://projekt-opal.de/distribution/https___ckan_govdata_de_cc33e901_597b_4f16_a56c_9b5ed737eafd> , <http://projekt-opal.de/distribution/https___ckan_govdata_de_9f29889d_3b1e_4bd0_83be_414ee8cb6f88> , <http://projekt-opal.de/distribution/https___ckan_govdata_de_35a997df_8158_4c2e_8051_932fed4cd9b4> ;
+        dcat:landingPage   "https://www.landesdatenbank.nrw.de/link/tabelleAufbau/82711-06iz" ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                <http://projekt-opal.de/measurement107578> , <http://projekt-opal.de/measurement107577> , <http://projekt-opal.de/measurement107583> , <http://projekt-opal.de/measurement107582> , <http://projekt-opal.de/measurement107579> , <http://projekt-opal.de/measurement107581> , <http://projekt-opal.de/measurement107580> .
