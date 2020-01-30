@@ -7,6 +7,7 @@ import org.dice_research.opal.civet.metrics.LicenseAvailabilityMetricTest;
 import org.dice_research.opal.civet.metrics.MetadataQualityMetricTest;
 import org.dice_research.opal.civet.metrics.MultipleSerializationsMetricTest;
 import org.dice_research.opal.civet.metrics.ProviderIdentityMetricTest;
+import org.dice_research.opal.civet.metrics.ReadabilityMetricTest;
 import org.dice_research.opal.civet.metrics.UpdateRateMetricTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -30,6 +31,8 @@ import org.junit.runners.Suite.SuiteClasses;
 		MultipleSerializationsMetricTest.class,
 
 		ProviderIdentityMetricTest.class,
+
+		ReadabilityMetricTest.class,
 
 		UpdateRateMetricTest.class,
 
