@@ -1,0 +1,30 @@
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_designated_neighbourhood_plan_areas49>
+        a                  dcat:Dataset ;
+        dct:description    "\nBoundaries of all designated neighbourhood areas (for the purposes of producing a neighbourhood plan) within Cheshire West and Chester.\n"@en ;
+        dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                             dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                             <http://xmlns.com/foaf/0.1/name>
+                                     "Cheshire West and Chester Council"
+                           ] ;
+        dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                             dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                             <http://xmlns.com/foaf/0.1/name>
+                                     "Cheshire West and Chester Council"
+                           ] ;
+        dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                             dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                             <http://xmlns.com/foaf/0.1/name>
+                                     "Cheshire West and Chester Council"
+                           ] ;
+        dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                             dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                             <http://xmlns.com/foaf/0.1/name>
+                                     "Cheshire West and Chester Council"
+                           ] ;
+        dct:title          "Designated_Neighbourhood_Plan_Areas"@en ;
+        dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_f4d268d0_04df_4996_8390_0293410ec030> ;
+        dcat:keyword       "002"@en ;
+

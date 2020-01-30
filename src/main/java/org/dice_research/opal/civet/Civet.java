@@ -14,6 +14,7 @@ import org.dice_research.opal.civet.metrics.LicenseAvailabilityMetric;
 import org.dice_research.opal.civet.metrics.MetadataQualityMetric;
 import org.dice_research.opal.civet.metrics.MultipleSerializationsMetric;
 import org.dice_research.opal.civet.metrics.ProviderIdentityMetric;
+import org.dice_research.opal.civet.metrics.ReadabilityMetric;
 import org.dice_research.opal.civet.metrics.UpdateRateMetric;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
 import org.dice_research.opal.common.interfaces.ModelProcessor;
@@ -102,6 +103,7 @@ public class Civet implements ModelProcessor, JenaModelProcessor {
 		metrics.add(new LicenseAvailabilityMetric());
 		metrics.add(new MultipleSerializationsMetric());
 		metrics.add(new ProviderIdentityMetric());
+		metrics.add(new ReadabilityMetric());
 		metrics.add(new UpdateRateMetric());
 
 		// Has to be last metric as it aggregates
