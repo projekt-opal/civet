@@ -43,6 +43,10 @@ import org.junit.runners.Suite.SuiteClasses;
 
 		MetadataQualityMetricTest.class,
 
+		// Test cases on all metrics
+
+		TestCasesTest.class,
+
 		// Minimal working example
 
 		ExampleTest.class
