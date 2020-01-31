@@ -1,65 +1,77 @@
 package org.dice_research.opal.civet.metrics;
 
-import org.dice_research.opal.civet.TestData;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.rdf.model.Resource;
+import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.vocabulary.DCTerms;
+import org.dice_research.opal.test_cases.OpalTestCases;
+import org.dice_research.opal.test_cases.TestCase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Tests {@link TimelinessMetric}.
+ *
+ * @author Adrian Wilke
  */
 public class TimelinessMetricTest {
 
-	TestData testdata;
+	TestCase testCase;
+	String testCaseDatasetUri;
 
 	@Before
 	public void setUp() throws Exception {
-		testdata = new TestData();
+		testCase = OpalTestCases.getTestCase("edp-2019-12-17", "mittenwalde");
+		testCaseDatasetUri = testCase.getDatasetUri();
 	}
 
 	@Test
-	public void test1Stars() throws Exception {
-		//DCTerms.modified -> updated between 2 year and 4 year
-		final String TEST_FILE = "TestData.ttl";
-		final String TEST_DATASET = "http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_d57ee02f_fb9d_4c5e_9ec7_80cf495d19b7";
+	public void testFormats() throws Exception {
+		// YYYY (eg 1997)
+		testFormat("yyyy", 5, System.currentTimeMillis());
+		long lastYear = System.currentTimeMillis() - 1000l * 60 * 60 * 24 * 365;
+		testFormat("yyyy", 5, lastYear);
+		long twoYearsAgo = System.currentTimeMillis() - 1000l * 60 * 60 * 24 * 365 * 2;
+		testFormat("yyyy", 2, twoYearsAgo);
 
-		TimelinessMetric metric = new TimelinessMetric();
-		Integer stars = metric.compute(testdata.getModel(TEST_FILE), TEST_DATASET);
-		Assert.assertEquals(TEST_FILE, 1, stars.intValue());
+		// YYYY-MM (eg 1997-07)
+		testFormatThreeMonthAgo("yyyy-MM");
+		testFormat("yyyy-MM", 5, System.currentTimeMillis());
+
+		// YYYY-MM-DD (eg 1997-07-16)
+		testFormatThreeMonthAgo("yyyy-MM-dd");
+
+		// YYYY-MM-DDThh:mmTZD (eg 1997-07-16T19:20+01:00)
+		testFormatThreeMonthAgo("YYYY-MM-dd'T'hh:mm'+01:00'");
+
+		// YYYY-MM-DDThh:mm:ssTZD (eg 1997-07-16T19:20:30+01:00)
+		testFormatThreeMonthAgo("YYYY-MM-dd'T'hh:mm:ss'+01:00'");
+
+		// YYYY-MM-DDThh:mm:ss.sTZD (eg 1997-07-16T19:20:30.45+01:00)
+		testFormatThreeMonthAgo("YYYY-MM-dd'T'hh:mm:ss'.45+01:00'");
 	}
 
-	@Test
-	public void test2Stars() throws Exception {
-		//DCTerms.modified -> updated between 1 year and 2 year
-		TimelinessMetric metric = new TimelinessMetric();
-		final String TEST_FILE = "TestData.ttl";
-		final String TEST_DATASET = "http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_18d846ba_45c2_483f_9a59_a776d15b8dad";
-
-		Integer stars = metric.compute(testdata.getModel(TEST_FILE), TEST_DATASET);
-		Assert.assertEquals(TEST_FILE, 2, stars.intValue());
+	protected Model getModelWithModifiedDate(String modifiedDate) throws IOException {
+		Model model = ModelFactory.createDefaultModel().add(testCase.getModel());
+		Resource dataset = model.getResource(testCase.getDatasetUri());
+		return model.add(dataset, DCTerms.modified, ResourceFactory.createPlainLiteral(modifiedDate));
 	}
 
-	@Test
-	public void test3Stars() throws Exception {
-		//DCTerms.modified -> updated between 2 months and an year
-		final String TEST_FILE = "TestData.ttl";
-		final String TEST_DATASET = "http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_ab5cbaa0_7a95_471f_94a1_502c8fe55170";
-
-		TimelinessMetric metric = new TimelinessMetric();
-		Integer stars = metric.compute(testdata.getModel(TEST_FILE), TEST_DATASET);
-		Assert.assertEquals(TEST_FILE, 3, stars.intValue());
+	protected void testFormatThreeMonthAgo(String pattern) throws Exception {
+		long threeMonthAgo = System.currentTimeMillis() - 1000l * 60 * 60 * 24 * 31 * 3;
+		testFormat(pattern, 4, threeMonthAgo);
 	}
 
-
-	@Test
-	public void test5Stars() throws Exception {
-		//DCTerms.modified -> updated between now and 7 days
-		final String TEST_FILE = "TestData.ttl";
-		final String TEST_DATASET = "http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_de6f2062_c0f9_4bb3_858d_d722250b322b";
-
-		TimelinessMetric metric = new TimelinessMetric();
-		Integer stars = metric.compute(testdata.getModel(TEST_FILE), TEST_DATASET);
-		Assert.assertEquals(TEST_FILE, 5, stars.intValue());
-
+	protected void testFormat(String pattern, int expectedStars, long timeToCheck) throws Exception {
+		SimpleDateFormat format = new SimpleDateFormat(pattern);
+		String date = format.format(new Date(timeToCheck));
+		Integer stars = new TimelinessMetric().compute(getModelWithModifiedDate(date), testCaseDatasetUri);
+		Assert.assertEquals(pattern, expectedStars, stars.intValue());
 	}
 }
