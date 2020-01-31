@@ -8,6 +8,7 @@ import org.dice_research.opal.civet.metrics.MetadataQualityMetricTest;
 import org.dice_research.opal.civet.metrics.MultipleSerializationsMetricTest;
 import org.dice_research.opal.civet.metrics.ProviderIdentityMetricTest;
 import org.dice_research.opal.civet.metrics.ReadabilityMetricTest;
+import org.dice_research.opal.civet.metrics.TimelinessMetricTest;
 import org.dice_research.opal.civet.metrics.UpdateRateMetricTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -33,6 +34,8 @@ import org.junit.runners.Suite.SuiteClasses;
 		ProviderIdentityMetricTest.class,
 
 		ReadabilityMetricTest.class,
+
+		TimelinessMetricTest.class,
 
 		UpdateRateMetricTest.class,
 

@@ -71,6 +71,8 @@ public class MetadataQualityMetricTest {
 			counter++;
 		}
 
+		model.write(System.out, "TURTLE");
+
 		// Note: Metrics integrated in the future may return null, if it is not possible
 		// to calculate a score for the test model.
 		Assert.assertEquals("Number of computed metrics", civet.getMetrics().size(), counter);
