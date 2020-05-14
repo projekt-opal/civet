@@ -23,55 +23,60 @@ import org.dice_research.opal.common.vocabulary.Opal;
 
 /**
  * The Dateformat metric awards stars based on the the different dateformat in
- * the dataset. RDF properties dct:issued, dct:modified and distribution is
- * checked for dates. The more meaningful dates has been awarded with high
- * ratings and ratings is decremented to low to the least meaningful dates.
- * Rating criteria: 1."if the date is in the format: DD/MM/YYYY hh:mm:s GMT -
+ * the dataset.RDF properties dct:issued, dct:modified and distribution are
+ * checked for dates. The more meaningful dates have been awarded. Rating
+ * criteria: 1."if the date is in the format: DD/MM/YYYY hh:mm:s GMT -
  * DD/MM/YYYY hh:mm:s GMT then give 5 stars" 2."if the date is in the format:
  * YYYY.MM.DD hh:mm:s GMT then give 4 stars" 3."if the date is in the format:
  * YYYY.MM.DD then give 3 stars" 4."if the date is in the format: YYYY then give
- * 2 stars" 5."if the date property is empty then give 1 star"
+ * 2 stars" 5."if the date property is empty or have invalid date format then
+ * give 1 star"
  * 
  * references: https://www.w3.org/TR/NOTE-datetime
  * 
  * @author Aamir Mohammed
  */
-public class Dateformat2 implements Metric {
+public class DateFormat2 implements Metric {
+
+	static List<String> dateTimeFormat = new ArrayList<String>();
+	static {
+		dateTimeFormat.add("YYYY-MM-DD hh:mm:s");
+		dateTimeFormat.add("dd.mm.yyyy hh:mm:s");
+		dateTimeFormat.add("dd-mm-yyyy hh:mm:s");
+		dateTimeFormat.add("dd/mm/yyyy hh:mm:s");
+		dateTimeFormat.add("YYYY.MM.DD hh:mm:s");
+		dateTimeFormat.add("YYYY/MM/DD hh:mm:s");
+	}
+
+	static List<String> dateFormat = new ArrayList<String>();
+	static {
+		dateFormat.add("yyyy-MM-dd");
+		dateFormat.add("dd.mm.yyyy");
+		dateFormat.add("YYYY/MM/DD");
+		dateFormat.add("YYYY.MM.DD");
+		dateFormat.add("dd-MM-yyyy");
+		dateFormat.add("dd/mm/yyyy");
+	}
+
+	static List<String> yearFormat = new ArrayList<String>();
+	static {
+		yearFormat.add("YYYY");
+	}
 
 	public static int checkDateFormat(String issued) {
-		if (issued.contains("bis") || issued.contains("-") || issued.contains("—")) {
-			if (issued.contains("bis")) {
-				String[] range = issued.split("bis");
-				return checkRange(range);
-			} else if (issued.contains("-")) {
-				String[] range = issued.split("-");
-				return checkRange(range);
-			} else {
-				String[] range = issued.split("—");
-				return checkRange(range);
-			}
+		if (issued.contains("bis")) {
+			String[] range = issued.split("bis");
+			return checkRange(range);
+		} else if (issued.contains("-")) {
+			String[] range = issued.split("-");
+			return checkRange(range);
+		} else if (issued.contains("—")) {
+			String[] range = issued.split("—");
+			return checkRange(range);
 		} else {
 
 			if (issued.contains("GMT") && issued.split(" ").length == 6)
 				return 4;
-			List<String> dateTimeFormat = new ArrayList<String>();
-			dateTimeFormat.add("YYYY-MM-DD hh:mm:s");
-			dateTimeFormat.add("dd.mm.yyyy hh:mm:s");
-			dateTimeFormat.add("dd-mm-yyyy hh:mm:s");
-			dateTimeFormat.add("dd/mm/yyyy hh:mm:s");
-			dateTimeFormat.add("YYYY.MM.DD hh:mm:s");
-			dateTimeFormat.add("YYYY/MM/DD hh:mm:s");
-
-			List<String> dateFormat = new ArrayList<String>();
-			dateFormat.add("YYYY-MM-DD");
-			dateFormat.add("dd.mm.yyyy");
-			dateFormat.add("YYYY/MM/DD");
-			dateFormat.add("YYYY.MM.DD");
-			dateFormat.add("dd-mm-yyyy");
-			dateFormat.add("dd/mm/yyyy");
-
-			List<String> yearFormat = new ArrayList<String>();
-			yearFormat.add("YYYY");
 
 			for (String string : dateTimeFormat) {
 				SimpleDateFormat Format = new SimpleDateFormat(string);
@@ -110,24 +115,6 @@ public class Dateformat2 implements Metric {
 	}
 
 	public static int checkRange(String[] range) {
-		List<String> dateTimeFormat = new ArrayList<String>();
-		dateTimeFormat.add("YYYY-MM-DD hh:mm:s");
-		dateTimeFormat.add("dd.mm.yyyy hh:mm:s");
-		dateTimeFormat.add("dd-mm-yyyy hh:mm:s");
-		dateTimeFormat.add("dd/mm/yyyy hh:mm:s");
-		dateTimeFormat.add("YYYY.MM.DD hh:mm:s");
-		dateTimeFormat.add("YYYY/MM/DD hh:mm:s");
-
-		List<String> dateFormat = new ArrayList<String>();
-		dateFormat.add("YYYY-MM-DD");
-		dateFormat.add("dd.mm.yyyy");
-		dateFormat.add("YYYY/MM/DD");
-		dateFormat.add("YYYY.MM.DD");
-		dateFormat.add("dd-mm-yyyy");
-		dateFormat.add("dd/mm/yyyy");
-
-		List<String> yearFormat = new ArrayList<String>();
-		yearFormat.add("YYYY");
 
 		String fromDate = "", toDate = "";
 		if (range.length == 2) {
@@ -172,14 +159,15 @@ public class Dateformat2 implements Metric {
 				continue;
 			}
 		}
-		return 2;
+		return 1;
 	}
 
 	private static final Logger logger = LogManager.getLogger();
 	private static final String descriptions = "if the date is in the format: DD/MM/YYYY hh:mm:s GMT - DD/MM/YYYY hh:mm:s GMT then give 5 stars"
 			+ "if the date is in the format: YYYY.MM.DD hh:mm:s GMT then give 4 stars"
 			+ "if the date is in the format: YYYY.MM.DD then give 3 stars"
-			+ "if the date is in the format: YYYY then give 2 stars" + "if the date property is empty then give 1 star";
+			+ "if the date is in the format: YYYY then give 2 stars"
+			+ "if the date property is empty or have invalid date format then give 1 star";
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {

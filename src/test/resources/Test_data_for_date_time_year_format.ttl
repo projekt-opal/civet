@@ -21,7 +21,7 @@
         a                      dcat:Dataset ;
         dct:accrualPeriodicity  <http://publications.europa.eu/resource/authority/frequency/UNKNOWN> ;
         dct:description         "The Corine Land Cover datasets CLC2000, CLC2006and CLC change 2000-2006areproduced within the frame of the GMES land monitoringproject.Corine Land Cover (CLC) provides consistent information on land cover and land cover changes across Europe. This inventory was initiated in 1985 (reference year 1990) and established a time series of land cover information with updates in 2000 and 2006.CLC products are based on photointerpretation of satellite images by national teams of participating countries - the EEA member and cooperating countries â€“ following a standard methodology and nomenclature with the following base parameters: 44 classes in the hierarchical three level Corine nomenclature; minimum mapping unit (MMU) for status layers is 25 hectares; minimum width of linear elements is 100 metres; minimum mapping unit (MMU) for Land Cover Changes (LCC) for the change layers is 5 hectares. The resulting national land cover inventories are further integrated into a seamless land cover map of Europe.Land cover and land use (LCLU) information is important not only for land change research, but also more broadly for the monitoring of environmental change, policy support, the creation of environmental indicators and reporting. CLC datasets provide important datasets supporting the implementation of key priority areas of the Environment Action Programmes of the European Union as protecting ecosystems, halting the loss of biological diversity, tracking the impacts of climate change, assessing developments in agriculture and implementing the EU Water Framework Directive, among others.More about the Corine Land Cover (CLC) and Copernicus land monitoring data in general can be found at http://land.copernicus.eu/." ;
-        dct:issued              "" ;              
+        dct:issued              "21/02/1989 00:00:0 GMT - 21/03/1989 00:00:0 GMT" ;              
 		dct:identifier          "{3DFF988D-59D2-415D-B2DA-818E8EF31117}" , "{CE1CBDCB-2D94-44C8-9D23-2A8F0D0F1F28}" ;
         dct:language            <http://publications.europa.eu/resource/authority/language/ENG> ;
         dct:provenance          <http://rdlib.net/.well-known/genid/rdflib/N792b92e77204476aa63ad4fe9d2587f3> ;
@@ -29,6 +29,7 @@
         dct:title               "CORINE land cover Iceland \"clc00_is\"" ;
         <http://www.w3.org/ns/adms#identifier>
                 "a4ee1c79-262e-4d98-9c22-0b331f34c6cd" ;
+        dcat:distribution      <http://projekt-opal.de/distribution/http___europeandataportal_eu_set_distribution_7a90cfe9_6060_4d4e_989c_de01bba5b1c5> , <http://projekt-opal.de/distribution/http___europeandataportal_eu_set_distribution_e646caed_6766_475b_bc4b_2b7a93fe2dd1> ;
         dcat:contactPoint      <http://rdlib.net/.well-known/genid/rdflib/N043abe3af3c142d9b86265c5c02e60d3> ;
         dcat:keyword           "Iceland" , "Downloadable Data" , "land use" , "land cover" .
 
