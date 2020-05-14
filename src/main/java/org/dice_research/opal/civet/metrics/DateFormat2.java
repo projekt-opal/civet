@@ -174,42 +174,40 @@ public class DateFormat2 implements Metric {
 		int result = 1;
 		logger.info("Processing dataset " + datasetUri);
 		Resource dataset = ResourceFactory.createResource(datasetUri);
-		StmtIterator datasetIterator = model.listStatements(new SimpleSelector(dataset, RDF.type, DCAT.Dataset));
-		if (datasetIterator.hasNext()) {
-			Statement dataSetSentence = datasetIterator.nextStatement();
-			Resource dataSet = dataSetSentence.getSubject();
+		Statement dataSetSentence = model.getRequiredProperty(dataset, RDF.type);
+		Resource dataSet = dataSetSentence.getSubject();
 
-			if (dataSet.hasProperty(DCTerms.issued)
-					&& !(dataSet.getProperty(DCTerms.issued).getObject().toString().isEmpty())) {
-				String dateissued = dataSet.getProperty(DCTerms.issued).getObject().toString();
-				result = checkDateFormat(dateissued);
-			}
+		if (dataSet.hasProperty(DCTerms.issued)
+				&& !(dataSet.getProperty(DCTerms.issued).getObject().toString().isEmpty())) {
+			String dateissued = dataSet.getProperty(DCTerms.issued).getObject().toString();
+			result = checkDateFormat(dateissued);
+		}
 
-			else if (dataSet.hasProperty(DCTerms.modified)
-					&& !(dataSet.getProperty(DCTerms.modified).getObject().toString().isEmpty())) {
-				String dateissued = dataSet.getProperty(DCTerms.modified).getObject().toString();
-				result = checkDateFormat(dateissued);
-			} else {
-				StmtIterator distribution = model
-						.listStatements(new SimpleSelector(dataset, DCAT.distribution, (RDFNode) null));
-				if (distribution.hasNext()) {
-					Statement distSetSentence = distribution.nextStatement();
-					Resource dist = distSetSentence.getObject().asResource();
+		else if (dataSet.hasProperty(DCTerms.modified)
+				&& !(dataSet.getProperty(DCTerms.modified).getObject().toString().isEmpty())) {
+			String dateissued = dataSet.getProperty(DCTerms.modified).getObject().toString();
+			result = checkDateFormat(dateissued);
+		} else {
+			StmtIterator distribution = model
+					.listStatements(new SimpleSelector(dataset, DCAT.distribution, (RDFNode) null));
+			if (distribution.hasNext()) {
+				Statement distSetSentence = distribution.nextStatement();
+				Resource dist = distSetSentence.getObject().asResource();
 
-					if (dist.hasProperty(DCTerms.issued)
-							&& !(dist.getProperty(DCTerms.issued).getObject().toString().isEmpty())) {
-						String dateissued = dist.getProperty(DCTerms.issued).getObject().toString();
-						result = checkDateFormat(dateissued);
-					}
+				if (dist.hasProperty(DCTerms.issued)
+						&& !(dist.getProperty(DCTerms.issued).getObject().toString().isEmpty())) {
+					String dateissued = dist.getProperty(DCTerms.issued).getObject().toString();
+					result = checkDateFormat(dateissued);
+				}
 
-					else if (dist.hasProperty(DCTerms.modified)
-							&& !(dist.getProperty(DCTerms.modified).getObject().toString().isEmpty())) {
-						String dateissued = dist.getProperty(DCTerms.modified).getObject().toString();
-						result = checkDateFormat(dateissued);
-					}
+				else if (dist.hasProperty(DCTerms.modified)
+						&& !(dist.getProperty(DCTerms.modified).getObject().toString().isEmpty())) {
+					String dateissued = dist.getProperty(DCTerms.modified).getObject().toString();
+					result = checkDateFormat(dateissued);
 				}
 			}
 		}
+//		}
 		return result;
 	}
 
