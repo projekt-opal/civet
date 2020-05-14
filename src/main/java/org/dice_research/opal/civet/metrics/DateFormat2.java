@@ -207,7 +207,6 @@ public class DateFormat2 implements Metric {
 				}
 			}
 		}
-//		}
 		return result;
 	}
 
