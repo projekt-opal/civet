@@ -9,13 +9,11 @@ import java.util.List;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
-import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.rdf.model.SimpleSelector;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.vocabulary.DCAT;
 import org.apache.jena.vocabulary.DCTerms;
-import org.apache.jena.vocabulary.RDF;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
@@ -173,9 +171,7 @@ public class DateFormat2 implements Metric {
 	public Integer compute(Model model, String datasetUri) throws Exception {
 		int result = 1;
 		logger.info("Processing dataset " + datasetUri);
-		Resource dataset = ResourceFactory.createResource(datasetUri);
-		Statement dataSetSentence = model.getRequiredProperty(dataset, RDF.type);
-		Resource dataSet = dataSetSentence.getSubject();
+		Resource dataSet = model.createResource(datasetUri);
 
 		if (dataSet.hasProperty(DCTerms.issued)
 				&& !(dataSet.getProperty(DCTerms.issued).getObject().toString().isEmpty())) {
@@ -189,7 +185,7 @@ public class DateFormat2 implements Metric {
 			result = checkDateFormat(dateissued);
 		} else {
 			StmtIterator distribution = model
-					.listStatements(new SimpleSelector(dataset, DCAT.distribution, (RDFNode) null));
+					.listStatements(new SimpleSelector(dataSet, DCAT.distribution, (RDFNode) null));
 			if (distribution.hasNext()) {
 				Statement distSetSentence = distribution.nextStatement();
 				Resource dist = distSetSentence.getObject().asResource();
