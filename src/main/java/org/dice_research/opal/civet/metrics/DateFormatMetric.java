@@ -38,7 +38,11 @@ import org.dice_research.opal.common.vocabulary.Opal;
  */
 public class DateFormatMetric implements Metric {
 
-	static List<String> correctFormat = new ArrayList<String>();
+	private static final Logger LOGGER = LogManager.getLogger();
+	private static final String DESCRIPTIONS = "If the date format is in the correct format then give 5 stars else 0 star"
+			+ "Finally, an average of the following 4 cases has to be computed for the finalscore: dataset: issued + modified, distributions: issued + modified";
+
+	private static List<String> correctFormat = new ArrayList<String>();
 	static {
 		correctFormat.add("YYYY");
 		correctFormat.add("YYYY-MM");
@@ -61,10 +65,6 @@ public class DateFormatMetric implements Metric {
 		}
 		return 0;
 	}
-
-	private static final Logger LOGGER = LogManager.getLogger();
-	private static final String DESCRIPTIONS = "If the date format is in the correct format then give 5 stars else 0 star"
-			+ "Finally, an average of the following 4 cases has to be computed for the finalscore: dataset: issued + modified, distributions: issued + modified";
 
 	@Override
 	public Integer compute(Model model, String datasetUri) throws Exception {
