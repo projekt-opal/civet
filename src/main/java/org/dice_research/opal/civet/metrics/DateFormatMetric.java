@@ -39,7 +39,7 @@ import org.dice_research.opal.common.vocabulary.Opal;
 public class DateFormatMetric implements Metric {
 
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final String DESCRIPTIONS = "If the date format is in the correct format then give 5 stars else 0 star"
+	private static final String DESCRIPTION = "If the date format is in the correct format then give 5 stars else 0 star"
 			+ "Finally, an average of the following 4 cases has to be computed for the finalscore: dataset: issued + modified, distributions: issued + modified";
 
 	private static List<String> correctFormat = new ArrayList<String>();
@@ -54,9 +54,9 @@ public class DateFormatMetric implements Metric {
 
 	public static int checkDateFormat(String dct_issued) {
 		for (String string : correctFormat) {
-			SimpleDateFormat Format = new SimpleDateFormat(string);
+			SimpleDateFormat format = new SimpleDateFormat(string);
 			try {
-				Format.parse(dct_issued.trim());
+				format.parse(dct_issued.trim());
 				return 5;
 
 			} catch (ParseException pe) {
@@ -112,12 +112,12 @@ public class DateFormatMetric implements Metric {
 
 	@Override
 	public String getDescription() {
-		return DESCRIPTIONS;
+		return DESCRIPTION;
 	}
 
 	@Override
 	public String getUri() throws Exception {
-		return Opal.OPAL_METRIC_CATEGORIZATION.getURI();
+		return Opal.OPAL_METRIC_DATE_FORMAT.getURI();
 	}
 
 }
