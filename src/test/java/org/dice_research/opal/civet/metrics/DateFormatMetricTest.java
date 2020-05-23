@@ -29,7 +29,7 @@ public class DateFormatMetricTest {
 
 	@Test
 	public void correctFormat() throws Exception {
-
+		// dataset and distribution contains all correct format
 		DateFormatMetric metric = new DateFormatMetric();
 		final String datasetUri = "http://projekt-opal.de/dataset/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf";
 		Integer stars = metric.compute(model, datasetUri);
@@ -38,7 +38,8 @@ public class DateFormatMetricTest {
 
 	@Test
 	public void mostCorrectFormat() throws Exception {
-
+		// dataset contains two correct formats, distribution contains two
+		// correct and one incorrect format
 		DateFormatMetric metric = new DateFormatMetric();
 		final String datasetUri = "http://projekt-opal.de/dataset/_mcloudde_vieljhrlicherasterdesmittlerenvegetationsbeginnsindeutschland";
 		Integer stars = metric.compute(model, datasetUri);
@@ -47,7 +48,8 @@ public class DateFormatMetricTest {
 
 	@Test
 	public void someCorrectFormat() throws Exception {
-
+		// dataset contains two correct formats, distribution contains two
+		// correct and two incorrect formats
 		DateFormatMetric metric = new DateFormatMetric();
 		final String datasetUri = "http://projekt-opal.de/dataset/_mcloudde_gerastertetglichemittlerebodennahelufttemperaturfreuropaprojektdecregmiklip-versionv001abgelstever";
 		Integer stars = metric.compute(model, datasetUri);
@@ -56,7 +58,8 @@ public class DateFormatMetricTest {
 
 	@Test
 	public void lessCorrectFormat() throws Exception {
-
+		// dataset contains two correct formats and distribution contains
+		// two incorrect formats
 		DateFormatMetric metric = new DateFormatMetric();
 		final String datasetUri = "http://projekt-opal.de/dataset/_mcloudde_gerastertestglichesminimumderbodennahenlufttemperaturfreuropaprojektdecregmiklip-versionv001abgels";
 		Integer stars = metric.compute(model, datasetUri);
@@ -65,7 +68,8 @@ public class DateFormatMetricTest {
 
 	@Test
 	public void oneCorrectFormat() throws Exception {
-
+		// dataset contains one correct and one incorrect format.
+		// distribution contains two incorrect formats
 		DateFormatMetric metric = new DateFormatMetric();
 		final String datasetUri = "http://projekt-opal.de/dataset/_mcloudde_gezeiten-undwindstaukurvenfr16pegelinderdeutschenbuchtmintlich";
 		Integer stars = metric.compute(model, datasetUri);
@@ -74,7 +78,7 @@ public class DateFormatMetricTest {
 
 	@Test
 	public void noCorrectFormat() throws Exception {
-
+		// dataset and distribution contains one incorrect format
 		DateFormatMetric metric = new DateFormatMetric();
 		final String datasetUri = "http://projekt-opal.de/dataset/_mcloudde_schienennetzdichteingebietsflche";
 		Integer stars = metric.compute(model, datasetUri);

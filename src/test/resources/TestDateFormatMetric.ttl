@@ -20352,6 +20352,7 @@
 
 <http://projekt-opal.de/distribution/_mcloudde_schienennetzdichteingebietsflche_1>
         a                 dcat:Distribution ;
+        dct:issued        "21.03.2015";
         dct:license       <http://www.ioer-monitor.de/fileadmin/Dokumente/PDFs/Nutzungsbedingungen_IOER-Monitor.pdf> ;
         dcat:downloadURL  <https://mcloud.de/export/datasets/_mcloudde_schienennetzdichteingebietsflche> .
 
@@ -35358,8 +35359,7 @@
                 "5.0"^^<http://www.w3.org/2001/XMLSchema#float> .
 
 <http://projekt-opal.de/distribution/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf_2>
-        a                 dcat:Distribution ;
-        dct:issued        "2016";
+        a                 dcat:Distribution; 
         dct:modified      "2017-03";
         dct:license       <https://www.govdata.de/dl-de/by-2-0> ;
         dcat:downloadURL  <https://opendata.duesseldorf.de/sites/default/files/Z%C3%A4hlstellen.geojson> .
