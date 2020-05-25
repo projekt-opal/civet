@@ -73,18 +73,15 @@ public class DateFormatMetric implements Metric {
 		int countIssued = 0;
 		int countModified = 0;
 		Resource dataSet = model.createResource(datasetUri);
-		if (dataSet.hasProperty(DCTerms.issued)) {
+		if (dataSet.hasProperty(DCTerms.issued) | (dataSet.hasProperty(DCTerms.modified))) {
 			// First checking the property to count for calculating the average
 			countIssued++;
+			countModified++;
 		}
 		if (dataSet.hasProperty(DCTerms.issued)
 				&& !(dataSet.getProperty(DCTerms.issued).getObject().toString().isEmpty())) {
 			String dct_issued = dataSet.getProperty(DCTerms.issued).getObject().toString();
 			result += checkDateFormat(dct_issued);
-		}
-		if (dataSet.hasProperty(DCTerms.modified)) {
-			// First checking the property to count for calculating the average
-			countModified++;
 		}
 		if (dataSet.hasProperty(DCTerms.modified)
 				&& !(dataSet.getProperty(DCTerms.modified).getObject().toString().isEmpty())) {
