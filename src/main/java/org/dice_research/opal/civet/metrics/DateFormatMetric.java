@@ -73,34 +73,47 @@ public class DateFormatMetric implements Metric {
 		int countIssued = 0;
 		int countModified = 0;
 		Resource dataSet = model.createResource(datasetUri);
+		if (dataSet.hasProperty(DCTerms.issued)) {
+			// First checking the property to count for calculating the average
+			countIssued++;
+		}
 		if (dataSet.hasProperty(DCTerms.issued)
 				&& !(dataSet.getProperty(DCTerms.issued).getObject().toString().isEmpty())) {
 			String dct_issued = dataSet.getProperty(DCTerms.issued).getObject().toString();
 			result += checkDateFormat(dct_issued);
-			countIssued++;
+		}
+		if (dataSet.hasProperty(DCTerms.modified)) {
+			// First checking the property to count for calculating the average
+			countModified++;
 		}
 		if (dataSet.hasProperty(DCTerms.modified)
 				&& !(dataSet.getProperty(DCTerms.modified).getObject().toString().isEmpty())) {
 			String dateissued = dataSet.getProperty(DCTerms.modified).getObject().toString();
 			result += checkDateFormat(dateissued);
-			countModified++;
 		}
 		StmtIterator distribution = model
 				.listStatements(new SimpleSelector(dataSet, DCAT.distribution, (RDFNode) null));
 		while (distribution.hasNext()) {
 			Statement distributionSentence = distribution.nextStatement();
 			Resource dist = distributionSentence.getObject().asResource();
+
+			if (dist.hasProperty(DCTerms.issued)) {
+				// First checking the property to count for calculating the average
+				countIssued++;
+			}
 			if (dist.hasProperty(DCTerms.issued)
 					&& !(dist.getProperty(DCTerms.issued).getObject().toString().isEmpty())) {
 				String dateissued = dist.getProperty(DCTerms.issued).getObject().toString();
 				result += checkDateFormat(dateissued);
-				countIssued++;
+			}
+			if (dist.hasProperty(DCTerms.modified)) {
+				// First checking the property to count for calculating the average
+				countModified++;
 			}
 			if (dist.hasProperty(DCTerms.modified)
 					&& !(dist.getProperty(DCTerms.modified).getObject().toString().isEmpty())) {
 				String dateissued = dist.getProperty(DCTerms.modified).getObject().toString();
 				result += checkDateFormat(dateissued);
-				countModified++;
 			}
 		}
 		return result / (countIssued + countModified);

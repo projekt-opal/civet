@@ -4,7 +4,8 @@
 <http://projekt-opal.de/dataset/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf>
         a                  dcat:Dataset ;
         dct:description    "Der Datensatz enthÃ¤lt die Standorte und weitere Angaben zu den DauerzÃ¤hlstellen fÃ¼r FahrrÃ¤der in DÃ¼sseldorf. In DÃ¼sseldorf gibt es 17 DauerzÃ¤hlstellen fÃ¼r den Radverkehr. Im Herbst 2014 wurde die ZÃ¤hlstelle am Mannesmannufer mit einer Informationstafel verknÃ¼pft. Sie zeigt den Tages- und Jahreswert an dieser Messstelle an. Weitergehende Informationen zum Thema Radfahren in DÃ¼sseldorf finden Sie auf der Seite RADschlag â€“ DÃ¼sseldorf tritt an! Die Datei â€žStandorte der DauerzÃ¤hlstellenâ€œ enthÃ¤lt folgende Spalteninformationen:" ;
-        dct:issued         "2018-06-02"; 
+        dct:issued         "2016-06-02"; 
+        dct:modified       "2017";
         dct:publisher      <http://projekt-opal.de/agent/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf> ;
         dct:title          "Standorte der DauerzÃ¤hlstellen Radverkehr in DÃ¼sseldorf" ;
         dcat:distribution  <http://projekt-opal.de/distribution/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf_2>;
@@ -2336,7 +2337,7 @@
 <http://projekt-opal.de/dataset/_mcloudde_hochbahntunnelhamburg>
         a                  dcat:Dataset ;
         dct:description    "Im Datensatz beinhaltet die Tunnel der Hamburger HOCHBAHN AG. Die Tunnel-Anlagen der HOCHBAHN sind in Bezug zur GelÃ¤ndeoberflÃ¤che dargestellt in Minusebenen. Im Bereich der Knotenpunkte kennzeichnet eine farbliche Unterscheidung von Tunnel Ebene -1 bis Tunnel Ebene -4 den unterirdischen Verlauf. Ãœbereinander liegende Anlagen unterscheiden sich in obere, mittlere und tiefe Tunnel-Anlagen." ;
-        dct:issued         "18.03.2015" ;
+        dct:issued         "" ;
         dct:publisher      <http://projekt-opal.de/agent/_mcloudde_hochbahntunnelhamburg> ;
         dct:title          "HOCHBAHN Tunnel Hamburg" ;
         dcat:distribution  <http://projekt-opal.de/distribution/_mcloudde_hochbahntunnelhamburg_4> , <http://projekt-opal.de/distribution/_mcloudde_hochbahntunnelhamburg_1> , <http://projekt-opal.de/distribution/_mcloudde_hochbahntunnelhamburg_2> , <http://projekt-opal.de/distribution/_mcloudde_hochbahntunnelhamburg_0> , <http://projekt-opal.de/distribution/_mcloudde_hochbahntunnelhamburg_3> ;
@@ -34399,6 +34400,7 @@
 
 <http://projekt-opal.de/distribution/_mcloudde_hochbahntunnelhamburg_1>
         a                 dcat:Distribution ;
+        dct:modified      "";
         dct:license       <https://www.govdata.de/dl-de/by-2-0> ;
         dcat:downloadURL  <https://mcloud.de/export/datasets/_mcloudde_hochbahntunnelhamburg> .
 
@@ -35359,8 +35361,9 @@
                 "5.0"^^<http://www.w3.org/2001/XMLSchema#float> .
 
 <http://projekt-opal.de/distribution/_mcloudde_standortederdauerzhlstellenradverkehrindsseldorf_2>
-        a                 dcat:Distribution; 
-        dct:modified      "2017-03";
+        a                 dcat:Distribution;
+        dct:issued        "2016-07-16T19:20+01:00";
+        dct:modified      "2017-07-16T19:20:30+01:00"; 
         dct:license       <https://www.govdata.de/dl-de/by-2-0> ;
         dcat:downloadURL  <https://opendata.duesseldorf.de/sites/default/files/Z%C3%A4hlstellen.geojson> .
 

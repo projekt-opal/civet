@@ -85,4 +85,13 @@ public class DateFormatMetricTest {
 		Assert.assertEquals("It contains no correct format", 0, stars.intValue());
 	}
 
+	@Test
+	public void checkEmptyProperty() throws Exception {
+		// dataset and distribution contains one empty property
+		DateFormatMetric metric = new DateFormatMetric();
+		final String datasetUri = "http://projekt-opal.de/dataset/_mcloudde_hochbahntunnelhamburg";
+		Integer stars = metric.compute(model, datasetUri);
+		Assert.assertEquals("Empty property", 0, stars.intValue());
+	}
+
 }
