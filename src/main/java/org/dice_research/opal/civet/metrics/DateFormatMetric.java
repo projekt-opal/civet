@@ -36,31 +36,25 @@ public class DateFormatMetric implements Metric {
 
 	public static int checkDateFormat(String issued) {
 		/*
-		 * Following are the correct date formats according to "w3.org". Here, we are
-		 * checking different date formats using regular expression.
-		 * 
+		 * Correct date formats list w.r.t "w3.org". Checking different date formats
+		 * using regular expression.
 		 */
 		if (issued.matches("\\d{4}-\\d{2}-\\d{2}")) {
 			// "YYYY-MM-DD"
 			return 5;
-		}
-		if (issued.matches("\\d{4}")) {
+		} else if (issued.matches("\\d{4}")) {
 			// "YYYY"
 			return 5;
-		}
-		if (issued.matches("\\d{4}-\\d{2}")) {
+		} else if (issued.matches("\\d{4}-\\d{2}")) {
 			// "YYYY-MM"
 			return 5;
-		}
-		if (issued.matches("\\d{4}-\\d{2}-\\d{2}[T]\\d{2}:\\d{2}:\\d{2}[+]\\d{2}:\\d{2}")) {
+		} else if (issued.matches("\\d{4}-\\d{2}-\\d{2}[T]\\d{2}:\\d{2}:\\d{2}[+]\\d{2}:\\d{2}")) {
 			// "YYYY-MM-DDThh:mm:ssTZD"
 			return 5;
-		}
-		if (issued.matches("\\d{4}-\\d{2}-\\d{2}[T]\\d{2}:\\d{2}[+]\\d{2}:\\d{2}")) {
+		} else if (issued.matches("\\d{4}-\\d{2}-\\d{2}[T]\\d{2}:\\d{2}[+]\\d{2}:\\d{2}")) {
 			// "YYYY-MM-DDThh:mmTZD"
 			return 5;
-		}
-		if (issued.matches("\\d{4}-\\d{2}-\\d{2}[T]\\d{2}:\\d{2}:\\d{2}[.]\\d+[+]\\d{2}:\\d{2}")) {
+		} else if (issued.matches("\\d{4}-\\d{2}-\\d{2}[T]\\d{2}:\\d{2}:\\d{2}[.]\\d+[+]\\d{2}:\\d{2}")) {
 			// "YYYY-MM-DDThh:mm:ss.sTZD"
 			return 5;
 		}
@@ -72,44 +66,45 @@ public class DateFormatMetric implements Metric {
 		int result = 0;
 		int countIssued = 0;
 		int countModified = 0;
+
 		Resource dataSet = model.createResource(datasetUri);
-		if (dataSet.hasProperty(DCTerms.issued) | (dataSet.hasProperty(DCTerms.modified))) {
-			// First checking the property to count for calculating the average
-			countIssued++;
-			countModified++;
-		}
-		if (dataSet.hasProperty(DCTerms.issued)
-				&& !(dataSet.getProperty(DCTerms.issued).getObject().toString().isEmpty())) {
+		Boolean checkDctIssued = dataSet.hasProperty(DCTerms.issued);
+		Boolean checkDctModified = dataSet.hasProperty(DCTerms.modified);
+
+		// Checking issued and modified RDF property in DCTerms
+		countIssued = checkDctIssued ? countIssued += 1 : countIssued;
+		countModified = checkDctModified ? countModified += 1 : countModified;
+
+		if (checkDctIssued && !(dataSet.getProperty(DCTerms.issued).getObject().toString().isEmpty())) {
 			String dct_issued = dataSet.getProperty(DCTerms.issued).getObject().toString();
 			result += checkDateFormat(dct_issued);
 		}
-		if (dataSet.hasProperty(DCTerms.modified)
-				&& !(dataSet.getProperty(DCTerms.modified).getObject().toString().isEmpty())) {
+
+		if (checkDctModified && !(dataSet.getProperty(DCTerms.modified).getObject().toString().isEmpty())) {
 			String dateissued = dataSet.getProperty(DCTerms.modified).getObject().toString();
 			result += checkDateFormat(dateissued);
 		}
+
 		StmtIterator distribution = model
 				.listStatements(new SimpleSelector(dataSet, DCAT.distribution, (RDFNode) null));
+
 		while (distribution.hasNext()) {
 			Statement distributionSentence = distribution.nextStatement();
-			Resource dist = distributionSentence.getObject().asResource();
+			Resource distDataSet = distributionSentence.getObject().asResource();
+			Boolean checkDistIssued = distDataSet.hasProperty(DCTerms.issued);
+			Boolean checkDistModified = distDataSet.hasProperty(DCTerms.modified);
 
-			if (dist.hasProperty(DCTerms.issued)) {
-				// First checking the property to count for calculating the average
-				countIssued++;
-			}
-			if (dist.hasProperty(DCTerms.issued)
-					&& !(dist.getProperty(DCTerms.issued).getObject().toString().isEmpty())) {
-				String dateissued = dist.getProperty(DCTerms.issued).getObject().toString();
+			// Checking issued and modified RDF property in DCAT distributions
+			countIssued = checkDistIssued ? countIssued += 1 : countIssued;
+			countModified = checkDistModified ? countModified += 1 : countModified;
+
+			if (checkDistIssued && !(distDataSet.getProperty(DCTerms.issued).getObject().toString().isEmpty())) {
+				String dateissued = distDataSet.getProperty(DCTerms.issued).getObject().toString();
 				result += checkDateFormat(dateissued);
 			}
-			if (dist.hasProperty(DCTerms.modified)) {
-				// First checking the property to count for calculating the average
-				countModified++;
-			}
-			if (dist.hasProperty(DCTerms.modified)
-					&& !(dist.getProperty(DCTerms.modified).getObject().toString().isEmpty())) {
-				String dateissued = dist.getProperty(DCTerms.modified).getObject().toString();
+
+			if (checkDistModified && !(distDataSet.getProperty(DCTerms.modified).getObject().toString().isEmpty())) {
+				String dateissued = distDataSet.getProperty(DCTerms.modified).getObject().toString();
 				result += checkDateFormat(dateissued);
 			}
 		}
