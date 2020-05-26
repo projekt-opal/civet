@@ -21,7 +21,7 @@ public class TestCasesTest {
 
 	@Test
 	public void test() throws Exception {
-		List<Metric> metrics = new Civet().getMetrics();
+		List<Metric> metrics = new Civet().setIncludeLongRunning(true).getMetrics();
 		List<TestCase> testCases = OpalTestCases.getAllTestCases();
 
 		long time = System.currentTimeMillis();

@@ -10,11 +10,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.metrics.CategorizationMetric;
 import org.dice_research.opal.civet.metrics.DataFormatMetric;
+import org.dice_research.opal.civet.metrics.DateFormatMetric;
 import org.dice_research.opal.civet.metrics.LicenseAvailabilityMetric;
 import org.dice_research.opal.civet.metrics.MetadataQualityMetric;
 import org.dice_research.opal.civet.metrics.MultipleSerializationsMetric;
 import org.dice_research.opal.civet.metrics.ProviderIdentityMetric;
 import org.dice_research.opal.civet.metrics.ReadabilityMetric;
+import org.dice_research.opal.civet.metrics.RetrievabilityMetric;
 import org.dice_research.opal.civet.metrics.TimelinessMetric;
 import org.dice_research.opal.civet.metrics.UpdateRateMetric;
 import org.dice_research.opal.common.interfaces.JenaModelProcessor;
@@ -27,8 +29,14 @@ import org.dice_research.opal.common.interfaces.ModelProcessor;
  * 
  * The Data Quality Vocabulary (DQV) is used to describe the resulting data.
  * 
+ * Long running metrics are excluded by default. To change that, use
+ * {@link #setIncludeLongRunning(boolean)}.
+ * 
+ * If a measurement of a metric could not be computed, an info is logged. To
+ * change that, use {@link #setLogIfNotComputed(boolean)}.
+ * 
  * Existing measurements will be removed before computing new measurements by
- * default. To change that, use {@link #removeMeasurements}.
+ * default. To change that, use {@link #setRemoveMeasurements(boolean)}.
  *
  * @see https://www.w3.org/TR/vocab-dqv/
  *
@@ -39,8 +47,9 @@ public class Civet implements ModelProcessor, JenaModelProcessor {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	private boolean removeMeasurements = true;
+	private boolean includeLongRunning = false;
 	private boolean logIfNotComputed = true;
+	private boolean removeMeasurements = true;
 
 	/**
 	 * Computes quality metric scores (measurements).
@@ -101,10 +110,14 @@ public class Civet implements ModelProcessor, JenaModelProcessor {
 
 		metrics.add(new CategorizationMetric());
 		metrics.add(new DataFormatMetric());
+		metrics.add(new DateFormatMetric());
 		metrics.add(new LicenseAvailabilityMetric());
 		metrics.add(new MultipleSerializationsMetric());
 		metrics.add(new ProviderIdentityMetric());
 		metrics.add(new ReadabilityMetric());
+		if (includeLongRunning) {
+			metrics.add(new RetrievabilityMetric());
+		}
 		metrics.add(new TimelinessMetric());
 		metrics.add(new UpdateRateMetric());
 
@@ -115,31 +128,47 @@ public class Civet implements ModelProcessor, JenaModelProcessor {
 	}
 
 	/**
-	 * Gets setting, if existing measurements will be removed.
+	 * If set, long running metrics are executed.
 	 */
-	public boolean isRemovingMeasurements() {
-		return removeMeasurements;
+	public boolean isIncludingLongRunning() {
+		return includeLongRunning;
 	}
 
 	/**
-	 * Sets, if existing measurements will be removed.
+	 * Sets if long running metrics should be executed.
 	 */
-	public Civet setRemoveMeasurements(boolean removeMeasurements) {
-		this.removeMeasurements = removeMeasurements;
+	public Civet setIncludeLongRunning(boolean includeLongRunning) {
+		this.includeLongRunning = includeLongRunning;
 		return this;
 	}
 
 	/**
-	 * Gets setting, if it is logged, when a measurement could not be computed.
+	 * If set, logs when a measurement could not be computed.
 	 */
-	public boolean isLogNotComputed() {
+	public boolean isLoggingIfNotComputed() {
 		return logIfNotComputed;
 	}
 
 	/**
 	 * Sets, if it should be logged, when a measurement could not be computed.
 	 */
-	public void setLogNotComputed(boolean logNotComputed) {
+	public Civet setLogIfNotComputed(boolean logNotComputed) {
 		this.logIfNotComputed = logNotComputed;
+		return this;
+	}
+
+	/**
+	 * If set, all existing measurements will be removed before computing new ones.
+	 */
+	public boolean isRemovingMeasurements() {
+		return removeMeasurements;
+	}
+
+	/**
+	 * Sets if all existing measurements will be removed before computing new ones.
+	 */
+	public Civet setRemoveMeasurements(boolean removeMeasurements) {
+		this.removeMeasurements = removeMeasurements;
+		return this;
 	}
 }

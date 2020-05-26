@@ -1,0 +1,171 @@
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_31303833_3231_4031_3130_323032344210>
+        a                  dcat:Dataset ;
+        dct:conformsTo     [ dct:type  <http://inspire.ec.europa.eu/metadata-codelist/SpatialReferenceSystem> ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "31303833-3231-4031-3130-323032344210"@de
+                           ] ;
+        dct:conformsTo     [ dct:type  <http://inspire.ec.europa.eu/metadata-codelist/SpatialReferenceSystem> ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "25832"@de
+                           ] ;
+        dct:conformsTo     [ dct:issued  "2010-12-08"^^<http://www.w3.org/2001/XMLSchema#date> ;
+                             dct:title   "VERORDNUNG (EG) Nr. 1089/2010 DER KOMMISSION vom 23. November 2010 zur Durchführung der Richtlinie 2007/2/EG des Europäischen Parlaments und des Rates hinsichtlich der Interoperabilität von Geodatensätzen und -diensten"@de
+                           ] ;
+        dct:description    "Abfallentsorgung:"@de ;
+        dct:identifier     "https://registry.gdi-de.org/id/de.bund.statistikverbund/BW-31303833-3231-4031-3130-323032344210"^^<http://www.w3.org/2001/XMLSchema#anyURI> ;
+        dct:language       <http://publications.europa.eu/resource/authority/language/GER> ;
+        dct:provenance     [ a       dct:ProvenanceStatement ;
+                             <http://www.w3.org/2000/01/rdf-schema#label>
+                                     "Das Statistische Landesamt Baden-Württemberg prüft die Daten, die in der Regionaldatenbank Deutschland gespeichert sind, durch geeignete Kontrollen auf ihre Richtigkeit und Vollständigkeit. Das Statistische Landesamt Baden-Württemberg übernimmt keine Gewähr für die Richtigkeit und Vollständigkeit von Daten und Metadaten aus der Regionaldatenbank Deutschland und für deren Übermittlung an den Nutzer über das Internet."@de
+                           ] ;
+        dct:spatial        []  ;
+        dct:subject        <http://inspire.ec.europa.eu/metadata-codelist/TopicCategory/environment> , <http://inspire.ec.europa.eu/metadata-codelist/TopicCategory/society> ;
+        dct:title          "Abfallentsorgung: (Baden-Württemberg)"@de ;
+        dct:type           <http://inspire.ec.europa.eu/metadata-codelist/ResourceType/dataset> ;
+        dcat:contactPoint  []  ;
+        dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_f63f4dd7_0964_4abf_8f54_39a1c4abf2f4> ;
+        dcat:theme         <http://inspire.ec.europa.eu/theme/pd> , <http://publications.europa.eu/resource/authority/data-theme/SOCI> , <http://eurovoc.europa.eu/3300> , <http://eurovoc.europa.eu/100149> ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         [ a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "thermische Behandlungsanlage"
+                           ] ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         [ a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "Ludwigsburg, Landkreis"
+                           ] ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         [ a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "Deponie"
+                           ] ;
+        dcat:theme         []  ;
+        dcat:theme         [ a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "Biberach, Landkreis"
+                           ] ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         [ a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "Lörrach, Landkreis"
+                           ] ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         [ a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "Tübingen, Regierungsbezirk"
+                           ] ;
+        dcat:theme         []  ;
+        dcat:theme         [ a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "Baden-Württemberg, Land"
+                           ] ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         [ a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "Tuttlingen, Landkreis"
+                           ] ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         [ a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "Ortenaukreis, Landkreis"
+                           ] ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         [ a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "Reutlingen, Landkreis"
+                           ] ;
+        dcat:theme         []  ;
+        dcat:theme         [ a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "Heilbronn, Stadtkreis"
+                           ] ;
+        dcat:theme         []  ;
+        dcat:theme         [ a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "Ostalbkreis, Landkreis"
+                           ] ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         [ a       <http://www.w3.org/2004/02/skos/core#Concept> ;
+                             <http://www.w3.org/2004/02/skos/core#inScheme>
+                                     []  ;
+                             <http://www.w3.org/2004/02/skos/core#prefLabel>
+                                     "Zollernalbkreis, Landkreis"
+                           ] ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        dcat:theme         []  ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                <http://projekt-opal.de/measurement591432> , <http://projekt-opal.de/measurement591435> , <http://projekt-opal.de/measurement591434> , <http://projekt-opal.de/measurement591436> , <http://projekt-opal.de/measurement591433> , <http://projekt-opal.de/measurement591431> , <http://projekt-opal.de/measurement591437> ;
+        <http://www.w3.org/ns/prov#wasUsedBy>
+                []  ;
+        <http://xmlns.com/foaf/0.1/isPrimaryTopicOf>
+                []  .
+				
+
+<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_f63f4dd7_0964_4abf_8f54_39a1c4abf2f4>
+        a                dcat:Distribution ;
+        dct:description  "Diese Resource beinhaltet die Tabelle 32111-02-02-4-B(Abfallentsorgung:) mit Daten der Amtlichen Statistik als CSV-Datei."@de ;
+        dct:license      []  ;
+        dct:rights       []  ;
+        dct:rights       []  ;
+        dct:rights       []  ;
+        dct:title        "CSV-File der Tabelle 32111-02-02-4-B"@de ;
+        <http://www.w3.org/2011/content#characterEncoding>
+                "UTF-8" ;
+        dcat:accessURL   <https://www.regionalstatistik.de/genesisws/downloader/08/32111-02-02-4-B_08.csv> .

@@ -1,0 +1,60 @@
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix dcat:  <http://www.w3.org/ns/dcat#> .
+
+<http://projekt-opal.de/dataset/https___europeandataportal_eu_set_data_conservation_areas1>
+        a                  dcat:Dataset ;
+        dct:description    "Defined Conservation Areas in Barrow Borough Council, the limit of each Conservation Area is recorded as a polygon.\n\nUpon accessing this Licensed Data you will be deemed to have accepted the terms of the Open Government Licence for Public Sector Information"@en ;
+        dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                             dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                             <http://xmlns.com/foaf/0.1/name>
+                                     "Barrow Borough Council"
+                           ] ;
+        dct:publisher      [ a         <http://xmlns.com/foaf/0.1/Agent> ;
+                             dct:type  <http://purl.org/adms/publishertype/NationalAuthority> ;
+                             <http://xmlns.com/foaf/0.1/name>
+                                     "Barrow Borough Council"
+                           ] ;
+        dct:title          "Conservation Areas"@en ;
+        dcat:distribution  <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_03a5f3c7_9ed3_4643_bcec_8a092a3d61af> , 
+		<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_02b34ee5_5775_40f6_8795_ddbb21377cac>,
+		<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_f7c697ca_5966_4920_a7da_d8cb055e6758>,
+		<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_ec505a94_098e_4154_b974_a8c6dff0ad24> , <http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_be9088ee_ca48_4dc3_bdf3_9a980bff8857> ;
+        dcat:theme         <http://publications.europa.eu/resource/authority/data-theme/REGI> ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                <http://projekt-opal.de/measurement180726> , <http://projekt-opal.de/measurement180720> , <http://projekt-opal.de/measurement180723> , <http://projekt-opal.de/measurement180725> , <http://projekt-opal.de/measurement180722> , <http://projekt-opal.de/measurement180724> , <http://projekt-opal.de/measurement180721> .
+				
+				
+	<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_f7c697ca_5966_4920_a7da_d8cb055e6758>
+        a                dcat:Distribution ;
+        dct:description  "information"@en ;
+        dct:title        "INSPIRE View Service"@en ;
+        dcat:accessURL   <http://inspire.misoportal.com/geoserver/corby_borough_council_conservation_area/wms?request=getCapabilities> .
+		
+	<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_02b34ee5_5775_40f6_8795_ddbb21377cac>
+        a                dcat:Distribution ;
+        dct:description  "download"@en ;
+        dct:title        "INSPIRE Download Service"@en ;
+        dcat:accessURL   <http://misoportal.com/portal/api/request-licenced-data/2389> .
+		
+	<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_03a5f3c7_9ed3_4643_bcec_8a092a3d61af>
+        a                dcat:Distribution ;
+        dct:description  "Barrow Council INSPIRE WMS Service"@en ;
+        dct:format       <http://publications.europa.eu/resource/authority/file-type/WMS> ;
+        dct:license      <http://reference.data.gov.uk/id/open-government-licence> ;
+        dct:title        "Barrow Council INSPIRE WMS Service"@en ;
+        dcat:accessURL   <https://webgis1.barrowbc.gov.uk/inspire/wms?service=WMS&request=GetCapabilities> .
+		
+	<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_ec505a94_098e_4154_b974_a8c6dff0ad24>
+        a                dcat:Distribution ;
+        dct:description  "Barrow Councils Web Mapping"@en ;
+        dct:format       <http://publications.europa.eu/resource/authority/file-type/HTML> ;
+        dct:license      <http://reference.data.gov.uk/id/open-government-licence> ;
+        dct:title        "Barrow Councils Web Mapping"@en ;
+        dcat:accessURL   <https://webgis1.barrowbc.gov.uk/webgis/bingis.html?action=load&layer=BBC:CONSERVATIONAREAS> .
+	
+	<http://projekt-opal.de/distribution/https___europeandataportal_eu_set_distribution_be9088ee_ca48_4dc3_bdf3_9a980bff8857>
+        a                dcat:Distribution ;
+        dct:description  "Barrow Council INSPIRE WFS GML 3.2 Download Service"@en ;
+        dct:license      <http://reference.data.gov.uk/id/open-government-licence> ;
+        dct:title        "Barrow Council INSPIRE WFS GML 3.2 Download Service"@en ;
+        dcat:accessURL   <https://webgis1.barrowbc.gov.uk/inspire/wfs?service=WFS&version=2.0.0&request=GetFeature&typeName=INSPIRE:CONSERVATIONAREAS&maxFeatures=50&outputFormat=GML32> .

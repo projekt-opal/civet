@@ -31,7 +31,7 @@ public class Example {
 
 		// If it should be logged, if a measurement could not be computed
 		// (optional method call, default: true)
-		civet.setLogNotComputed(true);
+		civet.setLogIfNotComputed(true);
 
 		// Update model
 		civet.processModel(model, datasetUri);

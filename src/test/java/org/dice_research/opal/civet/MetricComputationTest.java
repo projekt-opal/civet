@@ -36,7 +36,7 @@ public class MetricComputationTest {
 		Model model = testdata.getModel(TEST_EDP_ICE);
 		Model inputModel = ModelFactory.createDefaultModel().add(model);
 		Civet civet = new Civet();
-		civet.setLogNotComputed(false);
+		civet.setLogIfNotComputed(false);
 		civet.processModel(inputModel, TEST_EDP_ICE_DATASET);
 
 		Assert.assertTrue("Model contains additional statements.", model.size() < inputModel.size());
@@ -63,20 +63,20 @@ public class MetricComputationTest {
 		// Will add measurements
 		Model extendedModel = ModelFactory.createDefaultModel().add(model);
 		civet = new Civet();
-		civet.setLogNotComputed(false);
+		civet.setLogIfNotComputed(false);
 		civet.processModel(extendedModel, TEST_EDP_ICE_DATASET);
 		Assert.assertNotSame("Measurements added.", model.size(), extendedModel.size());
 
 		// Will remove existing measurements and add them again
 		Model reprocessedModel = ModelFactory.createDefaultModel().add(extendedModel);
 		civet = new Civet();
-		civet.setLogNotComputed(false);
+		civet.setLogIfNotComputed(false);
 		civet.processModel(reprocessedModel, TEST_EDP_ICE_DATASET);
 		Assert.assertEquals("Measurements removed and added.", extendedModel.size(), reprocessedModel.size());
 
 		// Will add additional measurements (duplicates)
 		civet = new Civet();
-		civet.setLogNotComputed(false);
+		civet.setLogIfNotComputed(false);
 		civet.setRemoveMeasurements(false);
 		reprocessedModel = ModelFactory.createDefaultModel().add(extendedModel);
 		civet.processModel(reprocessedModel, TEST_EDP_ICE_DATASET);
