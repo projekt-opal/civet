@@ -171,4 +171,21 @@ public class Civet implements ModelProcessor, JenaModelProcessor {
 		this.removeMeasurements = removeMeasurements;
 		return this;
 	}
+
+	/**
+	 * @deprecated Replaced by {@link #isLoggingIfNotComputed()}.
+	 */
+	@Deprecated
+	public boolean isLogNotComputed() {
+		return isLoggingIfNotComputed();
+	}
+
+	/**
+	 * @deprecated Replaced by {@link #setLogIfNotComputed(boolean)}.
+	 */
+	@Deprecated
+	public void setLogNotComputed(boolean logNotComputed) {
+		setLogIfNotComputed(logNotComputed);
+	}
+
 }
