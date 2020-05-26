@@ -20,7 +20,8 @@ import org.dice_research.opal.common.vocabulary.Opal;
  * data publisher information and landing-pages of datasets as well as
  * access-urls of distributions.
  * 
- * @author Gourab Sahu, Adrian Wilke
+ * @author Gourab Sahu
+ * @author Adrian Wilke
  */
 public class ProviderIdentityMetric implements Metric {
 
@@ -115,7 +116,7 @@ public class ProviderIdentityMetric implements Metric {
 				// URL given, but not used as URI resource
 				return 4;
 
-			} else if (!literal.isBlank()) {
+			} else if (!literal.isEmpty()) {
 				// Non-empty literals
 				return 3;
 

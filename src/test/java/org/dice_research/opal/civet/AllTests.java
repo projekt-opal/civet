@@ -3,6 +3,7 @@ package org.dice_research.opal.civet;
 import org.dice_research.opal.civet.example.ExampleTest;
 import org.dice_research.opal.civet.metrics.CategorizationMetricTest;
 import org.dice_research.opal.civet.metrics.DataFormatMetricTest;
+import org.dice_research.opal.civet.metrics.DateFormatMetricTest;
 import org.dice_research.opal.civet.metrics.LicenseAvailabilityMetricTest;
 import org.dice_research.opal.civet.metrics.MetadataQualityMetricTest;
 import org.dice_research.opal.civet.metrics.MultipleSerializationsMetricTest;
@@ -23,9 +24,11 @@ import org.junit.runners.Suite.SuiteClasses;
 
 		// Metrics
 
+		CategorizationMetricTest.class,
+
 		DataFormatMetricTest.class,
 
-		CategorizationMetricTest.class,
+		DateFormatMetricTest.class,
 
 		LicenseAvailabilityMetricTest.class,
 

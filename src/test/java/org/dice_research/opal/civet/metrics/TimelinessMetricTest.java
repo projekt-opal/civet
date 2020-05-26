@@ -32,17 +32,29 @@ public class TimelinessMetricTest {
 	}
 
 	@Test
+	public void testTimes() throws Exception {
+		long now = System.currentTimeMillis();
+
+		long day = 1000l * 60 * 60 * 24;
+		long month = day * 31;
+		long year = day * 365;
+
+		testFormat("yyyy-MM-dd", 5, now - 15 * day);
+		testFormat("yyyy-MM-dd", 4, now - 3 * month);
+		testFormat("yyyy-MM-dd", 3, now - 9 * month);
+		testFormat("yyyy-MM-dd", 2, now - (1 * year + 3 * month));
+		testFormat("yyyy-MM-dd", 1, now - (2 * year + 3 * month));
+		testFormat("yyyy-MM-dd", 0, now - (3 * year + 3 * month));
+	}
+
+	@Test
 	public void testFormats() throws Exception {
+
 		// YYYY (eg 1997)
-		testFormat("yyyy", 5, System.currentTimeMillis());
-		long lastYear = System.currentTimeMillis() - 1000l * 60 * 60 * 24 * 365;
-		testFormat("yyyy", 5, lastYear);
-		long twoYearsAgo = System.currentTimeMillis() - 1000l * 60 * 60 * 24 * 365 * 2;
-		testFormat("yyyy", 2, twoYearsAgo);
+		testFormatThreeMonthAgo("yyyy");
 
 		// YYYY-MM (eg 1997-07)
 		testFormatThreeMonthAgo("yyyy-MM");
-		testFormat("yyyy-MM", 5, System.currentTimeMillis());
 
 		// YYYY-MM-DD (eg 1997-07-16)
 		testFormatThreeMonthAgo("yyyy-MM-dd");
@@ -57,21 +69,35 @@ public class TimelinessMetricTest {
 		testFormatThreeMonthAgo("YYYY-MM-dd'T'hh:mm:ss'.45+01:00'");
 	}
 
-	protected Model getModelWithModifiedDate(String modifiedDate) throws IOException {
+	/**
+	 * Creates date which is 3 month before now.
+	 * 
+	 * Tests if the date combined with the given formatPattern results in 4 stars.
+	 */
+	protected void testFormatThreeMonthAgo(String formatPattern) throws Exception {
+		long threeMonthAgo = System.currentTimeMillis() - 1000l * 60 * 60 * 24 * 31 * 3;
+		testFormat(formatPattern, 4, threeMonthAgo);
+	}
+
+	/**
+	 * Creates date string based on formatPattern and modelMillis.
+	 * 
+	 * Tests if the created date results in expectedStars.
+	 */
+	protected void testFormat(String formatPattern, int expectedStars, long modelMillis) throws Exception {
+		SimpleDateFormat format = new SimpleDateFormat(formatPattern);
+		String date = format.format(new Date(modelMillis));
+
+		Integer stars = new TimelinessMetric().compute(getModel(date), testCaseDatasetUri);
+		Assert.assertEquals(formatPattern, expectedStars, stars.intValue());
+	}
+
+	/**
+	 * Returns model with triple: (dataset, DCTerms.modified, dateString).
+	 */
+	protected Model getModel(String dateString) throws IOException {
 		Model model = ModelFactory.createDefaultModel().add(testCase.getModel());
 		Resource dataset = model.getResource(testCase.getDatasetUri());
-		return model.add(dataset, DCTerms.modified, ResourceFactory.createPlainLiteral(modifiedDate));
-	}
-
-	protected void testFormatThreeMonthAgo(String pattern) throws Exception {
-		long threeMonthAgo = System.currentTimeMillis() - 1000l * 60 * 60 * 24 * 31 * 3;
-		testFormat(pattern, 4, threeMonthAgo);
-	}
-
-	protected void testFormat(String pattern, int expectedStars, long timeToCheck) throws Exception {
-		SimpleDateFormat format = new SimpleDateFormat(pattern);
-		String date = format.format(new Date(timeToCheck));
-		Integer stars = new TimelinessMetric().compute(getModelWithModifiedDate(date), testCaseDatasetUri);
-		Assert.assertEquals(pattern, expectedStars, stars.intValue());
+		return model.add(dataset, DCTerms.modified, ResourceFactory.createPlainLiteral(dateString));
 	}
 }

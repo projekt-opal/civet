@@ -25,7 +25,8 @@ import org.dice_research.opal.common.vocabulary.Opal;
  * @see https://en.wikipedia.org/w/index.php?title=Flesch%E2%80%93Kincaid_readability_tests&oldid=931233970
  * @see http://users.csc.calpoly.edu/~jdalbey/305/Projects/FleschReadabilityProject.html
  * 
- * @author Vikrant Singh, Adrian Wilke
+ * @author Vikrant Singh
+ * @author Adrian Wilke
  */
 public class ReadabilityMetric implements Metric {
 

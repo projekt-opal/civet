@@ -24,7 +24,8 @@ import org.dice_research.opal.common.vocabulary.Opal;
  * @see https://www.w3.org/TR/vocab-dcat-1/#Property:distribution_format
  * @see https://www.w3.org/TR/vocab-dcat-1/#Property:distribution_media_type
  * 
- * @author Gourab Sahu, Adrian Wilke
+ * @author Gourab Sahu
+ * @author Adrian Wilke
  */
 
 public class DataFormatMetric implements Metric {

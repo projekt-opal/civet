@@ -15,7 +15,8 @@ import org.dice_research.opal.common.vocabulary.Opal;
  * The AvailabilityOfLicensesMetric provides a rating to a dataset based on the
  * number of available licenses/rights in a dataset.
  * 
- * @author Gourab Sahu, Adrian Wilke
+ * @author Gourab Sahu
+ * @author Adrian Wilke
  */
 public class LicenseAvailabilityMetric implements Metric {
 

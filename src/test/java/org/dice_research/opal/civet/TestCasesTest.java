@@ -2,6 +2,8 @@ package org.dice_research.opal.civet;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.test_cases.OpalTestCases;
 import org.dice_research.opal.test_cases.TestCase;
 import org.junit.Test;
@@ -14,6 +16,8 @@ import org.junit.Test;
  * @author Adrian Wilke
  */
 public class TestCasesTest {
+
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	@Test
 	public void test() throws Exception {
@@ -38,9 +42,8 @@ public class TestCasesTest {
 
 		long runtime = System.currentTimeMillis() - time;
 
-		// Print overview
-		System.out.println("Executed " + counter + " tests for " + metrics.size() + " metrics and " + testCases.size()
-				+ " test cases in " + runtime + " milliseconds (" + this.getClass() + ")");
+		LOGGER.info("Executed " + counter + " tests for " + metrics.size() + " metrics and " + testCases.size()
+				+ " test cases in " + runtime + " milliseconds.");
 
 		// Print results
 		if (Boolean.FALSE) {

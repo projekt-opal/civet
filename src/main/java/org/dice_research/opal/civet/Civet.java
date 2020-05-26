@@ -40,7 +40,7 @@ public class Civet implements ModelProcessor, JenaModelProcessor {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	private boolean removeMeasurements = true;
-	private boolean logNotComputed = true;
+	private boolean logIfNotComputed = true;
 
 	/**
 	 * Computes quality metric scores (measurements).
@@ -72,7 +72,7 @@ public class Civet implements ModelProcessor, JenaModelProcessor {
 			}
 
 			if (score == null) {
-				if (logNotComputed) {
+				if (logIfNotComputed) {
 					LOGGER.info("No result for metric " + metric.getUri() + " and dataset " + datasetUri);
 				}
 			} else {
@@ -133,13 +133,13 @@ public class Civet implements ModelProcessor, JenaModelProcessor {
 	 * Gets setting, if it is logged, when a measurement could not be computed.
 	 */
 	public boolean isLogNotComputed() {
-		return logNotComputed;
+		return logIfNotComputed;
 	}
 
 	/**
 	 * Sets, if it should be logged, when a measurement could not be computed.
 	 */
 	public void setLogNotComputed(boolean logNotComputed) {
-		this.logNotComputed = logNotComputed;
+		this.logIfNotComputed = logNotComputed;
 	}
 }

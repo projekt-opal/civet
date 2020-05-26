@@ -34,7 +34,8 @@ import org.dice_research.opal.common.vocabulary.Opal;
  * @see https://www.dublincore.org/specifications/dublin-core/collection-description/frequency/
  * @see http://publications.europa.eu/resource/authority/frequency
  * 
- * @author Vikrant Singh, Adrian Wilke
+ * @author Vikrant Singh
+ * @author Adrian Wilke
  */
 
 public class UpdateRateMetric implements Metric {

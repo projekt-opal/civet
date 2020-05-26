@@ -23,6 +23,8 @@ import org.junit.Test;
  */
 public class MetadataQualityMetricTest {
 
+	private static final boolean PRINT = false;
+
 	/**
 	 * Tests calculation of average.
 	 */
@@ -71,7 +73,9 @@ public class MetadataQualityMetricTest {
 			counter++;
 		}
 
-		model.write(System.out, "TURTLE");
+		if (PRINT) {
+			model.write(System.out, "TURTLE");
+		}
 
 		// Note: Metrics integrated in the future may return null, if it is not possible
 		// to calculate a score for the test model.

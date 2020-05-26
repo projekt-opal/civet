@@ -24,7 +24,8 @@ import org.dice_research.opal.common.vocabulary.Opal;
  * @see https://www.w3.org/TR/vocab-dcat-2/#Property:resource_update_date
  * @see https://www.w3.org/TR/NOTE-datetime
  *
- * @author Vikrant Singh, Adrian Wilke
+ * @author Vikrant Singh
+ * @author Adrian Wilke
  */
 public class TimelinessMetric implements Metric {
 
