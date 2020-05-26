@@ -6,8 +6,6 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.vocabulary.DCAT;
 import org.apache.jena.vocabulary.DCTerms;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.dice_research.opal.civet.Metric;
 import org.dice_research.opal.common.vocabulary.Opal;
 
@@ -19,8 +17,6 @@ import org.dice_research.opal.common.vocabulary.Opal;
  * @author Adrian Wilke
  */
 public class LicenseAvailabilityMetric implements Metric {
-
-	private static final Logger LOGGER = LogManager.getLogger();
 
 	private static final String DESCRIPTION = "If dataset has rights/license info then award 5 stars "
 			+ "Else If dataset has no rights/license but all distributions in dataset have licenses/rights then give 5 star"
@@ -56,7 +52,6 @@ public class LicenseAvailabilityMetric implements Metric {
 		// Do not divide by zero.
 		// No distributions given.
 		if (counterDistributions == 0) {
-			LOGGER.warn("No distributions for " + datasetUri);
 			return null;
 		}
 

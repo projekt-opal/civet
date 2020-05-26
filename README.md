@@ -58,53 +58,73 @@ public class Example {
 
 		Civet civet = new Civet();
 
+		// If long running metrics should be included.
+		// (optional method call, default: false)
+		civet.setIncludeLongRunning(true);
+
+		// If it should be logged, if a measurement could not be computed
+		// (optional method call, default: true)
+		civet.setLogIfNotComputed(false);
+
 		// If existing measurements should be removed
 		// (optional method call, default: true)
 		civet.setRemoveMeasurements(true);
 
-		// If it should be logged, if a measurement could not be computed
-		// (optional method call, default: true)
-		civet.setLogNotComputed(true);
-
 		// Update model
-		model = civet.process(model, datasetUri);
+		civet.processModel(model, datasetUri);
 
 		// Write updated model into TURTLE file
 		FileHandler.export(turtleOutputFile, model);
 	}
 }
-
 ```
 
 Example input:
 
-```
-<https://example.org/>
+```Turtle
+<https://www.kreis-paderborn.de/kreis_paderborn/geoportal/opendata/>
         a       <http://www.w3.org/ns/dcat#Dataset> ;
+        <http://purl.org/dc/terms/accrualPeriodicity>
+                "IRREG" ;
+        <http://purl.org/dc/terms/license>
+                "http://www.govdata.de/dl-de/by-2-0" ;
+        <http://purl.org/dc/terms/publisher>
+                <https://www.kreis-paderborn.de/> ;
+        <http://www.w3.org/ns/dcat#distribution>
+                <https://www.kreis-paderborn.de/opendata/alkis/> ;
         <http://www.w3.org/ns/dcat#keyword>
-                "keywordB" , "keywordA" ;
-        <http://www.w3.org/ns/dcat#theme>
-                <https://example.org/theme> .
+                "map" , "Paderborn" .
 
-<https://example.org/theme>
-        a       <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://www.kreis-paderborn.de/opendata/alkis/>
+        a       <http://www.w3.org/ns/dcat#Distribution> ;
+        <http://www.w3.org/ns/dcat#accessURL>
+                "https://www.kreis-paderborn.de/opendata/alkis/" .
+                
+<https://www.kreis-paderborn.de/>
+        a       <http://xmlns.com/foaf/0.1/Agent> .
 ```
 
 Example output:
 
-```
-<https://example.org/>
+```Turtle
+<https://www.kreis-paderborn.de/kreis_paderborn/geoportal/opendata/>
         a       <http://www.w3.org/ns/dcat#Dataset> ;
+        <http://purl.org/dc/terms/accrualPeriodicity>
+                "IRREG" ;
+        <http://purl.org/dc/terms/license>
+                "http://www.govdata.de/dl-de/by-2-0" ;
+        <http://purl.org/dc/terms/publisher>
+                <https://www.kreis-paderborn.de/> ;
+        <http://www.w3.org/ns/dcat#distribution>
+                <https://www.kreis-paderborn.de/opendata/alkis/> ;
         <http://www.w3.org/ns/dcat#keyword>
-                "keywordA" , "keywordB" ;
-        <http://www.w3.org/ns/dcat#theme>
-                <https://example.org/theme> ;
+                "map" , "Paderborn" ;
         <http://www.w3.org/ns/dqv#hasQualityMeasurement>
                 [ a       <http://www.w3.org/ns/dqv#QualityMeasurement> ;
                   <http://www.w3.org/ns/dqv#isMeasurementOf>
-                          <http://metric.projekt-opal.de/MetadataQuality> ;
+                          <http://metric.projekt-opal.de/ProviderIdentity> ;
                   <http://www.w3.org/ns/dqv#value>
-                          3
+                          5
                 ] ;
         <http://www.w3.org/ns/dqv#hasQualityMeasurement>
                 [ a       <http://www.w3.org/ns/dqv#QualityMeasurement> ;
@@ -116,13 +136,53 @@ Example output:
         <http://www.w3.org/ns/dqv#hasQualityMeasurement>
                 [ a       <http://www.w3.org/ns/dqv#QualityMeasurement> ;
                   <http://www.w3.org/ns/dqv#isMeasurementOf>
-                          <http://metric.projekt-opal.de/Categorization> ;
+                          <http://metric.projekt-opal.de/LicenseAvailable> ;
                   <http://www.w3.org/ns/dqv#value>
                           5
+                ] ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                [ a       <http://www.w3.org/ns/dqv#QualityMeasurement> ;
+                  <http://www.w3.org/ns/dqv#isMeasurementOf>
+                          <http://metric.projekt-opal.de/MetadataQuality> ;
+                  <http://www.w3.org/ns/dqv#value>
+                          3
+                ] ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                [ a       <http://www.w3.org/ns/dqv#QualityMeasurement> ;
+                  <http://www.w3.org/ns/dqv#isMeasurementOf>
+                          <http://metric.projekt-opal.de/Retrievability> ;
+                  <http://www.w3.org/ns/dqv#value>
+                          5
+                ] ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                [ a       <http://www.w3.org/ns/dqv#QualityMeasurement> ;
+                  <http://www.w3.org/ns/dqv#isMeasurementOf>
+                          <http://metric.projekt-opal.de/Categorization> ;
+                  <http://www.w3.org/ns/dqv#value>
+                          3
+                ] ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                [ a       <http://www.w3.org/ns/dqv#QualityMeasurement> ;
+                  <http://www.w3.org/ns/dqv#isMeasurementOf>
+                          <http://metric.projekt-opal.de/DataFormat> ;
+                  <http://www.w3.org/ns/dqv#value>
+                          0
+                ] ;
+        <http://www.w3.org/ns/dqv#hasQualityMeasurement>
+                [ a       <http://www.w3.org/ns/dqv#QualityMeasurement> ;
+                  <http://www.w3.org/ns/dqv#isMeasurementOf>
+                          <http://metric.projekt-opal.de/UpdateRate> ;
+                  <http://www.w3.org/ns/dqv#value>
+                          1
                 ] .
 
-<https://example.org/theme>
-        a       <http://www.w3.org/2004/02/skos/core#Concept> .
+<https://www.kreis-paderborn.de/opendata/alkis/>
+        a       <http://www.w3.org/ns/dcat#Distribution> ;
+        <http://www.w3.org/ns/dcat#accessURL>
+                "https://www.kreis-paderborn.de/opendata/alkis/" .
+                
+<https://www.kreis-paderborn.de/>
+        a       <http://xmlns.com/foaf/0.1/Agent> .
 ```
 
 

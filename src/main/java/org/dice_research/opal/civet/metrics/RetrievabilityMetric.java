@@ -81,7 +81,11 @@ public class RetrievabilityMetric implements Metric {
 			scoreSum += scoreDistribution;
 		}
 
-		return (int) Math.ceil(scoreSum / distributionCounter);
+		if (distributionCounter == 0) {
+			return null;
+		} else {
+			return (int) Math.ceil(scoreSum / distributionCounter);
+		}
 	}
 
 	/**

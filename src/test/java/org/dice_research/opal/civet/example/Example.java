@@ -25,13 +25,17 @@ public class Example {
 
 		Civet civet = new Civet();
 
-		// If existing measurements should be removed
-		// (optional method call, default: true)
-		civet.setRemoveMeasurements(true);
+		// If long running metrics should be included.
+		// (optional method call, default: false)
+		civet.setIncludeLongRunning(true);
 
 		// If it should be logged, if a measurement could not be computed
 		// (optional method call, default: true)
-		civet.setLogIfNotComputed(true);
+		civet.setLogIfNotComputed(false);
+
+		// If existing measurements should be removed
+		// (optional method call, default: true)
+		civet.setRemoveMeasurements(true);
 
 		// Update model
 		civet.processModel(model, datasetUri);
