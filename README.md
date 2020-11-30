@@ -79,7 +79,7 @@ public class Example {
 }
 ```
 
-Example input:
+### Example input:
 
 ```Turtle
 <https://www.kreis-paderborn.de/kreis_paderborn/geoportal/opendata/>
@@ -104,7 +104,7 @@ Example input:
         a       <http://xmlns.com/foaf/0.1/Agent> .
 ```
 
-Example output:
+### Example output:
 
 ```Turtle
 <https://www.kreis-paderborn.de/kreis_paderborn/geoportal/opendata/>
