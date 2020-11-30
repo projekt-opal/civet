@@ -76,7 +76,7 @@ public class Example {
 
 ```
 
-Example input:
+### Example input:
 
 ```
 <https://example.org/>
@@ -90,7 +90,7 @@ Example input:
         a       <http://www.w3.org/2004/02/skos/core#Concept> .
 ```
 
-Example output:
+### Example output:
 
 ```
 <https://example.org/>
