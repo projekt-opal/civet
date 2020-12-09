@@ -33,6 +33,8 @@ Available versions are listed at [maven.aksw.org](https://maven.aksw.org/archiva
 
 ## Example
 
+![](doc/example.png)
+
 ```Java
 import java.io.File;
 import org.apache.jena.rdf.model.Model;
